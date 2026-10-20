@@ -235,6 +235,10 @@ button.pill:hover, a.pill:hover { background: var(--hover); color: var(--ink); }
 .switch input:checked { background: #b0141e; }
 .switch input:checked::after { transform: translateX(18px); }
 .switch input:focus-visible { outline: 2px solid #b0141e; outline-offset: 2px; }
+.switch.off { cursor: default; opacity: .55; }
+.switch.off input { cursor: default; }
+#pInst { flex-wrap: wrap; border-radius: 14px; }
+#pInst button { border-bottom: 1px solid #d9d1cb; margin-bottom: -1px; }
 
 .track { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .time { font-size: 14px; color: #6a615d; white-space: nowrap; }
@@ -708,7 +712,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       var seq = m.seq || m.ev.map(function (_, i) { return i; });
       seq.forEach(function (i) {
         var e = m.ev[i], d = e[1] * ((e[5] & 2) ? 1.6 : 1);
-        ev.push({ midi: e[0], b: beat, d: d, x: e[2], y: e[3], staff: e[4], img: k, st: m.st[e[4]] });
+        ev.push({ midi: e[0], b: beat, d: d, f: !!(e[5] & 2), x: e[2], y: e[3], staff: e[4], img: k, st: m.st[e[4]] });
         beat += d;
       });
     });
@@ -723,7 +727,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   function loadSong(s, mel) {
     if (P.song === s) return;
     stopPlay(); P.song = s; P.mel = mel; P.idx = 0;
-    if (FP && mel.ev.length) FP.load({ ev: mel.ev, beats: mel.beats, bpm: s.bpm || 84, tonic: mel.tonic });
+    if (FP && mel.ev.length) FP.load({ ev: mel.ev, beats: mel.beats, bpm: s.bpm || 84, tonic: mel.tonic, lyrics: s.cyr });
   }
   function unloadSong() { stopPlay(); P.song = null; P.mel = null; }
   function startPlay(mode, from, opts) {
@@ -769,7 +773,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     drawTime(on ? Math.max(0, FP.position()) : (P.mel && P.mel.ev[P.idx] ? P.mel.ev[P.idx].b : 0));
     document.querySelectorAll('#pInst button').forEach(function (x) { x.setAttribute('aria-pressed', x.getAttribute('data-v') === S.inst); });
     document.querySelectorAll('#pOct button').forEach(function (x) { x.setAttribute('aria-pressed', +x.getAttribute('data-v') === S.octave); });
-    var d = $('pDrone'); if (d) d.checked = !!S.drone;
+    var d = $('pDrone'), own = !!FP.INST[S.inst].ownDrone; if (d) { d.checked = own || !!S.drone; d.disabled = own; d.closest('.switch').classList.toggle('off', own); }
     var tr = $('pTr'); if (tr) tr.textContent = (S.transpose > 0 ? '+' : S.transpose < 0 ? '−' : '') + Math.abs(S.transpose);
     var tp = $('pTempo'); if (tp && document.activeElement !== tp) tp.value = Math.round(S.tempo * 100);
     var tv = $('pTempoV'); if (tv) tv.textContent = '♩ = ' + Math.round(((P.song && P.song.bpm) || 84) * S.tempo);
