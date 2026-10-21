@@ -15,7 +15,7 @@
 (function (global) {
   'use strict';
   var KEY = 'fed5.player';
-  var DEF = { inst: 'voice', octave: -12, drone: false, transpose: 0, tempo: 1 };
+  var DEF = { inst: 'sapilka', octave: -12, drone: false, transpose: 0, tempo: 1 };
   var INST = {
     voice:    { name: 'Голас', voice: .9 },
     lira:     { name: 'Голас з лірай', voice: .32, lira: true, ownDrone: true },
