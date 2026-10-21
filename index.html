@@ -237,8 +237,10 @@ button.pill:hover, a.pill:hover { background: var(--hover); color: var(--ink); }
 .switch input:focus-visible { outline: 2px solid #b0141e; outline-offset: 2px; }
 .switch.off { cursor: default; opacity: .55; }
 .switch.off input { cursor: default; }
-#pInst { flex-wrap: wrap; border-radius: 14px; }
-#pInst button { border-bottom: 1px solid #d9d1cb; margin-bottom: -1px; }
+#pInst { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; max-width: 460px; border-radius: 14px; }
+#pInst button { border-bottom: 1px solid #d9d1cb; min-height: 40px; padding: 4px 8px; line-height: 1.2; text-align: center; }
+#pInst button:nth-child(3n) { border-right: 0; }
+#pInst button:nth-last-child(-n+3) { border-bottom: 0; }
 
 .track { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .time { font-size: 14px; color: #6a615d; white-space: nowrap; }
