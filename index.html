@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Мужчынскія песні — Федароўскі, т. V</title>
-<meta name="description" content="533 мужчынскія песні з V тома «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.">
+<title>Мужчынскія песні — Федароўскі, т. V–VI</title>
+<meta name="description" content="845 мужчынскіх песень з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151213" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -310,6 +310,8 @@ kbd { font: 500 13px var(--sans); border: 1px solid var(--rule-2); border-bottom
 .cats button { width: 100%; border: 0; background: transparent; display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 11px 4px; text-align: left; font: 18px/1.3 var(--serif); color: var(--ink); transition: background-color .15s; }
 .cats button:hover { background: var(--hover); }
 .cats button span:last-child { font: 15px var(--sans); color: var(--ink-3); }
+.cats.vols { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+.cats small { display: block; margin-top: 3px; font: 14px/1.4 var(--sans); color: var(--ink-3); }
 .keys { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; color: var(--ink-2); margin: 0; }
 .keys dd { margin: 0; }
 
@@ -407,7 +409,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       <button class="icon-btn menu-btn" id="menu" aria-label="Спіс песень" aria-controls="rail" aria-expanded="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg></button>
       <a class="brand" href="#">
         <svg viewBox="0 0 40 40" aria-hidden="true" focusable="false"><g fill="currentColor"><path d="M20 3 37 20 20 37 3 20zM20 9 9 20l11 11 11-11z"/><rect x="18" y="13" width="4" height="14"/><rect x="13" y="18" width="14" height="4"/></g></svg>
-        <span><b>Мужчынскія песні</b><small>з V тома зборніка Міхала Федароўскага</small></span>
+        <span><b>Мужчынскія песні</b><small>з V і VI тамоў зборніка Міхала Федароўскага</small></span>
       </a>
       <span class="spacer"></span>
       <button class="icon-btn" id="theme" aria-label="Змяніць тэму"></button>
@@ -487,8 +489,8 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   // a shared link brings its own filters
   (function () {
     try {
-      var u = new URLSearchParams(location.search), map = { t: 'cat', s: 'sec', m: 'place', i: 'inf' };
-      if (!['g', 'q', 't', 's', 'm', 'i'].some(function (k) { return u.has(k); })) return;
+      var u = new URLSearchParams(location.search), map = { v: 'vol', t: 'cat', s: 'sec', m: 'place', i: 'inf' };
+      if (!['g', 'q', 'v', 't', 's', 'm', 'i'].some(function (k) { return u.has(k); })) return;
       st.f = {}; st.group = u.get('g') || 'all'; st.q = u.get('q') || '';
       Object.keys(map).forEach(function (k) { if (u.has(k)) st.f[map[k]] = u.get(k); });
     } catch (e) {}
@@ -504,7 +506,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   function isDark() { return st.theme ? st.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
 
   SONGS.forEach(function (s) {
-    s.hay = fold([s.id, s.title, s.cat, s.region, s.header, (s.informant || []).join(' '), (s.informant_cyr || []).join(' '), s.cyr.join(' '), s.lat.join(' ')].join(' \u0001 '));
+    s.hay = fold([s.id, s.title, s.cat, s.dance, s.region, s.header, (s.informant || []).join(' '), (s.informant_cyr || []).join(' '), s.cyr.join(' '), s.lat.join(' ')].join(' \u0001 '));
   });
 
   // ---------- filters (facets): counts follow the other active filters ----------
@@ -566,6 +568,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   })();
   var SEP = ' › ';
   var FACETS = [
+    { key: 'vol', url: 'v', label: 'Том', all: 'усе тамы', chips: true, vals: function (s) { return ['т. ' + s.vol]; } },
     { key: 'cat', url: 't', label: 'Тып', all: 'усе тыпы', chips: true, vals: function (s) { return [s.cat]; } },
     { key: 'sec', url: 's', label: 'Раздзел', all: 'усе раздзелы', tree: true, vals: function (s) { return [s.part, s.part + SEP + s.chapter]; } },
     { key: 'place', url: 'm', label: 'Мясціна', all: 'усе мясціны', tree: true, search: 'Шукаць мясцовасць…', vals: function (s) { return [s.fRegion, s.fRegion + SEP + s.fPlace]; } },
@@ -838,10 +841,11 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       '<br>' + fl('place', s.fRegion + SEP + s.fPlace, 'Іншыя песні адсюль') + '</dd></div>');
     if (s.informant.length) h.push('<div><dt>Выканаўца</dt><dd>' + s.informant.map(function (x, k) { return fl('inf', s.fInf[k] || '', esc(s.informant_cyr[k])) + '<br><span class="orig" translate="no">' + esc(x) + '</span>'; }).join('<br>') + '</dd></div>');
     if (s.recorder.length) h.push('<div><dt>Запіс</dt><dd class="orig" translate="no">' + esc(s.recorder.join('; ')) + '</dd></div>');
+    if (s.dance) h.push('<div><dt>Танец</dt><dd>' + esc(s.dance) + '</dd></div>');
     if ((s.tempo_by || []).length) h.push('<div><dt>Тэмп</dt><dd>' + esc(s.tempo_by.join(', ')) + ' <span class="orig" lang="pl" translate="no">(' + esc(s.tempo_lat.join('; ')) + ')</span></dd></div>');
     if (s.melref && !s.refm.length) h.push('<div><dt>Мелодыя</dt><dd class="orig" lang="pl" translate="no">' + esc(s.melref) + '</dd></div>');
     if (s.notes.length) h.push('<div><dt>Заўвага</dt><dd class="orig" translate="no">' + esc(s.notes.join('; ')) + '</dd></div>');
-    h.push('<div><dt>Крыніца</dt><dd>Федароўскі, ' + pageRef('V', s.pages && s.pages.length > 1 ? s.pages[0] + '–' + s.pages[s.pages.length - 1] : s.page) + '</dd></div>');
+    h.push('<div><dt>Крыніца</dt><dd>' + fl('vol', 'т. ' + s.vol, 'Федароўскі, т. ' + s.vol) + ', с. ' + (s.pages && s.pages.length > 1 ? s.pages[0] + '–' + s.pages[s.pages.length - 1] : s.page) + '</dd></div>');
     h.push('</dl>');
     if (s.footnotes.length) h.push('<div class="fn"><h3>Зноскі выдання</h3><p class="fn-note">Па-польску, як у арыгінале; «v.» — варыянт радка.</p><ol lang="pl" translate="no">' + s.footnotes.map(function (f) { return '<li>' + esc(f.replace(/^\d+\s+/, '')) + '</li>'; }).join('') + '</ol></div>');
     h.push('</aside>');
@@ -856,7 +860,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       '<span class="grow"></span><button class="pill" id="printBtn">' + svg('print', '') + 'Раздрукаваць</button></nav>');
     h.push('<svg class="opener" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="url(#orn-sm)"/></svg>');
     h.push('<h1 class="song-title"><span class="no num"><small>№</small>' + esc(s.id) + '</span>' + esc(stress(s.title)) + '</h1>');
-    h.push('<p class="print-src">Федароўскі М. Lud białoruski na Rusi Litewskiej, ' + pageRef('V', s.page) + '. ' + (s.region ? esc(s.region) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
+    h.push('<p class="print-src">Федароўскі М. Lud białoruski na Rusi Litewskiej, ' + pageRef(s.vol, s.page) + '. ' + (s.region ? esc(s.region) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
       (s.informant.length ? ' Выканаўца: ' + s.informant_cyr.map(function (x) { return esc(x.replace(/́/g, '')); }).join(', ') + '.' : '') + '</p>');
     h.push('<div class="subline"><button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="Паказаць усе песні тыпу «' + esc(s.cat) + '»">' + esc(s.cat) + '</button>');
     if (s.group === 'own') h.push('<span class="pill">' + noteIcon(s) + 'свае ноты</span>');
@@ -869,7 +873,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       h.push('<section class="sec score-sec" aria-labelledby="h-score"><div class="sec-h"><h2 id="h-score">' + (s.own.length ? 'Ноты і мелодыя' : 'Мелодыя') + '</h2></div><div class="score">');
       if (s.own.length) {
         h.push('<div class="sheets">'); s.own.forEach(function (im) { h.push(sheet(im, 'Ноты песні № ' + s.id, k, k === 0)); k++; }); h.push('</div>');
-        h.push('<p class="cap">Ноты з выдання, ' + pageRef('V', s.own[0].page) + '.</p>');
+        h.push('<p class="cap">Ноты з выдання, ' + pageRef(s.vol, s.own[0].page) + '.</p>');
       } else {
         var shown = false, sh = [];
         s.refm.forEach(function (r) {
@@ -877,6 +881,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
           var link = inSet ? '<a href="#' + esc(inSet.id) + '">№ ' + esc(r.n) + '</a>' : '№ ' + esc(r.n);
           var where = r.imgs.length ? pageRef(r.vol, r.imgs[0].page) : 'т. ' + r.vol;
           h.push('<p class="refnote">Спяваецца на мелодыю ' + link + ' (' + where + (r.header ? ', <span lang="pl" translate="no">' + esc(r.header) + '</span>' : '') + ')' +
+            (r.via ? '. Выданне адсылае да № ' + esc(r.via) + ', а тая песня — да гэтай мелодыі' : '') +
             (inSet ? '' : '<small>Песня № ' + esc(r.n) + ' не ўвайшла ў гэты зборнік: тут толькі яе ноты, словы пад нотамі — з той песні.</small>') + '</p>');
           if (!shown && r.imgs.length) { r.imgs.forEach(function (im) { sh.push(sheet(im, 'Ноты мелодыі № ' + r.n, k, k === 0)); k++; }); shown = true; }
           else r.imgs.forEach(function (im) { sh.push(sheet(im, 'Ноты мелодыі № ' + r.n, -1, false)); });
@@ -915,6 +920,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     if (likesOn) mountGiscus(s);
   }
 
+  var VOLS = [['V', 'песні любоўныя, вясельныя, сямейныя, каляндарныя, вайсковыя, балады'], ['VI', 'круцёлкі, жартоўныя песні, танцы, застольныя, розныя, хрэсьбінныя, думы']];
   function regionList() {
     var c = {}; SONGS.forEach(function (s) { c[s.fRegion] = (c[s.fRegion] || 0) + 1; });
     return Object.keys(c).sort(function (a, b) { return (a === NO_REGION) - (b === NO_REGION) || c[b] - c[a]; }).map(function (k) { return [k, c[k]]; });
@@ -926,11 +932,12 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       '<article class="home">' +
       '<svg class="band-lg" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="url(#orn-lg)"/></svg>' +
       '<h1>Мужчынскія песні</h1>' +
-      '<p class="lead">' + nf.format(SONGS.length) + ' песень з V тома зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады, рэкруцкія, чумацкія, жартоўныя і застольныя, валачобныя і калядныя. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць.</p>' +
+      '<p class="lead">' + nf.format(SONGS.length) + ' песень з V і VI тамоў зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць.</p>' +
       '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + 'Адкрыць першую песню</a></p>' +
+      '<h2>Па тамах</h2><ul class="cats vols">' + VOLS.map(function (v) { return '<li><button data-facet-set="vol" data-value="т. ' + v[0] + '"><span>Том ' + v[0] + ' <small>' + v[1] + '</small></span><span class="num">' + SONGS.filter(function (s) { return s.vol === v[0]; }).length + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Па тыпах</h2><ul class="cats">' + catNames.map(function (c) { return '<li><button data-facet-set="cat" data-value="' + esc(c) + '"><span>' + esc(c) + '</span><span class="num">' + cats[c] + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Па мясцінах</h2><ul class="cats">' + regionList().map(function (r) { return '<li><button data-facet-set="place" data-value="' + esc(r[0]) + '"><span>' + esc(r[0]) + '</span><span class="num">' + r[1] + '</span></button></li>'; }).join('') + '</ul>' +
-      '<h2>Што ёсць пры песні</h2><p>Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), выканаўца, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні (некаторыя — з тома VI).</p>' +
+      '<h2>Што ёсць пры песні</h2><p>Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), выканаўца, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні, нават калі яна ў іншым томе. Пры песнях VI тома пазначаны і танец («Kruciołka», «Polka drobna»…), калі ён ёсць у выданні.</p>' +
       '<h2>Мелодыі</h2><p>Ноты распазнаныя аўтаматычна і гучаць праз сінтэзатар голасам сапілкі, цымбалаў або кларнета, з бурдонам на выбар. «Паслухаць» іграе мелодыю адзін раз, «Развучыць» — павольней і па крузе. Актаву, вышыню і тэмп можна падабраць пад свой голас, а курсор паказвае на нотах, што гучыць зараз. У рытме і асобных нотах магчымыя памылкі распазнавання.</p>' +
       '<h2>Тэкст</h2><p>Тэкст пераведзены з польскай лацінкі Федароўскага ў беларускую кірыліцу з захаваннем дыялектнага вымаўлення і націскаў. Арыгінальны запіс можна паглядзець кнопкай «Арыгінал» або «Побач».</p>' +
       '<h2>Клавішы</h2><dl class="keys"><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>папярэдняя і наступная песня</dd><dt><kbd>/</kbd></dt><dd>пошук</dd><dt><kbd>Прабел</kbd></dt><dd>паслухаць мелодыю або спыніць</dd></dl>' +
@@ -952,7 +959,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     renderList();
     if (cur) renderSong(cur); else renderIntro();
     $('main').scrollTop = 0;
-    document.title = cur ? '№ ' + cur.id + ' ' + cur.title.replace(/́/g, '') + ' — Мужчынскія песні' : 'Мужчынскія песні — Федароўскі, т. V';
+    document.title = cur ? '№ ' + cur.id + ' ' + cur.title.replace(/́/g, '') + ' — Мужчынскія песні' : 'Мужчынскія песні — Федароўскі, т. V–VI';
     scrollListToCur();
     closeMenu();
   }

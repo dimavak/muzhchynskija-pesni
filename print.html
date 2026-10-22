@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Мужчынскія песні — Федароўскі, т. V (версія для друку)</title>
+<title>Мужчынскія песні — Федароўскі, т. V–VI (версія для друку)</title>
 <style>
 :root { --ink: #1d1914; --muted: #6b6258; --line: #d9d1c5; --accent: #b3261e; --ref: #8d3a2a; }
 * { box-sizing: border-box; }
@@ -75,7 +75,8 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     if (s.informant.length) m.push('выкон.: ' + s.informant.map(function (x, i) { return esc(s.informant_cyr[i]); }).join(', '));
     if ((s.tempo_by || []).length) m.push('тэмп: ' + esc(s.tempo_by.join(', ')) + ' <i>(' + esc(s.tempo_lat.join('; ')) + ')</i>');
     if (s.melref && !s.refm.length) m.push('мелодыя: <i>' + esc(s.melref) + '</i>');
-    m.push('т. V, с. ' + esc(s.page));
+    if (s.dance) m.push('танец: ' + esc(s.dance));
+    m.push('т. ' + esc(s.vol || 'V') + ', с. ' + esc(s.page));
     h.push('<div class="meta sans">' + m.join(' · ') + '</div>');
     s.own.forEach(function (im) { h.push('<div class="sheet"><img src="' + esc(im.src) + '" alt=""></div>'); });
     s.refm.forEach(function (r) {
@@ -95,7 +96,7 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
   var own = S.filter(function (s) { return s.group === 'own'; }).length;
   var html = [];
-  html.push('<div class="cover"><svg class="orn"><rect width="100%" height="100%" fill="url(#orn)"/></svg><h1>Мужчынскія песні</h1><div class="sub">з V тома зборніка Міхала Федароўскага<br><i>Lud białoruski na Rusi Litewskiej</i></div>' +
+  html.push('<div class="cover"><svg class="orn"><rect width="100%" height="100%" fill="url(#orn)"/></svg><h1>Мужчынскія песні</h1><div class="sub">з V і VI тамоў зборніка Міхала Федароўскага<br><i>Lud białoruski na Rusi Litewskiej</i></div>' +
     '<div class="stats sans"><div><b>' + S.length + '</b>песень</div><div><b>' + own + '</b>з нотамі</div><div><b>' + (music.length - own) + '</b>з нотамі мелодыі<br>паводле спасылкі</div><div><b>' + none.length + '</b>без нот</div></div>' +
     '<div class="note sans"><p>Нумары песень — паводле выдання. Тэкст пераведзены з польскай лацінкі Федароўскага ў беларускую кірыліцу з захаваннем дыялектнага вымаўлення і націскаў; песні, запісаныя па-польску, пададзены ў арыгінале. Ноты выразаныя са сканаў выдання; калі ў выданні пазначана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні. Тэкст выдання распазнаваўся аўтаматычна, таму асобныя словы могуць быць скажоныя — арыгінальны запіс можна паглядзець у HTML-версіі (index.html).</p>' +
     '<p>Дробным шрыфтам пад песнямі — зноскі выдання па-польску («v.» — варыянт радка). Мелодыі можна праслухаць у HTML-версіі (index.html).</p></div><svg class="orn b"><rect width="100%" height="100%" fill="url(#orn)"/></svg></div>');
