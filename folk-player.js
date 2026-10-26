@@ -1,8 +1,10 @@
 /*
- * folk-player.js — прайгравальнік мелодый зборніка (без знешніх бібліятэк, гук сінтэзуецца ў браўзеры).
+ * folk-player.js — прайгравальнік мелодый зборніка (без знешніх бібліятэк).
  *
  * Інструменты: мужчынскі голас (фармантны сінтэз, галосныя з першага куплета), голас з лірай, дуда,
- * сапілка, цымбалы (мадэль ударанай струны, доўгія ноты — трэмала), кларнет.
+ * сапілка, цымбалы (доўгія ноты — трэмала), кларнет. Сапілка, цымбалы, кларнет і пеўнік дуды
+ * гучаць запісамі нот з sounds/ (SoundFont MusyngKite, CC BY-SA 3.0); пакуль запісы не загрузіліся
+ * або калі іх няма, гук сінтэзуецца.
  * Голас, ліра і дуда гучаць у чыстым страі ад тонікі; ліра і дуда маюць свой бурдон.
  * Рэжымы: «listen» — адзін раз; «learn» — 70 % тэмпу, спачатку пачатковы тон, паўтор па крузе.
  * Налады (інструмент, актава, бурдон, вышыня ў паўтонах, тэмп) агульныя для ўсіх песень і запамінаюцца.
@@ -26,6 +28,7 @@
   };
   var OCTAVES = [[12, 'Высока'], [0, 'Як у нотах'], [-12, 'Мужчынскі голас']];
   var LEARN_TEMPO = .7, LOOKAHEAD = 1.0, TICK = 50;
+  var BASE = ((document.currentScript && document.currentScript.src) || '').replace(/[^\/]*$/, '');
 
   var S = (function () {
     var o = {}, v = {};
@@ -133,18 +136,79 @@
     for (i = 0; i < len; i++) out[i] = out[i] / (pk || 1) * .8 * (i > len - fade ? (len - i) / fade : 1);
     return (ks[key] = buf);
   }
-  function struck(dest, f, t0, dur) {
-    var I = INST.cymbaly, buf = string(f), step = .085;
+  function struck(dest, midi, f, t0, dur) {
+    var I = INST.cymbaly, step = .085, rec = recorded('cymbaly'), p = rec ? pick('cymbaly', midi, f) : { buf: string(f), rate: 1 };
+    var buf = p.buf, len = buf.duration / p.rate, gain = rec ? SAMPLES.cymbaly.gain : I.gain;
     var hits = dur > .45 ? Math.max(2, Math.floor(dur / step)) : 1;   // tremolo on long notes, as the players do
     for (var i = 0; i < hits; i++) {
       var t = t0 + i * step, s = ctx.createBufferSource(), g = ctx.createGain(), last = i === hits - 1;
-      s.buffer = buf; s.connect(g); g.connect(dest);
-      var v = I.gain * (i === 0 ? 1 : .55 + Math.random() * .15);
+      s.buffer = buf; s.playbackRate.value = p.rate; s.connect(g); g.connect(dest);
+      var v = gain * (i === 0 ? 1 : .55 + Math.random() * .15);
       g.gain.setValueAtTime(v, t);
-      var off = last ? t + Math.min(buf.duration, (dur - i * step) + 1.1) : t + step + .05;
+      var off = last ? t + Math.min(len, (dur - i * step) + 1.1) : t + step + .05;
       g.gain.setTargetAtTime(0, last ? t0 + dur + .15 : t + step, last ? .3 : .02);
-      s.start(t); track(s, Math.min(off, t + buf.duration));
+      s.start(t); track(s, Math.min(off, t + len));
     }
+  }
+  // ---------------- recorded notes ----------------
+  // sounds/<instrument>/<midi>.mp3: one note every three semitones from lo to hi, levelled to one loudness;
+  // a note between them is the nearest recording played faster or slower
+  var SAMPLES = {
+    sapilka:  { lo: 36, hi: 102, gain: 1.65, legato: .94, rel: .07 },
+    clarinet: { lo: 36, hi: 102, gain: 1.9, legato: .95, rel: .09 },
+    cymbaly:  { lo: 36, hi: 102, gain: .46 },
+    duda:     { lo: 48, hi: 108, gain: 1.4, rel: .03 }
+  };
+  var smp = {};   // instrument -> { bytes: {midi: ArrayBuffer}, buf: {midi: AudioBuffer}, ready, failed, wait }
+  function fetchSamples(key) {
+    var P = SAMPLES[key];
+    if (!P || smp[key] || !global.fetch || location.protocol === 'file:') return;   // a page opened from disk cannot fetch
+    var set = smp[key] = { bytes: {}, buf: {} }, jobs = [];
+    for (var m = P.lo; m <= P.hi; m += 3) (function (m) {
+      jobs.push(fetch(BASE + 'sounds/' + key + '/' + m + '.mp3')
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); })
+        .then(function (a) { set.bytes[m] = a; }));
+    })(m);
+    set.fetched = Promise.all(jobs);
+    set.fetched.catch(function () { set.failed = true; });
+  }
+  // decoding needs the audio context, so it waits for the first play
+  function loadSamples(key) {
+    fetchSamples(key);
+    var set = smp[key];
+    if (!set) return null;
+    if (!set.wait) set.wait = set.fetched.then(function () {
+      return Promise.all(Object.keys(set.bytes).map(function (m) {
+        return new Promise(function (ok, no) { ctx.decodeAudioData(set.bytes[m], ok, no); }).then(function (b) { set.buf[m] = b; delete set.bytes[m]; });
+      }));
+    }).then(function () { set.ready = true; }, function () { set.failed = true; });
+    return set.wait;
+  }
+  function recorded(key) { var set = smp[key]; return !!(set && set.ready); }
+  // the recording nearest to the pitch and how fast to play it for frequency f
+  function pick(key, midi, f) {
+    var P = SAMPLES[key], n = Math.max(P.lo, Math.min(P.hi, P.lo + Math.round((midi - P.lo) / 3) * 3));
+    return { buf: smp[key].buf[n], rate: f / hz(n) };
+  }
+  function sampled(dest, key, midi, f, t0, dur) {
+    var P = SAMPLES[key], p = pick(key, midi, f), s = ctx.createBufferSource(), g = ctx.createGain();
+    s.buffer = p.buf; s.playbackRate.value = p.rate; s.connect(g); g.connect(dest);
+    var end = t0 + Math.max(.05, dur * (P.legato || 1)), len = p.buf.duration / p.rate;
+    // a note longer than its recording holds on the steady middle part
+    if (end + P.rel * 3 > t0 + len - .1) { s.loop = true; s.loopStart = Math.min(1, p.buf.duration / 3); s.loopEnd = p.buf.duration - .1; }
+    g.gain.setValueAtTime(P.gain, t0); g.gain.setValueAtTime(P.gain, end); g.gain.setTargetAtTime(0, end, P.rel / 3);
+    s.start(t0); track(s, end + P.rel * 3);
+  }
+  // duda from recordings: notes join without a gap; a repeated note is split by a quick higher grace note
+  var piped = null;
+  function sampledChanter(dest, midi, t, dur) {
+    var m = midi + 12, f = jhz(m), L = piped || (piped = { n: 0 });
+    if (L.midi != null && (midi === L.midi || (dur > .5 && L.n % 3 === 0))) {
+      var gm = m + (midi === L.midi ? 5 : 2);
+      sampled(dest, 'duda', gm, jhz(gm), t - .032, .032);
+    }
+    sampled(dest, 'duda', m, f, t, dur + .015);
+    L.midi = midi; L.n++;
   }
   // ---------------- voice, lira and duda: one continuous sound per phrase ----------------
   // Tenor formants: frequency Hz, level dB, bandwidth Hz. «ы» sits between «і» and «у».
@@ -300,9 +364,11 @@
       if (I.lira) liraString(dest, midi, t0, dur, info);
       return;
     }
-    if (I.duda) { chanter(dest, midi, t0, dur); return; }
+    if (I.duda) { if (recorded('duda')) sampledChanter(dest, midi, t0, dur); else chanter(dest, midi, t0, dur); return; }
     var f = hz(midi);
-    if (I.string) struck(dest, f, t0, dur); else wind(dest, S.inst, f, t0, dur);
+    if (I.string) struck(dest, midi, f, t0, dur);
+    else if (recorded(S.inst)) sampled(dest, S.inst, midi, f, t0, dur);
+    else wind(dest, S.inst, f, t0, dur);
   }
 
   // drone (бурдон): tonic and fifth with an extra octave, never lower than ~150 Hz, fixed level about a half
@@ -327,6 +393,7 @@
 
   // ---------------- scheduler: notes are queued about a second ahead ----------------
   var song = null, playing = false, mode = 'listen', bus = null, timer = 0, next = 0, segs = [], onEnd = null, closed = false;
+  var starts = 0, from0 = 0, SAMPLE_WAIT = 4000;
   function spb() { return 60 / (song.bpm * S.tempo * (mode === 'learn' ? LEARN_TEMPO : 1)); }
   function pitch(m) { return m + S.octave + S.transpose; }
   function pump() {
@@ -354,16 +421,31 @@
     var t = ctx ? ctx.currentTime : 0;
     droneOff(t);
     live.splice(0).forEach(function (n) { try { n.stop(t + .05); } catch (e) {} });
-    lines = {};
+    lines = {}; piped = null;
     if (bus) { var b = bus; try { b.gain.cancelScheduledValues(t); b.gain.setTargetAtTime(0, t, .02); } catch (e) {} setTimeout(function () { try { b.disconnect(); } catch (e) {} }, 300); }
     bus = null;
   }
   function finish() { playing = false; clear(); if (onEnd) onEnd(); }
 
+  // start the sound once the recordings are there (or given up on)
+  function begin(from, opts) {
+    bus = ctx.createGain(); bus.gain.value = 1; bus.connect(master); bus.connect(verb);
+    var t = ctx.currentTime + .08;
+    closed = false;
+    if (S.drone) droneOn(t);
+    if (INST[S.inst].ownDrone) ownDrone(t);
+    if (mode === 'learn' && !(opts && opts.tone === false)) {
+      for (var i = 0; i < song.ev.length && song.ev[i].midi < 0; i++) {}
+      if (i < song.ev.length) { note(bus, pitch(song.ev[i].midi), t, 1.3); t += 1.9; }
+    }
+    segs = [{ t0: t, b0: song.ev[from].b }]; next = from;
+    pump(); timer = setInterval(pump, TICK);
+  }
+
   var api = {
     INST: INST, OCTAVES: OCTAVES, settings: S,
     supported: function () { return !!(global.AudioContext || global.webkitAudioContext); },
-    load: function (melody) { if (playing) { playing = false; clear(); } song = melody; song.info = phrasing(melody); },
+    load: function (melody) { if (playing) { playing = false; clear(); } song = melody; song.info = phrasing(melody); fetchSamples(S.inst); },
     // mode: 'listen' | 'learn'; from: note index; opts.tone: false skips the starting tone in learn mode
     play: function (m, from, opts) {
       if (!song || !song.ev.length || !ensure()) return false;
@@ -371,18 +453,11 @@
       if (ctx.state !== 'running') ctx.resume();
       if (playing) { playing = false; clear(); }
       mode = m === 'learn' ? 'learn' : 'listen'; playing = true;
-      from = Math.max(0, Math.min(song.ev.length - 1, from || 0));
-      bus = ctx.createGain(); bus.gain.value = 1; bus.connect(master); bus.connect(verb);
-      var t = ctx.currentTime + .08;
-      closed = false;
-      if (S.drone) droneOn(t);
-      if (INST[S.inst].ownDrone) ownDrone(t);
-      if (mode === 'learn' && !(opts && opts.tone === false)) {
-        for (var i = 0; i < song.ev.length && song.ev[i].midi < 0; i++) {}
-        if (i < song.ev.length) { note(bus, pitch(song.ev[i].midi), t, 1.3); t += 1.9; }
-      }
-      segs = [{ t0: t, b0: song.ev[from].b }]; next = from;
-      pump(); timer = setInterval(pump, TICK);
+      from = from0 = Math.max(0, Math.min(song.ev.length - 1, from || 0));
+      segs = [];
+      var token = ++starts, wait = loadSamples(S.inst), go = function () { if (playing && token === starts) begin(from, opts); };
+      if (wait && !recorded(S.inst)) { Promise.race([wait, new Promise(function (ok) { setTimeout(ok, SAMPLE_WAIT); })]).then(go); }
+      else go();
       return true;
     },
     stop: function () { if (playing) { playing = false; clear(); } },
@@ -391,6 +466,7 @@
     // current position in beats (negative while the starting tone sounds)
     position: function () {
       if (!playing || !ctx) return 0;
+      if (!segs.length) return song.ev[from0].b;
       var now = ctx.currentTime, seg = segs[0];
       for (var i = segs.length - 1; i >= 0; i--) if (segs[i].t0 <= now) { seg = segs[i]; break; }
       return seg.b0 + (now - seg.t0) / spb();
@@ -400,6 +476,7 @@
     set: function (k, v) {
       if (!(k in DEF)) return;
       S[k] = v; persist();
+      if (k === 'inst') fetchSamples(v);
       if (!playing) return;
       if (k === 'drone') { if (v) droneOn(ctx.currentTime + .02); else droneOff(ctx.currentTime); }
       else { var b = api.position(), i = 0; for (var j = song.ev.length - 1; j >= 0; j--) if (song.ev[j].b <= b) { i = j; break; } api.play(mode, i, { tone: false }); }
