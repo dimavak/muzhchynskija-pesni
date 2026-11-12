@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Мужчынскія песні — Федароўскі, т. V–VI</title>
 <meta name="description" content="845 мужчынскіх песень з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.">
+<!-- link previews in messengers and social networks; og:image needs the site's full address -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Мужчынскія песні">
+<meta property="og:title" content="Мужчынскія песні — Федароўскі, т. V–VI">
+<meta property="og:description" content="845 мужчынскіх песень з зборніка Міхала Федароўскага: тэксты, ноты і мелодыі для праслухоўвання.">
+<meta property="og:url" content="https://dimavak.github.io/muzhchynskija-pesni/">
+<meta property="og:image" content="https://dimavak.github.io/muzhchynskija-pesni/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="be_BY">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#151213" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
@@ -109,7 +120,24 @@ h1, h2, h3 { text-wrap: balance; }
 .groups button:hover { background: var(--hover); }
 .groups button[aria-pressed="true"] { background: var(--thread); color: var(--thread-ink); }
 .groups button[aria-pressed="true"] small { color: inherit; opacity: .85; }
-.facets { display: grid; gap: 8px; }
+.facets { display: grid; gap: 8px; padding: 2px 0 8px; }
+/* all the filters fold into one box, so the list starts right under the search */
+.fbox { border: 1px solid var(--rule-2); border-radius: var(--r); background: var(--page); }
+.fbox > summary { list-style: none; display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 8px 0 12px; cursor: pointer; border-radius: var(--r); font-weight: 500; }
+.fbox > summary::-webkit-details-marker { display: none; }
+.fbox > summary:hover { background: var(--hover); }
+.fbox > summary .i { width: 20px; height: 20px; color: var(--ink-2); }
+.fbox > summary .grow { flex: 1; }
+.fbox .fcount { min-width: 22px; height: 22px; padding: 0 6px; border-radius: 11px; background: var(--thread); color: var(--thread-ink); font-size: 13px; display: inline-grid; place-items: center; }
+.fbox[open] > summary .chev { transform: rotate(180deg); }
+.fbox .chev { width: 22px; height: 22px; fill: currentColor; color: var(--ink-3); transition: transform .2s; flex: none; }
+.fbox-in { padding: 0 8px 4px; display: grid; }
+.factive { display: flex; flex-wrap: wrap; gap: 6px; }
+.factive:empty { display: none; }
+.factive button { display: inline-flex; align-items: center; gap: 4px; max-width: 100%; min-height: 32px; padding: 2px 6px 2px 10px; border: 0; border-radius: 16px; background: var(--thread-soft); color: var(--on-soft); font-size: 14.5px; text-align: left; }
+.factive button span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.factive button svg { width: 16px; height: 16px; fill: currentColor; flex: none; }
+.list-more { height: 1px; }
 .facet { border: 1px solid var(--rule-2); border-radius: var(--r); background: var(--page); min-width: 0; }
 .facet summary { list-style: none; display: flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 8px 0 12px; cursor: pointer; border-radius: var(--r); }
 .facet summary::-webkit-details-marker { display: none; }
@@ -142,6 +170,7 @@ h1, h2, h3 { text-wrap: balance; }
 .ic.ref { fill: var(--thread); }
 .flink { border: 0; background: transparent; padding: 0; color: var(--thread); text-align: left; font: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; cursor: pointer; }
 .flink:hover { text-decoration-thickness: 2px; }
+.apparatus .flink, .apparatus a { display: inline-block; padding: 4px 0; margin: -2px 0; }
 .crumbbar .grow { flex: 1; }
 .print-src, .print-url { display: none; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 10px 12px; }
@@ -380,6 +409,15 @@ dialog.zoom img { display: block; margin: 0 auto; width: min(1700px, 170vw); max
 dialog.zoom .close { position: fixed; top: 10px; right: 10px; background: #fff; color: #222; }
 dialog.zoom .close:hover { background: #f1ebe8; }
 .scrim { display: none; }
+.home-search { display: none; }
+.mini { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 50; display: flex; align-items: center; gap: 10px; width: min(560px, calc(100vw - 24px)); padding: 6px 8px 6px 6px; border-radius: 30px; background: var(--paper); color: var(--ink); border: 1px solid var(--rule-2); box-shadow: var(--shadow); transition: transform .2s, opacity .2s; }
+.mini.on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
+.mini .mbtn { width: 46px; height: 46px; border: 0; border-radius: 23px; background: var(--thread); color: var(--thread-ink); display: grid; place-items: center; flex: none; }
+.mini .mbtn svg { width: 24px; height: 24px; fill: currentColor; }
+.mini .mt { flex: 1; min-width: 0; border: 0; background: transparent; text-align: left; padding: 4px 6px; border-radius: 8px; color: inherit; }
+.mini .mt b { display: block; font: 600 16px/1.25 var(--serif); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini .mt small { display: block; font-size: 14px; color: var(--ink-2); }
+.mini .mt:hover { background: var(--hover); }
 .snack { position: fixed; left: 50%; bottom: max(20px, env(safe-area-inset-bottom)); transform: translate(-50%, 16px); opacity: 0; background: #2b2423; color: #f7efed; padding: 12px 18px; border-radius: 8px; font-size: 15px; box-shadow: var(--shadow); transition: transform .2s, opacity .2s; z-index: 60; pointer-events: none; max-width: calc(100vw - 32px); }
 .snack.on { transform: translate(-50%, 0); opacity: 1; }
 
@@ -397,6 +435,8 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   .brand small { display: none; }
   .cols.two { grid-template-columns: minmax(0, 1fr); }
   .zoom-btn { opacity: 1; }
+  .home-search { display: flex; align-items: center; gap: 10px; width: 100%; height: 52px; margin: 0 0 22px; padding: 0 16px; border-radius: 26px; border: 1px solid var(--rule-2); background: var(--page); color: var(--ink-3); font-size: 17px; text-align: left; box-shadow: var(--shadow); }
+  .home-search svg { width: 22px; height: 22px; fill: currentColor; flex: none; }
 }
 @media (min-width: 901px) { .menu-btn { display: none; } }
 @media (max-width: 520px) {
@@ -414,7 +454,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
 @media print {
   @page { margin: 14mm 16mm; }
   html, body { background: #fff !important; color: #000 !important; height: auto; }
-  .mast, .rail, .scrim, .skip, .map-wrap, .map-legend, .crumbbar, .subline, .sec-h, .player, .pnote, .zoom-btn, .cap, .refnote small, .apparatus, .likes, .pager, .snack, dialog, .cur-band, .cur-dot { display: none !important; }
+  .mast, .rail, .scrim, .skip, .map-wrap, .map-legend, .crumbbar, .subline, .sec-h, .player, .pnote, .zoom-btn, .cap, .refnote small, .apparatus, .likes, .pager, .snack, .mini, dialog, .cur-band, .cur-dot { display: none !important; }
   .app, .layout, .grid { display: block; height: auto; }
   .doc { overflow: visible; }
   .page { max-width: none; padding: 0; }
@@ -470,7 +510,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
         <span><b>Мужчынскія песні</b><small>з V і VI тамоў зборніка Міхала Федароўскага</small></span>
       </a>
       <span class="spacer"></span>
-      <a class="map-link" href="#map" id="mapLink"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg><span>Мапа</span></a>
+      <a class="map-link" href="#map" id="mapLink" aria-label="Мапа мясцін"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg><span>Мапа</span></a>
       <button class="icon-btn" id="theme" aria-label="Змяніць тэму"></button>
     </div>
   </header>
@@ -490,8 +530,14 @@ dialog.zoom .close:hover { background: #f1ebe8; }
             <button data-g="music"><span>З нотамі</span><small class="num" id="c-music"></small></button>
             <button data-g="none"><span>Без нот</span><small class="num" id="c-none"></small></button>
           </div>
-          <div class="facets" id="facets"></div>
-          <button class="reset" id="resetAll" hidden>Скінуць усе фільтры</button>
+          <div class="factive" id="factive"></div>
+          <details class="fbox" id="fbox">
+            <summary><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg><span>Фільтры</span><span class="fcount num" id="fcount" hidden></span><span class="grow"></span><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z"/></svg></summary>
+            <div class="fbox-in">
+              <div class="facets" id="facets"></div>
+              <button class="reset" id="resetAll" hidden>Скінуць усе фільтры</button>
+            </div>
+          </details>
         </div>
         <p class="legend"><span><svg class="ic own" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>свае ноты</span><span><svg class="ic ref" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h3V3H9zM17 11h6v6h-2v-2.59l-4.3 4.3-1.41-1.42 4.29-4.29H17z"/></svg>ноты іншай песні</span></p>
         <nav class="list" id="list" aria-label="Спіс песень"></nav>
@@ -506,6 +552,10 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   <img alt="">
 </dialog>
 <div class="snack" id="snack" role="status" aria-live="polite"></div>
+<div class="mini" id="mini" role="region" aria-label="Мелодыя іграе">
+  <button class="mbtn" id="miniStop" aria-label="Спыніць"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h12v12H6z"/></svg></button>
+  <button class="mt" id="miniGo" aria-label="Да нот"><b id="miniTitle"></b><small class="num" id="miniTime"></small></button>
+</div>
 
 <script src="config.js"></script>
 <script src="data.js"></script>
@@ -536,6 +586,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     tune: 'M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z', plus: 'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z',
     heart: 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z',
     book: 'M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z',
+    search: 'M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z',
     map: 'M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z',
     print: 'M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z'
   };
@@ -566,9 +617,27 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   function snack(t) { var el = $('snack'); el.textContent = t; el.classList.add('on'); clearTimeout(snack.t); snack.t = setTimeout(function () { el.classList.remove('on'); }, 2600); }
   function isDark() { return st.theme ? st.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
 
-  SONGS.forEach(function (s) {
-    s.hay = fold([s.id, s.title, s.cat, s.dance, s.region, s.header, (s.informant || []).join(' '), (s.informant_cyr || []).join(' '), s.cyr.join(' '), s.lat.join(' ')].join(' \u0001 '));
-  });
+  function buildHay(s) {
+    s.hay = fold([s.id, s.title, s.cat, s.dance, s.region, s.header, (s.informant || []).join(' '), (s.informant_cyr || []).join(' '), s.cyr.join(' '), (s.lat || []).join(' ')].join(' \u0001 '));
+  }
+  SONGS.forEach(buildHay);
+  // the original Latin-script texts (a third of the data) come after the first view: texts-lat.js
+  var latState = window.SONGS_LAT ? 2 : 0, latWait = [];
+  function withLat(cb) {
+    if (latState === 2) return cb();
+    latWait.push(cb);
+    if (latState) return;
+    latState = 1;
+    var sc = document.createElement('script'); sc.src = 'texts-lat.js';
+    sc.onload = sc.onerror = function () {
+      var L = window.SONGS_LAT || {};
+      SONGS.forEach(function (s) { s.lat = L[s.id] || []; buildHay(s); });
+      latState = 2;
+      var q = latWait; latWait = []; q.forEach(function (f) { f(); });
+    };
+    document.body.appendChild(sc);
+  }
+  if (latState === 2) SONGS.forEach(function (s) { s.lat = window.SONGS_LAT[s.id] || []; buildHay(s); });
 
   // ---------- filters (facets): counts follow the other active filters ----------
   var cats = {};
@@ -668,12 +737,15 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       SONGS.forEach(function (s) { if (matchAll(s, f.key)) f.vals(s).forEach(function (v) { cnt[v] = (cnt[v] || 0) + 1; }); });
       if (sel && !cnt[sel]) cnt[sel] = 0;
       var keys = Object.keys(cnt), open = load('open.' + f.key, false) || (f.key === 'cat' && load('typesOpen', false));
+      // options are built only for a facet that is open and visible: fewer elements, faster typing in the search
+      var built = open && $('fbox').open;
       var opt = function (v, cls, label) {
         return '<button class="' + cls + '" data-f="' + f.key + '" data-v="' + esc(v) + '" aria-pressed="' + (sel === v) + '"' + (f.key === 'place' && cls.indexOf('sub') >= 0 ? ' lang="pl" translate="no"' : '') + '>' +
           '<span>' + esc(label) + '</span><small class="num">' + cnt[v] + '</small></button>';
       };
       var body = [];
-      if (f.chips) {
+      if (!built) {}
+      else if (f.chips) {
         keys.sort(function (a, b) { return cnt[b] - cnt[a] || a.localeCompare(b, 'be'); });
         body.push('<div class="chips">' + keys.map(function (v) { return opt(v, 'chip', v); }).join('') + '</div>');
       } else {
@@ -706,6 +778,12 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     $('facets').innerHTML = h.join('');
     if (focusKey) { var inp = document.querySelector('[data-fs="' + focusKey + '"]'); if (inp) { inp.focus(); try { inp.setSelectionRange(pos, pos); } catch (e) {} } }
     $('resetAll').hidden = !anyFilter();
+    var act = FACETS.filter(function (f) { return !!st.f[f.key]; });
+    $('fcount').hidden = !act.length; $('fcount').textContent = act.length;
+    // active filters stay visible (and removable) while the box is closed
+    $('factive').innerHTML = $('fbox').open ? '' : act.map(function (f) {
+      return '<button data-clear="' + f.key + '" aria-label="Скінуць фільтр «' + f.label + ': ' + esc(shortLabel(st.f[f.key])) + '»"><span>' + f.label + ': ' + esc(shortLabel(st.f[f.key])) + '</span>' + svg('close', '') + '</button>';
+    }).join('');
   }
   function syncUrl() {
     try {
@@ -736,18 +814,36 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     if (s.group === 'ref') return '<svg class="ic ref" viewBox="0 0 24 24" role="img" aria-label="ноты іншай песні"><path d="' + IC.noteRef + '"/></svg>';
     return '';
   }
-  function renderList() {
-    var h = [], lastG = null;
-    visible.forEach(function (s) {
+  // the list is drawn in portions: the first ones at once, the rest as it is scrolled
+  var LIST_STEP = 120, listShown = 0, listObs = null;
+  function itemsHtml(from, to) {
+    var h = [], lastG = from > 0 ? (hasMusic(visible[from - 1]) ? 'music' : 'none') : null;
+    visible.slice(from, to).forEach(function (s) {
       var g = hasMusic(s) ? 'music' : 'none';
       if (st.group === 'all' && g !== lastG) { h.push('<div class="ghead">' + (g === 'music' ? 'З нотамі' : 'Без нот') + '</div>'); lastG = g; }
       h.push('<a class="item" href="#' + esc(s.id) + '"' + (cur && cur.id === s.id ? ' aria-current="page"' : '') + '><span class="n num">' + esc(s.id) + '</span><span class="t">' + esc(s.title) + '</span>' + (noteIcon(s) || '<span></span>') + '</a>');
     });
-    $('list').innerHTML = h.join('') || '<div class="empty">Нічога не знойдзена.<br><button class="tbtn" id="resetF">Скінуць фільтры</button></div>';
+    return h.join('');
+  }
+  function moreList() {
+    var el = $('list'), old = el.querySelector('.list-more'); if (old) old.remove();
+    var to = Math.min(visible.length, listShown + LIST_STEP);
+    el.insertAdjacentHTML('beforeend', itemsHtml(listShown, to) + (to < visible.length ? '<div class="list-more" aria-hidden="true"></div>' : ''));
+    listShown = to;
+    var m = el.querySelector('.list-more');
+    if (m && listObs) listObs.observe(m);
+  }
+  function renderList() {
+    var at = cur ? visible.indexOf(cur) : -1;
+    listShown = 0; $('list').innerHTML = '';
+    if (!visible.length) { $('list').innerHTML = '<div class="empty">Нічога не знойдзена.<br><button class="tbtn" id="resetF">Скінуць фільтры</button></div>'; return; }
+    if (!listObs && 'IntersectionObserver' in window) listObs = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { listObs.unobserve(e.target); moreList(); } }); }, { root: $('railScroll'), rootMargin: '600px' });
+    if (!listObs) LIST_STEP = visible.length;
+    do moreList(); while (listShown <= at);
   }
   function setFacet(key, v, open) {
     st.f[key] = st.f[key] === v && !open ? '' : v;
-    if (open) save('open.' + key, true);
+    if (open) { save('open.' + key, true); save('fbox', true); $('fbox').open = true; }
     saveFilters(); refilter();
     if (open) openMenu();
   }
@@ -804,9 +900,24 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     P.idx = idxAtBeat(b); drawCursor(); drawTime(b);
     P.raf = requestAnimationFrame(loop);
   }
+  // a small player at the bottom while the big one is scrolled out of sight
+  var miniObs = null, playerSeen = true;
+  function watchPlayer() {
+    if (miniObs) miniObs.disconnect();
+    var el = document.querySelector('.player'); playerSeen = true;
+    if (!el || !('IntersectionObserver' in window)) return drawMini();
+    miniObs = new IntersectionObserver(function (es) { playerSeen = es[es.length - 1].isIntersecting; drawMini(); });
+    miniObs.observe(el);
+  }
+  function drawMini() {
+    var on = playing() && !playerSeen && P.song;
+    $('mini').classList.toggle('on', !!on);
+    if (on) $('miniTitle').textContent = '№ ' + P.song.id + ' ' + P.song.title.replace(/́/g, '');
+  }
   function drawTime(b) {
     if (!P.mel) return;
     var sp = spb(), tot = P.mel.beats * sp, now = Math.max(0, b) * sp;
+    if (playing() && !playerSeen) $('miniTime').textContent = (FP.mode() === 'learn' ? 'Развучыць · ' : '') + fmt(now) + ' / ' + fmt(tot);
     var t = $('ptime'); if (t) t.textContent = fmt(now) + ' / ' + fmt(tot);
     var r = $('pseek'); if (r) { var v = P.mel.beats ? Math.min(1000, Math.round(1000 * b / P.mel.beats)) : 0; r.value = v; r.style.setProperty('--p', (v / 10) + '%'); r.setAttribute('aria-valuetext', fmt(now) + ' з ' + fmt(tot)); }
   }
@@ -824,6 +935,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     });
   }
   function updateUI() {
+    drawMini();
     var L = $('pListen'); if (!L || !FP) return;
     var on = playing(), m = on ? FP.mode() : '', S = FP.settings;
     L.innerHTML = svg(m === 'listen' ? 'stop' : 'play') + '<span>' + (m === 'listen' ? 'Стоп' : 'Паслухаць') + '</span>';
@@ -964,7 +1076,8 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     h.push('</div></div>');
     if (pl) h.push('<p class="notice">Гэтую песню Федароўскі запісаў па-польску, таму тэкст пададзены ў арыгінале.</p>');
     var mode = pl ? 'lat' : st.mode;
-    if (mode === 'both') h.push('<div class="cols two"><div><h3>Кірыліца</h3>' + textBlock(s.cyr, 'cyr') + '</div><div><h3>Арыгінал Федароўскага</h3>' + textBlock(s.lat, 'lat', 'be-Latn') + '</div></div>');
+    if (mode !== 'cyr' && latState !== 2) { h.push('<p class="none">Загружаецца арыгінал…</p>'); withLat(function () { if (cur === s) rerenderText(); }); }
+    else if (mode === 'both') h.push('<div class="cols two"><div><h3>Кірыліца</h3>' + textBlock(s.cyr, 'cyr') + '</div><div><h3>Арыгінал Федароўскага</h3>' + textBlock(s.lat, 'lat', 'be-Latn') + '</div></div>');
     else if (mode === 'lat') h.push('<div class="cols one">' + textBlock(s.lat, 'lat', pl ? 'pl' : 'be-Latn') + '</div>');
     else h.push('<div class="cols one">' + textBlock(s.cyr, 'cyr') + '</div>');
     h.push('</section>');
@@ -978,6 +1091,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     $('view').innerHTML = h.join('');
 
     loadSong(s, mel);
+    watchPlayer();
     updateUI();
     if (likesOn) mountGiscus(s);
   }
@@ -994,6 +1108,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       '<article class="home">' +
       '<svg class="band-lg" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="url(#orn-lg)"/></svg>' +
       '<h1>Мужчынскія песні</h1>' +
+      '<button class="home-search" id="homeSearch">' + svg('search', '') + 'Нумар, радок, выканаўца…</button>' +
       '<p class="lead">' + nf.format(SONGS.length) + ' песень з V і VI тамоў зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць.</p>' +
       '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + 'Адкрыць першую песню</a><a class="btn quiet" href="#map">' + svg('map', '') + 'Мапа мясцін</a></p>' +
       '<h2>Па тамах</h2><ul class="cats vols">' + VOLS.map(function (v) { return '<li><button data-facet-set="vol" data-value="т. ' + v[0] + '"><span>Том ' + v[0] + ' <small>' + v[1] + '</small></span><span class="num">' + SONGS.filter(function (s) { return s.vol === v[0]; }).length + '</span></button></li>'; }).join('') + '</ul>' +
@@ -1159,7 +1274,14 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     var b = e.target.closest('button[data-f]'); if (b) setFacet(b.getAttribute('data-f'), b.getAttribute('data-v'));
   });
   $('facets').addEventListener('keydown', function (e) { var c = e.target.closest('[data-clear]'); if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); clearFacet(c.getAttribute('data-clear')); } });
-  $('facets').addEventListener('toggle', function (e) { var d = e.target; if (d.matches && d.matches('details.facet')) save('open.' + d.getAttribute('data-facet'), d.open); }, true);
+  $('facets').addEventListener('toggle', function (e) {
+    var d = e.target; if (!d.matches || !d.matches('details.facet')) return;
+    save('open.' + d.getAttribute('data-facet'), d.open);
+    // a freshly inserted open <details> fires toggle too: rebuild only when the user opened an empty one
+    if (d.open && $('fbox').open && !d.querySelector('.opts, .chips')) renderFacets();
+  }, true);
+  $('fbox').addEventListener('toggle', function () { save('fbox', this.open); renderFacets(); });
+  $('factive').addEventListener('click', function (e) { var c = e.target.closest('[data-clear]'); if (c) clearFacet(c.getAttribute('data-clear')); });
   var ft; $('facets').addEventListener('input', function (e) { var k = e.target.getAttribute('data-fs'); if (!k) return; fq[k] = e.target.value; clearTimeout(ft); ft = setTimeout(renderFacets, 120); });
   $('resetAll').addEventListener('click', resetAll);
   var qt; $('q').addEventListener('input', function () { var v = this.value; $('qclear').hidden = !v; clearTimeout(qt); qt = setTimeout(function () { st.q = v; refilter(); }, 120); });
@@ -1168,6 +1290,8 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   $('list').addEventListener('click', function (e) { if (e.target.closest('#resetF')) resetAll(); });
   $('theme').addEventListener('click', function () { st.theme = isDark() ? 'light' : 'dark'; save('theme', st.theme); applyPrefs(); if (mapOn()) renderMap(); });
   $('menu').addEventListener('click', openMenu);
+  $('miniStop').addEventListener('click', stopPlay);
+  $('miniGo').addEventListener('click', function () { var el = document.querySelector('.score'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   $('scrim').addEventListener('click', closeMenu);
   function openZoom(src) { var d = $('zoom'); d.querySelector('img').src = src; if (d.showModal) d.showModal(); else d.setAttribute('open', ''); }
   $('zoomClose').addEventListener('click', function () { $('zoom').close(); });
@@ -1178,6 +1302,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     var t = e.target;
     var cb = t.closest('[data-facet-set]'); if (cb) { setFacet(cb.getAttribute('data-facet-set'), cb.getAttribute('data-value'), true); return; }
     var pb = t.closest('[data-place]'); if (pb) { focusPlace(pb.getAttribute('data-place')); return; }
+    if (t.closest('#homeSearch')) { openMenu(); $('q').focus(); return; }
     if (t.closest('#printBtn')) { stopPlay(); window.print(); return; }
     var zb = t.closest('.zoom-btn'); if (zb) { openZoom(zb.getAttribute('data-src')); return; }
     if (t.closest('#prev')) return go(-1);
@@ -1233,7 +1358,10 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   var mq = matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', applyPrefs);
 
   if (st.q) { $('q').value = st.q; $('qclear').hidden = false; }
+  $('fbox').open = load('fbox', false);
   applyPrefs(); compute(); counts(); show();
+  // search by the original spelling works once the Latin texts are in
+  setTimeout(function () { withLat(function () { if (st.q) refilter(); }); }, 300);
 })();
 </script>
 </body>
