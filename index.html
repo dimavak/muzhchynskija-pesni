@@ -101,6 +101,15 @@ h1, h2, h3 { text-wrap: balance; }
 .icon-btn:active { background: var(--press); }
 .icon-btn[disabled] { opacity: .35; pointer-events: none; }
 .layout { display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); min-height: 0; }
+/* 18+ section: age badge and the gate before it */
+.age { display: inline-flex; align-items: center; justify-content: center; flex: none; font: 700 13px/1 var(--sans); letter-spacing: .02em; color: var(--thread-ink); background: var(--thread); border-radius: 6px; padding: 4px 6px; vertical-align: middle; }
+.brand .age { margin-left: -4px; }
+.home h1 .age, .home h2 .age { font-size: .4em; padding: .25em .4em; position: relative; top: -.1em; }
+.app.gate .layout { grid-template-columns: minmax(0, 1fr); }
+.app.gate .rail, .app.gate #menu, .app.gate #mapLink, .app.gate #theme { display: none; }
+.gate-box { max-width: 640px; margin: 0 auto; text-align: center; }
+.gate-box .actions { justify-content: center; }
+.gate-box .age-big { display: inline-block; font: 800 44px/1 var(--serif); color: var(--thread); border: 4px solid currentColor; border-radius: 50%; width: 112px; height: 112px; line-height: 104px; margin: 24px 0 8px; }
 
 /* ---------- rail: search, filters, list ---------- */
 .rail { background: var(--linen); border-right: 1px solid var(--rule); min-height: 0; display: flex; flex-direction: column; }
@@ -558,7 +567,16 @@ dialog.zoom .close:hover { background: #f1ebe8; }
 </div>
 
 <script src="config.js"></script>
-<script src="data.js"></script>
+<script>
+// ?r=18 opens the separate 18+ section (vol. VIa, obscene songs): its data loads only after the age is confirmed
+(function () {
+  var a = /[?&]r=18(&|$)/.test(location.search), ok = false;
+  try { ok = localStorage.getItem('fed5.adult18') === '1'; } catch (e) {}
+  window.ADULT = a; window.ADULT_OK = ok;
+  if (a) { var m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex'; document.head.appendChild(m); document.documentElement.classList.add('adult'); }
+  document.write(!a ? '<script src="data.js"><\/script>' : ok ? '<script src="data-18.js"><\/script>' : '');
+})();
+</script>
 <script src="places.js"></script>
 <script src="melodies.js"></script>
 <script src="folk-player.js"></script>
@@ -566,6 +584,24 @@ dialog.zoom .close:hover { background: #f1ebe8; }
 (function () {
   'use strict';
   var SONGS = window.SONGS || [], MEL = window.MELODIES || {}, CFG = window.SONGBOOK_CONFIG || {};
+  var ADULT = !!window.ADULT, NAME = ADULT ? 'Фрывольныя песні' : 'Мужчынскія песні', MAIN = location.pathname, A18 = MAIN + '?r=18';
+  if (ADULT) {
+    document.querySelector('.brand b').textContent = NAME;
+    document.querySelector('.brand small').textContent = 'т. VIa зборніка Федароўскага · толькі для дарослых';
+    document.querySelector('.brand span').insertAdjacentHTML('afterend', '<span class="age" title="Толькі для дарослых">18+</span>');
+  }
+  if (ADULT && !window.ADULT_OK) {
+    // age gate: nothing of the section is loaded until the visitor confirms
+    try { var th = JSON.parse(localStorage.getItem('fed5.theme') || '""'); if (th) document.documentElement.setAttribute('data-theme', th); } catch (e) {}
+    document.getElementById('app').classList.add('gate');
+    document.title = 'Толькі для дарослых — ' + NAME;
+    document.getElementById('view').innerHTML = '<article class="home gate-box"><p class="age-big">18+</p><h1>Фрывольныя песні</h1>' +
+      '<p class="lead">У гэтым раздзеле — абсцэнныя (непрыстойныя) мужчынскія песні і прыпеўкі да танцаў з тома VIa зборніка Міхала Федароўскага. Тэксты ўтрымліваюць грубую лексіку і адкрытыя сэксуальныя вобразы і прызначаныя толькі для дарослых.</p>' +
+      '<p class="lead">Вам ёсць 18 гадоў?</p>' +
+      '<p class="actions"><button class="btn primary" id="age-yes">Так, мне ёсць 18</button><a class="btn quiet" href="' + MAIN + '">Не, да асноўнага каталога</a></p></article>';
+    document.getElementById('age-yes').addEventListener('click', function () { try { localStorage.setItem('fed5.adult18', '1'); } catch (e) {} location.reload(); });
+    return;
+  }
   var WIKI = 'https://be.wikipedia.org/wiki/%D0%9C%D1%96%D1%85%D0%B0%D0%BB_%D0%A4%D0%B5%D0%B4%D0%B0%D1%80%D0%BE%D1%9E%D1%81%D0%BA%D1%96';
   var byId = {};
   SONGS.forEach(function (s) { byId[s.id] = s; });
@@ -595,9 +631,10 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   // ---------- preferences (per viewer, optional) ----------
   function load(k, d) { try { var v = localStorage.getItem('fed5.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem('fed5.' + k, JSON.stringify(v)); } catch (e) {} }
-  var st = { group: load('group', 'all'), f: load('facets', null), mode: load('mode', 'cyr'), acc: load('acc', true), fs: load('fs', 20), theme: load('theme', ''), q: '' };
+  var FK = ADULT ? 'a18.' : '';
+  var st = { group: load(FK + 'group', 'all'), f: load(FK + 'facets', null), mode: load('mode', 'cyr'), acc: load('acc', true), fs: load('fs', 20), theme: load('theme', ''), q: '' };
   // filters may also come from the address (shareable links)
-  if (!st.f || typeof st.f !== 'object') st.f = { cat: load('cat', '') };
+  if (!st.f || typeof st.f !== 'object') st.f = { cat: ADULT ? '' : load('cat', '') };
   // a shared link brings its own filters
   (function () {
     try {
@@ -628,7 +665,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     latWait.push(cb);
     if (latState) return;
     latState = 1;
-    var sc = document.createElement('script'); sc.src = 'texts-lat.js';
+    var sc = document.createElement('script'); sc.src = ADULT ? 'texts-lat-18.js' : 'texts-lat.js';
     sc.onload = sc.onerror = function () {
       var L = window.SONGS_LAT || {};
       SONGS.forEach(function (s) { s.lat = L[s.id] || []; buildHay(s); });
@@ -788,6 +825,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
   function syncUrl() {
     try {
       var u = new URLSearchParams();
+      if (ADULT) u.set('r', '18');
       if (st.group !== 'all') u.set('g', st.group);
       FACETS.forEach(function (f) { if (st.f[f.key]) u.set(f.url, st.f[f.key]); });
       if (st.q) u.set('q', st.q);
@@ -795,7 +833,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash);
     } catch (e) {}
   }
-  function saveFilters() { save('group', st.group); save('facets', st.f); }
+  function saveFilters() { save(FK + 'group', st.group); save(FK + 'facets', st.f); }
 
   // ---------- list ----------
   var cur = null, visible = [];
@@ -1052,11 +1090,12 @@ dialog.zoom .close:hover { background: #f1ebe8; }
         var shown = false, sh = [];
         s.refm.forEach(function (r) {
           var inSet = byId[r.n] || byId[r.n + 'a'];
-          var link = inSet ? '<a href="#' + esc(inSet.id) + '">№ ' + esc(r.n) + '</a>' : '№ ' + esc(r.n);
+          var inMain = !inSet && ADULT && r.vol !== 'VIa';
+          var link = inSet ? '<a href="#' + esc(inSet.id) + '">№ ' + esc(r.n) + '</a>' : inMain ? '<a href="' + MAIN + '#' + esc(r.n) + '">№ ' + esc(r.n) + '</a>' : '№ ' + esc(r.n);
           var where = r.imgs.length ? pageRef(r.vol, r.imgs[0].page) : 'т. ' + r.vol;
           h.push('<p class="refnote">Спяваецца на мелодыю ' + link + ' (' + where + (r.header ? ', <span lang="pl" translate="no">' + esc(r.header) + '</span>' : '') + ')' +
             (r.via ? '. Выданне адсылае да № ' + esc(r.via) + ', а тая песня — да гэтай мелодыі' : '') +
-            (inSet ? '' : '<small>Песня № ' + esc(r.n) + ' не ўвайшла ў гэты зборнік: тут толькі яе ноты, словы пад нотамі — з той песні.</small>') + '</p>');
+            (inSet ? '' : inMain ? '<small>Гэтая песня — у асноўным каталогу.</small>' : '<small>Песня № ' + esc(r.n) + ' не ўвайшла ў гэты зборнік: тут толькі яе ноты, словы пад нотамі — з той песні.</small>') + '</p>');
           if (!shown && r.imgs.length) { r.imgs.forEach(function (im) { sh.push(sheet(im, 'Ноты мелодыі № ' + r.n, k, k === 0)); k++; }); shown = true; }
           else r.imgs.forEach(function (im) { sh.push(sheet(im, 'Ноты мелодыі № ' + r.n, -1, false)); });
         });
@@ -1096,7 +1135,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     if (likesOn) mountGiscus(s);
   }
 
-  var VOLS = [['V', 'песні любоўныя, вясельныя, сямейныя, каляндарныя, вайсковыя, балады'], ['VI', 'круцёлкі, жартоўныя песні, танцы, застольныя, розныя, хрэсьбінныя, думы']];
+  var VOLS = ADULT ? [['VIa', 'песні абсцэнныя і абсцэнныя танцавальныя']] : [['V', 'песні любоўныя, вясельныя, сямейныя, каляндарныя, вайсковыя, балады'], ['VI', 'круцёлкі, жартоўныя песні, танцы, застольныя, розныя, хрэсьбінныя, думы']];
   function regionList() {
     var c = {}; SONGS.forEach(function (s) { c[s.fRegion] = (c[s.fRegion] || 0) + 1; });
     return Object.keys(c).sort(function (a, b) { return (a === NO_REGION) - (b === NO_REGION) || c[b] - c[a]; }).map(function (k) { return [k, c[k]]; });
@@ -1107,16 +1146,17 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     $('view').innerHTML =
       '<article class="home">' +
       '<svg class="band-lg" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="url(#orn-lg)"/></svg>' +
-      '<h1>Мужчынскія песні</h1>' +
+      '<h1>' + NAME + (ADULT ? ' <span class="age">18+</span>' : '') + '</h1>' +
       '<button class="home-search" id="homeSearch">' + svg('search', '') + 'Нумар, радок, выканаўца…</button>' +
-      '<p class="lead">' + nf.format(SONGS.length) + ' песень з V і VI тамоў зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць.</p>' +
-      '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + 'Адкрыць першую песню</a><a class="btn quiet" href="#map">' + svg('map', '') + 'Мапа мясцін</a></p>' +
+      (ADULT ? '<p class="lead">' + nf.format(SONGS.length) + ' мужчынскіх песень і прыпевак з тома VIa зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>, раздзелы «Pieśni obsceniczne» і «Pieśni obsceniczne taneczne»: жартоўныя і непрыстойныя песні, дыялогі, прыпеўкі да круцёлкі, полькі і мяцеліцы. Песні, якія спяваюцца ад імя жанчыны, сюды не ўвайшлі. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць. Гэты раздзел асобны: у асноўны каталог і пошук ён не трапляе.</p>' : '<p class="lead">' + nf.format(SONGS.length) + ' песень з V і VI тамоў зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць.</p>') +
+      '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + 'Адкрыць першую песню</a><a class="btn quiet" href="#map">' + svg('map', '') + 'Мапа мясцін</a>' + (ADULT ? '<a class="btn quiet" href="' + MAIN + '">Асноўны каталог</a>' : '') + '</p>' +
       '<h2>Па тамах</h2><ul class="cats vols">' + VOLS.map(function (v) { return '<li><button data-facet-set="vol" data-value="т. ' + v[0] + '"><span>Том ' + v[0] + ' <small>' + v[1] + '</small></span><span class="num">' + SONGS.filter(function (s) { return s.vol === v[0]; }).length + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Па тыпах</h2><ul class="cats">' + catNames.map(function (c) { return '<li><button data-facet-set="cat" data-value="' + esc(c) + '"><span>' + esc(c) + '</span><span class="num">' + cats[c] + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Па мясцінах</h2><p>Усе вёскі і мястэчкі, дзе Федароўскі запісаў гэтыя песні, — на <a href="#map">мапе</a>.</p><ul class="cats">' + regionList().map(function (r) { return '<li><button data-facet-set="place" data-value="' + esc(r[0]) + '"><span>' + esc(r[0]) + '</span><span class="num">' + r[1] + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Што ёсць пры песні</h2><p>Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), выканаўца, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні, нават калі яна ў іншым томе. Пры песнях VI тома пазначаны і танец («Kruciołka», «Polka drobna»…), калі ён ёсць у выданні.</p>' +
       '<h2>Мелодыі</h2><p>Ноты распазнаныя аўтаматычна і гучаць праз сінтэзатар голасам сапілкі, цымбалаў або кларнета, з бурдонам на выбар. «Паслухаць» іграе мелодыю адзін раз, «Развучыць» — павольней і па крузе. Актаву, вышыню і тэмп можна падабраць пад свой голас, а курсор паказвае на нотах, што гучыць зараз. У рытме і асобных нотах магчымыя памылкі распазнавання.</p>' +
       '<h2>Тэкст</h2><p>Тэкст пераведзены з польскай лацінкі Федароўскага ў беларускую кірыліцу з захаваннем дыялектнага вымаўлення і націскаў. Арыгінальны запіс можна паглядзець кнопкай «Арыгінал» або «Побач».</p>' +
+      (ADULT ? '' : '<h2>Фрывольныя песні <span class="age">18+</span></h2><p>Абсцэнныя песні і прыпеўкі да танцаў з тома VIa сабраныя ў <a href="' + A18 + '">асобным раздзеле</a> толькі для дарослых. У гэты каталог і пошук яны не трапляюць.</p>') +
       '<h2>Клавішы</h2><dl class="keys"><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>папярэдняя і наступная песня</dd><dt><kbd>/</kbd></dt><dd>пошук</dd><dt><kbd>Прабел</kbd></dt><dd>паслухаць мелодыю або спыніць</dd></dl>' +
       '</article>';
     unloadSong();
@@ -1124,7 +1164,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
 
   // ---------- map of the places where the songs were written down ----------
   // places.js: PLACES (one marker per settlement), SONG_PLACES (song -> markers), PLACE_TOWNS (Polish -> Belarusian town names)
-  var PLACES = window.PLACES || {}, SONG_PLACES = window.SONG_PLACES || {}, PLACE_TOWNS = window.PLACE_TOWNS || {};
+  var PLACES = window.PLACES || {}, SONG_PLACES = (ADULT ? window.SONG_PLACES_18 : window.SONG_PLACES) || {}, PLACE_TOWNS = window.PLACE_TOWNS || {};
   var LEAFLET = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min';
   var MAP = null, mapMarkers = {};
   function mapOn() { return /^#map(\/|$)/.test(location.hash); }
@@ -1230,7 +1270,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     $('mapLink').toggleAttribute('aria-current', mapOn()); if (mapOn()) $('mapLink').setAttribute('aria-current', 'page');
     if (mapOn()) {
       cur = null; renderList(); renderMap(id.slice(4));
-      $('main').scrollTop = 0; document.title = 'Мапа мясцін — Мужчынскія песні'; closeMenu(); return;
+      $('main').scrollTop = 0; document.title = 'Мапа мясцін — ' + NAME; closeMenu(); return;
     }
     unloadMap();
     cur = byId[id] || null;
@@ -1243,7 +1283,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     renderList();
     if (cur) renderSong(cur); else renderIntro();
     $('main').scrollTop = 0;
-    document.title = cur ? '№ ' + cur.id + ' ' + cur.title.replace(/́/g, '') + ' — Мужчынскія песні' : 'Мужчынскія песні — Федароўскі, т. V–VI';
+    document.title = cur ? '№ ' + cur.id + ' ' + cur.title.replace(/́/g, '') + ' — ' + NAME : ADULT ? 'Фрывольныя песні (18+) — Федароўскі, т. VIa' : 'Мужчынскія песні — Федароўскі, т. V–VI';
     scrollListToCur();
     closeMenu();
   }
@@ -1267,7 +1307,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     document.querySelectorAll('meta[name=theme-color]').forEach(function (m) { m.setAttribute('content', dark ? '#151213' : '#ffffff'); });
     giscusSend({ setConfig: { theme: giscusTheme() } });
   }
-  $('groups').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; st.group = b.getAttribute('data-g'); save('group', st.group); refilter(); });
+  $('groups').addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; st.group = b.getAttribute('data-g'); save(FK + 'group', st.group); refilter(); });
   function clearFacet(k) { st.f[k] = ''; saveFilters(); refilter(); }
   $('facets').addEventListener('click', function (e) {
     var c = e.target.closest('[data-clear]'); if (c) { e.preventDefault(); e.stopPropagation(); clearFacet(c.getAttribute('data-clear')); return; }
