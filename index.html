@@ -440,15 +440,15 @@ dialog.zoom .close:hover { background: #f1ebe8; }
 .hero-ph.split .hero-in { position: static; align-self: center; max-width: 700px; padding: 0 clamp(20px, 4vw, 64px) 0 clamp(20px, 5vw, 72px); text-shadow: none; }
 .home .hero-ph.split .kicker { color: #7a1c22; }
 .hero-ph.split h1 { color: #1c1918; }
+.hero-ph.split .hero-in { container-type: inline-size; }
+/* the longest word of the title is about 5.6em wide: keep it inside the text column, also when the side menu narrows the page */
+.hero-ph.split h1 { font-size: min(clamp(46px, 7.5vw, 96px), 17cqi); }
 .home .hero-ph.split .sub { color: #4a403c; font-size: clamp(17px, 1.5vw, 20px); }
 .hero-ph.split .home-search { background: #fff; box-shadow: 0 10px 30px -14px rgba(40, 20, 10, .45); border: 1px solid #cfc6bb; }
 .hero-ph.split figure { position: relative; margin: 0; height: 100%; overflow: hidden; }
 .hero-ph.split figure img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
 .hero-ph.split figure::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #ddd6ca 0, rgba(221, 214, 202, 0) 26%), linear-gradient(0deg, rgba(221, 214, 202, .9) 0, rgba(221, 214, 202, 0) 14%); pointer-events: none; }
 .home .hero-ph.split .ph-cap { color: #5d5552; z-index: 2; }
-.ph-band { margin: 64px calc(-1 * clamp(16px, 4vw, 48px)) 0; position: relative; }
-.ph-band img { width: 100%; height: clamp(220px, 32vw, 420px); object-fit: cover; object-position: 50% 60%; display: block; }
-.ph-band figcaption { font-size: 13px; color: var(--ink-3); margin: 8px clamp(16px, 4vw, 48px) 0; }
 .sec-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 52px 0 18px; }
 .sec-title h2 { margin: 0; font: 700 clamp(26px, 3vw, 34px)/1.15 var(--serif); }
 .sec-title a { font-weight: 500; white-space: nowrap; }
@@ -505,13 +505,6 @@ a.place { text-decoration: none; }
 .people { display: flex; gap: 14px; align-items: flex-start; }
 .people img { width: 100%; height: auto; border-radius: 14px; display: block; }
 .people figure { margin: 0; min-width: 0; }
-.song-ph { position: relative; margin: 0 0 22px; height: 230px; border-radius: 16px; overflow: hidden; background: #181112; }
-.song-ph img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; display: block; }
-.song-ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(18, 10, 11, .55), rgba(18, 10, 11, 0) 55%); }
-.song-ph .where { position: absolute; z-index: 1; left: 22px; bottom: 18px; color: #fff; }
-.song-ph .where b { display: block; font: 700 26px/1.1 var(--serif); }
-.song-ph .where span { font-size: 15px; color: #efe6e2; }
-.song-ph .phc { position: absolute; z-index: 1; right: 14px; bottom: 10px; font-size: 12.5px; color: rgba(255, 255, 255, .75); text-shadow: 0 1px 6px rgba(0,0,0,.6); }
 @media (max-width: 760px) {
   .music { grid-template-columns: 1fr; }
   .informants { grid-template-columns: 1fr; }
@@ -525,12 +518,10 @@ a.place { text-decoration: none; }
   .hero-ph.split figure::before { background: linear-gradient(0deg, #ddd6ca 0, rgba(221, 214, 202, 0) 30%); }
   .hero-ph.split .hero-in { padding: 0 20px 30px; margin-top: -40px; position: relative; z-index: 2; }
   .ph-cap { display: none; }
-  .song-ph { height: 180px; }
   .places { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
   .place b { font-size: 19px; }
   .music.collector, .music.melody { grid-template-columns: 1fr; }
   .melody figure { order: -1; }
-  .song-ph .phc { top: 10px; bottom: auto; left: 14px; right: 14px; text-align: right; }
 }
 
 .mini { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 50; display: flex; align-items: center; gap: 10px; width: min(560px, calc(100vw - 24px)); padding: 6px 8px 6px 6px; border-radius: 30px; background: var(--paper); color: var(--ink); border: 1px solid var(--rule-2); box-shadow: var(--shadow); transition: transform .2s, opacity .2s; }
@@ -1196,10 +1187,6 @@ a.place { text-decoration: none; }
       '<span class="num">' + (i >= 0 ? nf.format(i + 1) + ' з ' + nf.format(visible.length) : '') + '</span>' +
       '<button class="icon-btn" id="next" aria-label="Наступная песня"' + (n ? '' : ' disabled') + '>' + svg('next') + '</button>' +
       '<span class="grow"></span><button class="pill" id="printBtn">' + svg('print', '') + 'Раздрукаваць</button></nav>');
-    var PH = { 'Ваўкавыскі пав.': ['vaukavysk-hara', 'Ваўкавыскі павет', 'Ваўкавыск, Шведская гара. Паштоўка, да 1939'], 'Слонімскі пав.': ['slonim-vulica', 'Слонімскі павет', 'Слонім, каля 1915'], 'Навагрудскі пав.': ['navahrudak-rynak', 'Навагрудскі павет', 'Навагрудак, рынак, каля 1915'], 'Лідскі пав.': ['lida-kirmash', 'Лідскі павет', 'Ліда, кірмаш, да 1918'], 'Гродзенскі пав.': ['hrodna', 'Гродзенскі павет', 'Гродна, агульны выгляд, да 1908'], 'Слуцкі пав.': ['lucniki', 'Слуцкі павет', 'Сяляне вёскі Лучнікі, да 1917', '50% 16%'] };
-    var ph = PH[s.fRegion];
-    var phWhere = (SONG_PLACES[s.id] || []).map(function (k) { return PLACES[k] ? placeName(PLACES[k]) : ''; }).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).slice(0, 2).join(', ') || (s.fPlace && s.fPlace.charAt(0) !== '[' ? s.fPlace : '');
-    if (ph) h.push('<figure class="song-ph"><img src="img/' + ph[0] + '.jpg" alt=""' + (ph[3] ? ' style="object-position:' + ph[3] + '"' : '') + '><figcaption class="where"><b>' + esc(phWhere || ph[1]) + '</b>' + (phWhere ? '<span>' + esc(ph[1]) + '</span>' : '') + '</figcaption><span class="phc">Фота: ' + esc(ph[2]) + '</span></figure>');
 
     h.push('<h1 class="song-title"><span class="no num"><small>№</small>' + esc(s.id) + '</span>' + esc(stress(s.title)) + '</h1>');
     h.push('<p class="print-src">Федароўскі М. Lud białoruski na Rusi Litewskiej, ' + pageRef(s.vol, s.page) + '. ' + (s.region ? esc(s.region) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
@@ -1326,7 +1313,6 @@ a.place { text-decoration: none; }
         '<figure style="flex: .72 1 0"><img src="img/lachavicy-siamja.jpg" alt="Мужчына, жанчына і дзяўчынка ў святочным строі каля сцяны хаты" loading="lazy"><figcaption>Сям\'я ў святочных строях, Ляхавічы, 1913. Фота Е. Раманава</figcaption></figure>' +
         '<figure style="flex: .73 1 0"><img src="img/padlipcy.jpg" alt="Мужчына ў шапцы з казырком трымае на руках дзяўчынку" loading="lazy"><figcaption>Селянін з дзяўчынкай, Падліпцы, 1905. Фота В. Косткі</figcaption></figure>' +
       '</div><p class="ph-credit">Фота: Wikimedia Commons, грамадскі набытак</p>' +
-      '<figure class="ph-band"><img src="img/navahrudak-lata.jpg" alt="Летні луг і агароджа з дрэвамі каля вёскі" loading="lazy"><figcaption>«Лета», ваколіцы Навагрудка, каля 1920. Фота Яна Булгака. Polona, грамадскі набытак</figcaption></figure>' +
       '<section class="music collector"><figure><img src="img/fedarouski.jpg" alt="Міхал Федароўскі" loading="lazy"><figcaption>Міхал Федароўскі (1853–1923). Фота з IV тома «Lud białoruski», 1935. Polona, грамадскі набытак</figcaption></figure>' +
       '<div><p class="eyebrow">Збіральнік</p><h2>Міхал Федароўскі</h2><p>З 1877 па 1905 год ён збіраў песні, казкі, прыказкі і павер\'і з Ваўкавышчыны, Слонімшчыны, Лідчыны, Сакольшчыны і суседніх паветаў. Запісы паходзілі з розных крыніц. З гэтых матэрыялаў склалася восем тамоў «Lud białoruski na Rusi Litewskiej».</p><p>Песні з нотамі ўвайшлі ў V і VI тамы. Пры кожнай песні пазначана мясціна і, калі вядома, ад каго яе запісалі.</p></div></section>' +
       // how the songs were gathered and the tunes written down: Lud białoruski t. V (1958) «Od redakcji» and t. VII (1969), articles by Kozerska, Obrębska-Jabłońska, Damrosz and Stęszewski
