@@ -443,7 +443,7 @@ dialog.zoom img { display: block; margin: 0 auto; width: min(1700px, 170vw); max
 dialog.zoom .close { position: fixed; top: 10px; right: 10px; background: #fff; color: #222; }
 dialog.zoom .close:hover { background: #f1ebe8; }
 /* photos of people on the home page open large: click or tap, arrows or swipe for the next one */
-.home .hero-ph figure > img, .home .people figure > img, .home .pair figure > img, .home .collector figure > img { cursor: zoom-in; }
+.home .people figure > img, .home .pair figure > img { cursor: zoom-in; }
 dialog.ph-box { width: 100vw; height: 100vh; height: 100dvh; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: rgba(18, 12, 12, .98); color: #f4ede3; overflow: hidden; overscroll-behavior: contain; }
 dialog.ph-box[open] { display: flex; flex-direction: column; align-items: center; justify-content: center; }
 dialog.ph-box::backdrop { background: transparent; }
@@ -1679,8 +1679,8 @@ a.place { text-decoration: none; }
   $('zoomClose').addEventListener('click', function () { $('zoom').close(); });
   $('zoom').addEventListener('click', function (e) { if (e.target === this || e.target.tagName === 'IMG') this.close(); });
 
-  // photo viewer for the photos of people on the home page (hero, peasants, singers, collector)
-  var PH_SEL = '.home .hero-ph figure > img, .home .people figure > img, .home .pair figure > img, .home .collector figure > img', PH = { list: [], i: 0, x: null };
+  // photo viewer for the photos of people on the home page (peasants and singers; not the hero or the collector portrait)
+  var PH_SEL = '.home .people figure > img, .home .pair figure > img', PH = { list: [], i: 0, x: null };
   function phBox() {
     var d = $('phBox'); if (d) return d;
     var arrow = '<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6z"/></svg>';
