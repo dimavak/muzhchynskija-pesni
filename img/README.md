@@ -5,7 +5,8 @@
 
 | Файл | Дзе на сайце | Што на фота | Дата | Крыніца |
 |---|---|---|---|---|
-| `sluck-sielanin.jpg` | галоўная, вялікае фота | «Тып беларускага селяніна», Слуцк. Фота С. Юхніна | да 1917 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:23_Slucak_Bielaruski_sielanin.jpg) |
+| `lachavicy-muzyki-hero.jpg` | галоўная, вялікае фота | Тры музыкі (скрыпка, басэтля, бубен), фрагмент здымка `lachavicy-muzyki.jpg`, Ляхавічы | 1913 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Lachowiccy_muzycy.jpg) |
+| `sluck-sielanin.jpg` | «Людзі» | «Тып беларускага селяніна», Слуцк. Фота С. Юхніна | да 1917 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:23_Slucak_Bielaruski_sielanin.jpg) |
 | `vaukavysk-1919.jpg` | «Мясціны» | Ваўкавыск, паштоўка | 1919 | [Polona](https://polona.pl/item-view/dcce3761-025b-4d1b-86cb-345beb16927e) |
 | `svislach.jpg` | «Мясціны» | Свіслач, касцёл (паштоўка паводле малюнка Н. Орды) | 1910–1930 | [Polona](https://polona.pl/item-view/5de2e631-60f9-49de-9ca5-191b99c86cbe) |
 | `bierastavica.jpg` | «Мясціны» | Вялікая Бераставіца, стары касцёл | 1920 | [Polona](https://polona.pl/item-view/a6be813e-58fc-49b0-a3d2-1defb3b03b81) |
@@ -21,6 +22,11 @@
 | `zarabkovicy-sialanin.jpg` | «Людзі» | Селянін у святочным строі, Жарабковічы Слуцкага павета. Аўтар не пазначаны | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72285), МАЭ № 1629-9, з Этнаграфічнага аддзела Рускага музея |
 | `zarabkovicy-chlopiec.jpg` | «Людзі» | Малады селянін у святочным строі, Жарабковічы | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72286), МАЭ № 1629-11 |
 | `zarabkovicy-muzcyna.jpg` | «Людзі» | Селянін 40 гадоў, Жарабковічы | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72275), МАЭ № 1629-4 |
+| `zarabkovicy-sialanin-2.jpg` | «Людзі» | Селянін у святочным строі, Жарабковічы | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72272), МАЭ № 1629-1 |
+| `zarabkovicy-junak.jpg` | «Людзі» | Юнак 19 гадоў, Жарабковічы | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72274), МАЭ № 1629-3 |
+| `padlipcy-sviata.jpg` | «Людзі» | Селянін у святочным строі, Падліпцы Слуцкага павета | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72281), МАЭ № 1629-5 |
+| `padlipcy-praca.jpg` | «Людзі» | Селянін у рабочым строі, Падліпцы | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72283), МАЭ № 1629-7 |
+| `kleck-bialorusin.jpg` | «Людзі» | «Białorusin z pod Klecka (pow. słucki)». Фота Я. Булгака | 1912 | [Polona](https://polona.pl/item-view/130f91d1-c13e-40bc-9455-5f498d5d6a0b): «Litwa i Ruś», Вільня, 1912, т. 4, сш. 2 (скан з мікрафільма) |
 | `spjavacka-bajarczykava-1891.jpg` | «Ад каго запісаныя песні» | спявачка Марыля Баярчыкова з вёскі Вялікія Азяранкі (Ваўкавыскі павет) | 1891 | [Polona](https://polona.pl/item-view/cbf823b9-5e54-4371-9484-cf939b5d544d): «Życie i prace Jana Karłowicza», Варшава, 1904, арт. М. Федароўскага «Z nad Niemna», с. 81 |
 | `spjavacka-goslauska-1891.jpg` | «Ад каго запісаныя песні» | спявачка Юзэфа Гаслаўская з Мсцібава (Ваўкавыскі павет) | 1891 | тая ж кніга, с. 82 |
 | `fedarouski.jpg` | «Збіральнік» | Міхал Федароўскі, партрэт з IV тома «Lud białoruski» | 1935 | [Polona](https://polona.pl/item-view/b712c7b4-2927-4766-96fd-c2b7d488f468) |
