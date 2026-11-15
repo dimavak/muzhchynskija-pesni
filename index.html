@@ -527,6 +527,10 @@ a.place { text-decoration: none; }
 .how .ex img { width: 100%; height: auto; display: block; }
 .how .ex span { display: block; font-size: 13px; margin-top: 6px; }
 .people { display: flex; gap: 14px; align-items: flex-start; }
+.people-h { font: 700 24px/1.2 var(--serif); margin: 44px 0 8px; }
+.home .people-note { font: 400 18px/1.6 var(--serif); color: var(--ink-2); margin: 0 0 16px; max-width: 46em; }
+.places.after-cats { margin-top: 28px; }
+.actions + .music.collector { margin-top: 24px; }
 .people img { width: 100%; height: auto; border-radius: 14px; display: block; }
 .people figure { margin: 0; min-width: 0; }
 @media (max-width: 760px) {
@@ -1396,6 +1400,16 @@ a.place { text-decoration: none; }
     var rc = function (r) { var n = SONGS.filter(function (s) { return s.fRegion === r; }).length; return n + ' ' + songsWord(n); };
     var fed = '<a href="' + WIKI + '" rel="noopener" target="_blank">' + t('Міхала Федароўскага') + '</a>';
     var own = SONGS.filter(function (s) { return s.group === 'own'; }).length, ref = SONGS.filter(function (s) { return s.group === 'ref'; }).length;
+    // peasants of Slutsk povet (not Fedarouski's singers): an extra part of «Ад каго запісаныя песні», or a section of its own where that block is hidden (18+)
+    var people = function (sub) {
+      return (sub ? '<h3 class="people-h">' + t('Сяляне Слуцкага павета') + '</h3><p class="people-note">' + t('Гэта не спевакі Федароўскага, а сяляне Слуцкага павета, адкуль таксама паходзяць песні зборніка, на здымках 1905–1917 гадоў.') + '</p>'
+        : '<div class="sec-title"><div><p class="eyebrow">' + t('Людзі') + '</p><h2>' + t('Сяляне Слуцкага павета') + '</h2></div></div>') +
+        '<div class="people">' +
+          '<figure style="flex: 1.64 1 0"><img src="img/lucniki.jpg" alt="' + t('Сяляне, мужчыны, жанчыны і дзеці, каля плота і хаты') + '" loading="lazy"><figcaption>' + t('Сяляне вёскі Лучнікі. Паштоўка паводле фота С. Юхніна, да 1917') + '</figcaption></figure>' +
+          '<figure style="flex: .72 1 0"><img src="img/lachavicy-siamja.jpg" alt="' + t('Мужчына, жанчына і дзяўчынка ў святочным строі каля сцяны хаты') + '" loading="lazy"><figcaption>' + t('Сям\'я ў святочных строях, Ляхавічы, 1913. Фота Е. Раманава') + '</figcaption></figure>' +
+          '<figure style="flex: .73 1 0"><img src="img/padlipcy.jpg" alt="' + t('Мужчына ў шапцы з казырком трымае на руках дзяўчынку') + '" loading="lazy"><figcaption>' + t('Селянін з дзяўчынкай, Падліпцы, 1905. Фота В. Косткі') + '</figcaption></figure>' +
+        '</div><p class="ph-credit">' + t('Фота: Wikimedia Commons, грамадскі набытак') + '</p>';
+    };
     var first = visible[0] || SONGS[0];
     $('view').innerHTML =
       '<article class="home">' +
@@ -1407,14 +1421,6 @@ a.place { text-decoration: none; }
       '<figure><img src="img/sluck-sielanin.jpg" alt="' + t('Стары селянін у кажуху і футравай шапцы, з люлькай і кіем') + '" fetchpriority="high">' +
       '<figcaption class="ph-cap">' + t('«Тып беларускага селяніна», Слуцк, да 1917. Фота С. Юхніна, грамадскі набытак') + '</figcaption></figure></section>' +
       '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + t('Адкрыць першую песню') + '</a><a class="btn quiet" href="#map">' + svg('map', '') + t('Мапа мясцін') + '</a>' + (ADULT ? '<a class="btn quiet" href="' + MAIN + '">' + t('Асноўны каталог') + '</a>' : '') + '</p>' +
-      '<div class="sec-title"><div><p class="eyebrow">' + t('Адкуль песні') + '</p><h2>' + t('Мясціны') + '</h2></div><a href="#map">' + t('Уся мапа →') + '</a></div>' +
-      '<div class="places">' + PLACE_CARDS.map(placeCard).join('') + '</div>' +
-      '<div class="sec-title"><div><p class="eyebrow">' + t('Людзі') + '</p><h2>' + t('Сяляне Слуцкага павета') + '</h2></div></div>' +
-      '<div class="people">' +
-        '<figure style="flex: 1.64 1 0"><img src="img/lucniki.jpg" alt="' + t('Сяляне, мужчыны, жанчыны і дзеці, каля плота і хаты') + '" loading="lazy"><figcaption>' + t('Сяляне вёскі Лучнікі. Паштоўка паводле фота С. Юхніна, да 1917') + '</figcaption></figure>' +
-        '<figure style="flex: .72 1 0"><img src="img/lachavicy-siamja.jpg" alt="' + t('Мужчына, жанчына і дзяўчынка ў святочным строі каля сцяны хаты') + '" loading="lazy"><figcaption>' + t('Сям\'я ў святочных строях, Ляхавічы, 1913. Фота Е. Раманава') + '</figcaption></figure>' +
-        '<figure style="flex: .73 1 0"><img src="img/padlipcy.jpg" alt="' + t('Мужчына ў шапцы з казырком трымае на руках дзяўчынку') + '" loading="lazy"><figcaption>' + t('Селянін з дзяўчынкай, Падліпцы, 1905. Фота В. Косткі') + '</figcaption></figure>' +
-      '</div><p class="ph-credit">' + t('Фота: Wikimedia Commons, грамадскі набытак') + '</p>' +
       '<section class="music collector"><figure><img src="img/fedarouski.jpg" alt="' + t('Міхал Федароўскі') + '" loading="lazy"><figcaption>' + t('Міхал Федароўскі (1853–1923). Фота з IV тома «Lud białoruski», 1935. Polona, грамадскі набытак') + '</figcaption></figure>' +
       '<div><p class="eyebrow">' + t('Збіральнік') + '</p><h2>' + t('Міхал Федароўскі') + '</h2><p>' + t('З 1877 па 1905 год ён збіраў песні, казкі, прыказкі і павер\'і з Ваўкавышчыны, Слонімшчыны, Лідчыны, Сакольшчыны і суседніх паветаў. Запісы паходзілі з розных крыніц. З гэтых матэрыялаў склалася восем тамоў «Lud białoruski na Rusi Litewskiej».') + '</p><p>' + t('Песні з нотамі ўвайшлі ў V і VI тамы. Пры кожнай песні пазначана мясціна і, калі вядома, ад каго яе запісалі.') + '</p></div></section>' +
       // how the songs were gathered and the tunes written down: Lud białoruski t. V (1958) «Od redakcji» and t. VII (1969), articles by Kozerska, Obrębska-Jabłońska, Damrosz and Stęszewski
@@ -1437,7 +1443,7 @@ a.place { text-decoration: none; }
       (ADULT ? '' : '<a class="ex" href="#9"><img src="notes/m_9_1.png" alt="' + t('Ноты песні № 9 з пазнакай Tr.') + '" loading="lazy"><span>' + t('№ 9, ад Анны Сладкай з-пад Крынак. Мелодыю і словы пад ёй запісаў Трачык.') + '</span></a>' +
       '<a class="ex" href="#6"><img src="notes/m_6_1.png" alt="' + t('Ноты песні № 6 з пазнакай J. K. і словамі ў дужках') + '" loading="lazy"><span>' + t('№ 6, ад Марылі Мулярчыкавай са Шандраў каля Мсцібава. Карловіч запісаў толькі напеў, словы ў дужках дадалі рэдактары.') + '</span></a>') +
       '<p class="src">' + t('Паводле VII тома «Lud białoruski» (Варшава, 1969) і ўспамінаў Федароўскага пра Карловіча (1904). На старонцы кожнай песні пазначана, хто запісаў яе мелодыю.') + '</p></div></section>' +
-      (ADULT || !infTop.length ? '' : '<div class="sec-title"><div><p class="eyebrow">' + t('Людзі') + '</p><h2>' + t('Ад каго запісаныя песні') + '</h2></div></div>' +
+      (ADULT || !infTop.length ? people(false) : '<div class="sec-title"><div><p class="eyebrow">' + t('Людзі') + '</p><h2>' + t('Ад каго запісаныя песні') + '</h2></div></div>' +
       '<section class="informants"><div class="pair">' +
         '<figure style="flex: .70 1 0"><img src="img/spjavacka-bajarczykava-1891.jpg" alt="' + t('Маладая жанчына ў светлай світцы і хустцы, усміхаецца') + '" loading="lazy"><figcaption>' + t('Марыля Баярчыкова з Вялікіх Азяранак, 1891') + '</figcaption></figure>' +
         '<figure style="flex: .68 1 0"><img src="img/spjavacka-goslauska-1891.jpg" alt="' + t('Пажылая жанчына ў фартуху каля сцяны хаты') + '" loading="lazy"><figcaption>' + t('Юзэфа Гаслаўская з Мсцібава, 1891') + '</figcaption></figure>' +
@@ -1445,12 +1451,13 @@ a.place { text-decoration: none; }
       '<p>' + t('Словы і ноты адной песні часам запісвалі ад розных людзей, частку тэкстаў дыктавалі, а частку даслалі памочнікі Федароўскага. Таму імя пры песні паказвае, ад каго яе запісалі, а не абавязкова таго, хто яе спяваў.') + '</p>' +
       '<p class="src">' + t('На фота — адзіныя вядомыя партрэты спявачак Федароўскага. З кнігі «Życie i prace Jana Karłowicza», Варшава, 1904. Polona, грамадскі набытак') + '</p></div></section>' +
       '<div class="inf-grid">' + infTop.map(function (o) { return '<button class="inf-card" data-facet-set="inf" data-value="' + esc(o.n) + '"><b' + (BE ? '' : ' translate="no"') + '>' + esc(infName(o.n)) + '</b><span>' + esc(o.pl.length ? o.pl.slice(0, 2).join(', ') : BE ? (o.reg || '').replace(' пав.', ' павет') : tv(o.reg || '')) + '</span><small>' + o.c + ' ' + songsWord(o.c) + '</small></button>'; }).join('') + '</div>' +
-      '<p class="inf-hint">' + t('Усяго {n} {names}. Націсніце на імя, каб убачыць песні, запісаныя ад гэтага чалавека, або выберыце яго ў фільтры «Ад каго запісана».', { n: nf.format(Object.keys(infMap).length), names: plural(Object.keys(infMap).length, 'імя', 'імёны', 'імёнаў') }) + '</p>') +
+      '<p class="inf-hint">' + t('Усяго {n} {names}. Націсніце на імя, каб убачыць песні, запісаныя ад гэтага чалавека, або выберыце яго ў фільтры «Ад каго запісана».', { n: nf.format(Object.keys(infMap).length), names: plural(Object.keys(infMap).length, 'імя', 'імёны', 'імёнаў') }) + '</p>' + people(true)) +
       '<section class="music melody"><div><p class="eyebrow">' + t('Мелодыі') + '</p><h2>' + t('Песні, запісаныя больш за сто гадоў таму, гучаць зноў') + '</h2><p>' + t('Для {n} песень ёсць ноты. Іх можна праслухаць голасам, на дудзе, сапілцы, цымбалах або кларнеце, развучыць павольна і па крузе, падабраць вышыню пад свой голас.', { n: nf.format(own + ref) }) + '</p><p>' + t('Курсор паказвае на нотах, што гучыць зараз.') + '</p></div>' +
       '<figure><img src="img/lud-t1.jpg" alt="' + t('Тытульны ліст I тома Lud białoruski, 1897') + '" loading="lazy"><figcaption>' + t('Тытульны ліст I тома, Кракаў, 1897. Polona, грамадскі набытак') + '</figcaption></figure></section>' +
       '<h2>' + t('Па тамах') + '</h2><ul class="cats vols">' + VOLS.map(function (v) { return '<li><button data-facet-set="vol" data-value="т. ' + v[0] + '"><span>' + t('Том {v}', { v: v[0] }) + ' <small>' + v[1] + '</small></span><span class="num">' + SONGS.filter(function (s) { return s.vol === v[0]; }).length + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>' + t('Па тыпах') + '</h2><ul class="cats">' + catNames.map(function (c) { return '<li><button data-facet-set="cat" data-value="' + esc(c) + '"><span>' + esc(tv(c)) + '</span><span class="num">' + cats[c] + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>' + t('Па мясцінах') + '</h2><p>' + t('Усе вёскі і мястэчкі, адкуль паходзяць гэтыя песні, — на <a href="#map">мапе</a>.') + '</p><ul class="cats">' + regionList().map(function (r) { return '<li><button data-facet-set="place" data-value="' + esc(r[0]) + '"><span>' + esc(tv(r[0])) + '</span><span class="num">' + r[1] + '</span></button></li>'; }).join('') + '</ul>' +
+      '<div class="places after-cats">' + PLACE_CARDS.map(placeCard).join('') + '</div>' +
       '<h2>' + t('Што ёсць пры песні') + '</h2><p>' + t('Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), ад каго запісана, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні, нават калі яна ў іншым томе. Пры песнях VI тома пазначаны і танец («Kruciołka», «Polka drobna»…), калі ён ёсць у выданні.') + '</p>' +
       '<h2>' + t('Мелодыі') + '</h2><p>' + t('Ноты распазнаныя аўтаматычна і гучаць праз сінтэзатар голасам сапілкі, цымбалаў або кларнета, з бурдонам на выбар. «Паслухаць» іграе мелодыю адзін раз, «Развучыць» — павольней і па крузе. Актаву, вышыню і тэмп можна падабраць пад свой голас, а курсор паказвае на нотах, што гучыць зараз. У рытме і асобных нотах магчымыя памылкі распазнавання.') + '</p>' +
       '<h2>' + t('Тэкст') + '</h2><p>' + t('Тэкст пераведзены з польскай лацінкі Федароўскага ў беларускую кірыліцу з захаваннем дыялектнага вымаўлення і націскаў. Арыгінальны запіс можна паглядзець кнопкай «Арыгінал» або «Побач».') + '</p>' +
