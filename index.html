@@ -420,6 +420,86 @@ dialog.zoom .close { position: fixed; top: 10px; right: 10px; background: #fff; 
 dialog.zoom .close:hover { background: #f1ebe8; }
 .scrim { display: none; }
 .home-search { display: none; }
+/* ===== photo-led home and song header (archive photos, duotone) ===== */
+.home { max-width: none; }
+.home > h2, .home > p, .home > ul, .home > dl { max-width: 820px; }
+.hero-ph { position: relative; margin: -18px calc(-1 * clamp(16px, 4vw, 48px)) 40px; height: min(80vh, 720px); min-height: 520px; overflow: hidden; color: #fff; background: #181112; }
+.hero-ph img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 55%; display: block; }
+.hero-ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(18, 10, 11, 0) 35%, rgba(18, 10, 11, .72) 66%, rgba(18, 10, 11, .94)); }
+.hero-in { text-shadow: 0 1px 12px rgba(0, 0, 0, .35); }
+.hero-in { position: absolute; z-index: 1; left: clamp(16px, 4vw, 48px); right: clamp(16px, 4vw, 48px); bottom: clamp(26px, 5vh, 52px); max-width: 820px; }
+.home .hero-ph .kicker { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; font: 600 14px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: #fff; }
+.kicker::before { content: ""; width: 36px; height: 3px; background: #d4202c; }
+.hero-ph h1 { color: #fff; font: 800 clamp(46px, 7.5vw, 96px)/.98 var(--serif); letter-spacing: -.025em; margin: 0 0 14px; }
+.home .hero-ph .sub { font: 400 clamp(18px, 2vw, 23px)/1.45 var(--serif); color: #efe6e2; max-width: 36em; margin: 0 0 24px; }
+.hero-ph .home-search { display: flex; align-items: center; gap: 10px; width: min(560px, 100%); height: 56px; margin: 0; padding: 0 20px; border-radius: 28px; border: 0; background: rgba(255, 255, 255, .94); color: #5d5552; font-size: 17px; text-align: left; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, .5); }
+.hero-ph .home-search svg { width: 22px; height: 22px; fill: currentColor; }
+.home .ph-cap { position: absolute; z-index: 1; right: 14px; bottom: 10px; font: 12.5px/1.3 var(--sans); color: rgba(255, 255, 255, .78); max-width: 46%; text-align: right; }
+.hero-ph.split { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr); align-items: stretch; background: #ddd6ca; color: var(--ink); height: min(84vh, 760px); min-height: 560px; }
+.hero-ph.split::after { display: none; }
+.hero-ph.split .hero-in { position: static; align-self: center; max-width: 700px; padding: 0 clamp(20px, 4vw, 64px) 0 clamp(20px, 5vw, 72px); text-shadow: none; }
+.home .hero-ph.split .kicker { color: #7a1c22; }
+.hero-ph.split h1 { color: #1c1918; }
+.home .hero-ph.split .sub { color: #4a403c; }
+.hero-ph.split .home-search { background: #fff; box-shadow: 0 10px 30px -14px rgba(40, 20, 10, .45); border: 1px solid #cfc6bb; }
+.hero-ph.split figure { position: relative; margin: 0; height: 100%; overflow: hidden; }
+.hero-ph.split figure img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
+.hero-ph.split figure::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #ddd6ca 0, rgba(221, 214, 202, 0) 26%), linear-gradient(0deg, rgba(221, 214, 202, .9) 0, rgba(221, 214, 202, 0) 14%); pointer-events: none; }
+.home .hero-ph.split .ph-cap { color: #5d5552; z-index: 2; }
+.ph-band { margin: 64px calc(-1 * clamp(16px, 4vw, 48px)) 0; position: relative; }
+.ph-band img { width: 100%; height: clamp(220px, 32vw, 420px); object-fit: cover; object-position: 50% 60%; display: block; }
+.ph-band figcaption { font-size: 13px; color: var(--ink-3); margin: 8px clamp(16px, 4vw, 48px) 0; }
+.sec-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 52px 0 18px; }
+.sec-title h2 { margin: 0; font: 700 clamp(26px, 3vw, 34px)/1.15 var(--serif); }
+.sec-title a { font-weight: 500; white-space: nowrap; }
+.home .eyebrow { font: 500 13px/1.3 var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--thread); margin: 0 0 6px; }
+.places { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px 20px; }
+.music.collector img { aspect-ratio: 3 / 4; object-position: 50% 30%; max-height: 620px; }
+.music.melody { grid-template-columns: minmax(0, 1fr) minmax(0, .8fr); }
+.music.melody img { aspect-ratio: auto; object-fit: contain; max-height: 560px; background: var(--linen-2); padding: 18px; box-sizing: border-box; }
+.music.collector { grid-template-columns: minmax(0, .8fr) minmax(0, 1fr); }
+.place { display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch; border: 0; padding: 0; background: none; text-align: left; color: var(--ink); cursor: pointer; font: inherit; }
+a.place { text-decoration: none; }
+.home .ph-credit { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; }
+.place figure { margin: 0 0 12px; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 14px; background: var(--linen-2); }
+.place img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
+.place:hover img { transform: scale(1.04); }
+.place b { display: block; font: 700 22px/1.2 var(--serif); }
+.place span { display: block; color: var(--ink-2); font-size: 15px; margin-top: 2px; }
+.place small { display: block; color: var(--ink-3); font-size: 13px; margin-top: 6px; }
+.music { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(22px, 4vw, 56px); align-items: center; margin: 64px 0 20px; }
+.music figure { margin: 0; border-radius: 16px; overflow: hidden; position: relative; }
+.music img { width: 100%; display: block; aspect-ratio: 1 / 1; object-fit: cover; object-position: 50% 40%; }
+.music figcaption, .people figcaption { font-size: 13px; color: var(--ink-3); margin-top: 8px; }
+.music h2 { font: 700 clamp(28px, 3.4vw, 42px)/1.1 var(--serif); margin: 0 0 16px; }
+.music p { font: 400 19px/1.6 var(--serif); color: var(--ink-2); margin: 0 0 14px; }
+.people { display: flex; gap: 14px; align-items: flex-start; }
+.people img { width: 100%; height: auto; border-radius: 14px; display: block; }
+.people figure { margin: 0; min-width: 0; }
+.song-ph { position: relative; margin: 0 0 22px; height: 230px; border-radius: 16px; overflow: hidden; background: #181112; }
+.song-ph img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 45%; display: block; }
+.song-ph::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(18, 10, 11, .55), rgba(18, 10, 11, 0) 55%); }
+.song-ph .where { position: absolute; z-index: 1; left: 22px; bottom: 18px; color: #fff; }
+.song-ph .where b { display: block; font: 700 26px/1.1 var(--serif); }
+.song-ph .where span { font-size: 15px; color: #efe6e2; }
+.song-ph .phc { position: absolute; z-index: 1; right: 14px; bottom: 10px; font-size: 12.5px; color: rgba(255, 255, 255, .75); text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+@media (max-width: 760px) {
+  .music { grid-template-columns: 1fr; }
+  .people { flex-wrap: wrap; gap: 12px; } .people figure:first-child { flex-basis: 100% !important; }
+  .hero-ph { min-height: 560px; height: 86vh; }
+  .hero-ph.split { grid-template-columns: 1fr; height: auto; min-height: 0; }
+  .hero-ph.split figure { order: -1; height: 58vh; }
+  .hero-ph.split figure::before { background: linear-gradient(0deg, #ddd6ca 0, rgba(221, 214, 202, 0) 30%); }
+  .hero-ph.split .hero-in { padding: 0 20px 30px; margin-top: -40px; position: relative; z-index: 2; }
+  .ph-cap { display: none; }
+  .song-ph { height: 180px; }
+  .places { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
+  .place b { font-size: 19px; }
+  .music.collector, .music.melody { grid-template-columns: 1fr; }
+  .melody figure { order: -1; }
+  .song-ph .phc { top: 10px; bottom: auto; left: 14px; right: 14px; text-align: right; }
+}
+
 .mini { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 50; display: flex; align-items: center; gap: 10px; width: min(560px, calc(100vw - 24px)); padding: 6px 8px 6px 6px; border-radius: 30px; background: var(--paper); color: var(--ink); border: 1px solid var(--rule-2); box-shadow: var(--shadow); transition: transform .2s, opacity .2s; }
 .mini.on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
 .mini .mbtn { width: 46px; height: 46px; border: 0; border-radius: 23px; background: var(--thread); color: var(--thread-ink); display: grid; place-items: center; flex: none; }
@@ -1071,7 +1151,11 @@ dialog.zoom .close:hover { background: #f1ebe8; }
       '<span class="num">' + (i >= 0 ? nf.format(i + 1) + ' з ' + nf.format(visible.length) : '') + '</span>' +
       '<button class="icon-btn" id="next" aria-label="Наступная песня"' + (n ? '' : ' disabled') + '>' + svg('next') + '</button>' +
       '<span class="grow"></span><button class="pill" id="printBtn">' + svg('print', '') + 'Раздрукаваць</button></nav>');
-    h.push('<svg class="opener" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="url(#orn-sm)"/></svg>');
+    var PH = { 'Ваўкавыскі пав.': ['vaukavysk-hara', 'Ваўкавыскі павет', 'Ваўкавыск, Шведская гара. Паштоўка, да 1939'], 'Слонімскі пав.': ['slonim-vulica', 'Слонімскі павет', 'Слонім, каля 1915'], 'Навагрудскі пав.': ['navahrudak-rynak', 'Навагрудскі павет', 'Навагрудак, рынак, каля 1915'], 'Лідскі пав.': ['lida-kirmash', 'Лідскі павет', 'Ліда, кірмаш, да 1918'], 'Гродзенскі пав.': ['hrodna', 'Гродзенскі павет', 'Гродна, агульны выгляд, да 1908'], 'Слуцкі пав.': ['lucniki', 'Слуцкі павет', 'Сяляне вёскі Лучнікі, да 1917', '50% 16%'] };
+    var ph = PH[s.fRegion];
+    var phWhere = (SONG_PLACES[s.id] || []).map(function (k) { return PLACES[k] ? placeName(PLACES[k]) : ''; }).filter(function (x, i, a) { return x && a.indexOf(x) === i; }).slice(0, 2).join(', ') || (s.fPlace && s.fPlace.charAt(0) !== '[' ? s.fPlace : '');
+    if (ph) h.push('<figure class="song-ph"><img src="img/' + ph[0] + '.jpg" alt=""' + (ph[3] ? ' style="object-position:' + ph[3] + '"' : '') + '><figcaption class="where"><b>' + esc(phWhere || ph[1]) + '</b>' + (phWhere ? '<span>' + esc(ph[1]) + '</span>' : '') + '</figcaption><span class="phc">Фота: ' + esc(ph[2]) + '</span></figure>');
+
     h.push('<h1 class="song-title"><span class="no num"><small>№</small>' + esc(s.id) + '</span>' + esc(stress(s.title)) + '</h1>');
     h.push('<p class="print-src">Федароўскі М. Lud białoruski na Rusi Litewskiej, ' + pageRef(s.vol, s.page) + '. ' + (s.region ? esc(s.region) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
       (s.informant.length ? ' Выканаўца: ' + s.informant_cyr.map(function (x) { return esc(x.replace(/́/g, '')); }).join(', ') + '.' : '') + '</p>');
@@ -1142,18 +1226,57 @@ dialog.zoom .close:hover { background: #f1ebe8; }
     return Object.keys(c).sort(function (a, b) { return (a === NO_REGION) - (b === NO_REGION) || c[b] - c[a]; }).map(function (k) { return [k, c[k]]; });
   }
   function renderIntro() {
+    // home place cards: [image, name, povet, caption, 'region' (filter by povet) | 'place' (marker on the map), image style]
+    var PLACE_CARDS = [
+      ['vaukavysk-1919', 'Ваўкавыск', 'Ваўкавыскі павет', 'Паштоўка, 1919', 'region'],
+      ['svislach', 'Свіслач', 'Ваўкавыскі павет', 'Касцёл. Паштоўка паводле малюнка Н. Орды', 'place'],
+      ['bierastavica', 'Вялікая Бераставіца', 'Ваўкавыскі павет', 'Стары касцёл, 1920', 'place'],
+      ['dziatlava', 'Дзятлава', 'Слонімскі павет', 'Касцёл, 1920-я', 'place', 'object-position:50% 12%'],
+      ['slonim-vulica', 'Слонім', 'Слонімскі павет', 'Цэнтр горада, каля 1915', 'region'],
+      ['zavosse', 'Завоссе', 'Навагрудскі павет', 'Свіронак. Паштоўка, да 1905', 'place'],
+      ['navahrudak-rynak', 'Навагрудак', 'Навагрудскі павет', 'Рынак, каля 1915', 'region'],
+      ['lida-kirmash', 'Ліда', 'Лідскі павет', 'Кірмаш на рынку, да 1918', 'region']
+    ];
+    var SPh = (ADULT ? window.SONG_PLACES_18 : window.SONG_PLACES) || {}, PLh = window.PLACES || {};
+    var placeCard = function (c) {
+      var fig = '<figure><img src="img/' + c[0] + '.jpg" alt="" loading="lazy"' + (c[5] ? ' style="' + c[5] + '"' : '') + '></figure><b>' + c[1] + '</b>';
+      if (c[4] === 'place') {
+        var keys = Object.keys(PLh).filter(function (k) { return PLh[k].be === c[1]; });
+        var n = SONGS.filter(function (s) { return (SPh[s.id] || []).some(function (k) { return keys.indexOf(k) >= 0; }); }).length;
+        return '<a class="place" href="#map' + (keys.length ? '/' + encodeURIComponent(keys[0]) : '') + '">' + fig + '<span>' + c[2] + (n ? ' · ' + n + ' ' + songsWord(n) : '') + '</span><small>' + c[3] + '</small></a>';
+      }
+      var r = c[2].replace(' павет', ' пав.');
+      return '<button class="place" data-facet-set="place" data-value="' + r + '">' + fig + '<span>' + c[2] + ' · ' + rc(r) + '</span><small>' + c[3] + '</small></button>';
+    };
+    var rc = function (r) { var n = SONGS.filter(function (s) { return s.fRegion === r; }).length, m10 = n % 10, m100 = n % 100; return n + (m10 === 1 && m100 !== 11 ? ' песня' : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? ' песні' : ' песень'); };
     var own = SONGS.filter(function (s) { return s.group === 'own'; }).length, ref = SONGS.filter(function (s) { return s.group === 'ref'; }).length;
     var first = visible[0] || SONGS[0];
     $('view').innerHTML =
       '<article class="home">' +
-      '<svg class="band-lg" aria-hidden="true" focusable="false"><rect width="100%" height="100%" fill="url(#orn-lg)"/></svg>' +
-      '<h1>' + NAME + (ADULT ? ' <span class="age">18+</span>' : '') + '</h1>' +
-      '<button class="home-search" id="homeSearch">' + svg('search', '') + 'Нумар, радок, выканаўца…</button>' +
+      '<section class="hero-ph split">' +
+      '<div class="hero-in"><p class="kicker">Міхал Федароўскі · Lud białoruski · ' + (ADULT ? 'т. VIa' : 'т. V–VI') + '</p><h1>' + NAME + (ADULT ? ' <span class="age">18+</span>' : '') + '</h1>' +
+      '<p class="sub">' + nf.format(SONGS.length) + ' ' + songsWord(SONGS.length) + ' з вёсак і мястэчак Гродзеншчыны і Случчыны, запісаных у канцы XIX стагоддзя. Тэксты, ноты і мелодыі.</p>' +
+      '<button class="home-search" id="homeSearch">' + svg('search', '') + 'Нумар, радок, выканаўца…</button></div>' +
+      '<figure><img src="img/sluck-sielanin.jpg" alt="Стары селянін у кажуху і футравай шапцы, з люлькай і кіем" fetchpriority="high">' +
+      '<figcaption class="ph-cap">«Тып беларускага селяніна», Слуцк, да 1917. Фота С. Юхніна, грамадскі набытак</figcaption></figure></section>' +
       (ADULT ? '<p class="lead">' + nf.format(SONGS.length) + ' мужчынскіх песень і прыпевак з тома VIa зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>, раздзелы «Pieśni obsceniczne» і «Pieśni obsceniczne taneczne»: жартоўныя і непрыстойныя песні, дыялогі, прыпеўкі да круцёлкі, полькі і мяцеліцы. Песні, якія спяваюцца ад імя жанчыны, сюды не ўвайшлі. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць. Гэты раздзел асобны: у асноўны каталог і пошук ён не трапляе.</p>' : '<p class="lead">' + nf.format(SONGS.length) + ' песень з V і VI тамоў зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць.</p>') +
       '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + 'Адкрыць першую песню</a><a class="btn quiet" href="#map">' + svg('map', '') + 'Мапа мясцін</a>' + (ADULT ? '<a class="btn quiet" href="' + MAIN + '">Асноўны каталог</a>' : '') + '</p>' +
+      '<div class="sec-title"><div><p class="eyebrow">Адкуль песні</p><h2>Мясціны</h2></div><a href="#map">Уся мапа →</a></div>' +
+      '<div class="places">' + PLACE_CARDS.map(placeCard).join('') + '</div>' +
+      '<div class="sec-title"><div><p class="eyebrow">Людзі</p><h2>Сяляне Слуцкага павета</h2></div></div>' +
+      '<div class="people">' +
+        '<figure style="flex: 1.64 1 0"><img src="img/lucniki.jpg" alt="Сяляне, мужчыны, жанчыны і дзеці, каля плота і хаты" loading="lazy"><figcaption>Сяляне вёскі Лучнікі. Паштоўка паводле фота С. Юхніна, да 1917</figcaption></figure>' +
+        '<figure style="flex: .72 1 0"><img src="img/lachavicy-siamja.jpg" alt="Мужчына, жанчына і дзяўчынка ў святочным строі каля сцяны хаты" loading="lazy"><figcaption>Сям\'я ў святочных строях, Ляхавічы, 1913. Фота Е. Раманава</figcaption></figure>' +
+        '<figure style="flex: .73 1 0"><img src="img/padlipcy.jpg" alt="Мужчына ў шапцы з казырком трымае на руках дзяўчынку" loading="lazy"><figcaption>Селянін з дзяўчынкай, Падліпцы, 1905. Фота В. Косткі</figcaption></figure>' +
+      '</div><p class="ph-credit">Фота: Wikimedia Commons, грамадскі набытак</p>' +
+      '<figure class="ph-band"><img src="img/navahrudak-lata.jpg" alt="Летні луг і агароджа з дрэвамі каля вёскі" loading="lazy"><figcaption>«Лета», ваколіцы Навагрудка, каля 1920. Фота Яна Булгака. Polona, грамадскі набытак</figcaption></figure>' +
+      '<section class="music collector"><figure><img src="img/fedarouski.jpg" alt="Міхал Федароўскі" loading="lazy"><figcaption>Міхал Федароўскі (1853–1923). Фота з IV тома «Lud białoruski», 1935. Polona, грамадскі набытак</figcaption></figure>' +
+      '<div><p class="eyebrow">Збіральнік</p><h2>Міхал Федароўскі</h2><p>З 1877 па 1905 год ён збіраў песні, казкі, прыказкі і павер\'і з Ваўкавышчыны, Слонімшчыны, Лідчыны, Сакольшчыны і суседніх паветаў. Запісы паходзілі з розных крыніц. З гэтых матэрыялаў склалася восем тамоў «Lud białoruski na Rusi Litewskiej».</p><p>Песні з нотамі ўвайшлі ў V і VI тамы. Пры кожнай песні пазначана вёска і, калі вядома, хто яе спяваў.</p></div></section>' +
+      '<section class="music melody"><div><p class="eyebrow">Мелодыі</p><h2>Песні, запісаныя больш за сто гадоў таму, гучаць зноў</h2><p>Для ' + nf.format(own + ref) + ' песень ёсць ноты. Іх можна праслухаць голасам, на дудзе, сапілцы, цымбалах або кларнеце, развучыць павольна і па крузе, падабраць вышыню пад свой голас.</p><p>Курсор паказвае на нотах, што гучыць зараз.</p></div>' +
+      '<figure><img src="img/lud-t1.jpg" alt="Тытульны ліст I тома Lud białoruski, 1897" loading="lazy"><figcaption>Тытульны ліст I тома, Кракаў, 1897. Polona, грамадскі набытак</figcaption></figure></section>' +
       '<h2>Па тамах</h2><ul class="cats vols">' + VOLS.map(function (v) { return '<li><button data-facet-set="vol" data-value="т. ' + v[0] + '"><span>Том ' + v[0] + ' <small>' + v[1] + '</small></span><span class="num">' + SONGS.filter(function (s) { return s.vol === v[0]; }).length + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Па тыпах</h2><ul class="cats">' + catNames.map(function (c) { return '<li><button data-facet-set="cat" data-value="' + esc(c) + '"><span>' + esc(c) + '</span><span class="num">' + cats[c] + '</span></button></li>'; }).join('') + '</ul>' +
-      '<h2>Па мясцінах</h2><p>Усе вёскі і мястэчкі, дзе Федароўскі запісаў гэтыя песні, — на <a href="#map">мапе</a>.</p><ul class="cats">' + regionList().map(function (r) { return '<li><button data-facet-set="place" data-value="' + esc(r[0]) + '"><span>' + esc(r[0]) + '</span><span class="num">' + r[1] + '</span></button></li>'; }).join('') + '</ul>' +
+      '<h2>Па мясцінах</h2><p>Усе вёскі і мястэчкі, адкуль паходзяць гэтыя песні, — на <a href="#map">мапе</a>.</p><ul class="cats">' + regionList().map(function (r) { return '<li><button data-facet-set="place" data-value="' + esc(r[0]) + '"><span>' + esc(r[0]) + '</span><span class="num">' + r[1] + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Што ёсць пры песні</h2><p>Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), выканаўца, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні, нават калі яна ў іншым томе. Пры песнях VI тома пазначаны і танец («Kruciołka», «Polka drobna»…), калі ён ёсць у выданні.</p>' +
       '<h2>Мелодыі</h2><p>Ноты распазнаныя аўтаматычна і гучаць праз сінтэзатар голасам сапілкі, цымбалаў або кларнета, з бурдонам на выбар. «Паслухаць» іграе мелодыю адзін раз, «Развучыць» — павольней і па крузе. Актаву, вышыню і тэмп можна падабраць пад свой голас, а курсор паказвае на нотах, што гучыць зараз. У рытме і асобных нотах магчымыя памылкі распазнавання.</p>' +
       '<h2>Тэкст</h2><p>Тэкст пераведзены з польскай лацінкі Федароўскага ў беларускую кірыліцу з захаваннем дыялектнага вымаўлення і націскаў. Арыгінальны запіс можна паглядзець кнопкай «Арыгінал» або «Побач».</p>' +
