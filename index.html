@@ -440,7 +440,7 @@ dialog.zoom .close:hover { background: #f1ebe8; }
 .hero-ph.split .hero-in { position: static; align-self: center; max-width: 700px; padding: 0 clamp(20px, 4vw, 64px) 0 clamp(20px, 5vw, 72px); text-shadow: none; }
 .home .hero-ph.split .kicker { color: #7a1c22; }
 .hero-ph.split h1 { color: #1c1918; }
-.home .hero-ph.split .sub { color: #4a403c; }
+.home .hero-ph.split .sub { color: #4a403c; font-size: clamp(17px, 1.5vw, 20px); }
 .hero-ph.split .home-search { background: #fff; box-shadow: 0 10px 30px -14px rgba(40, 20, 10, .45); border: 1px solid #cfc6bb; }
 .hero-ph.split figure { position: relative; margin: 0; height: 100%; overflow: hidden; }
 .hero-ph.split figure img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
@@ -473,6 +473,35 @@ a.place { text-decoration: none; }
 .music figcaption, .people figcaption { font-size: 13px; color: var(--ink-3); margin-top: 8px; }
 .music h2 { font: 700 clamp(28px, 3.4vw, 42px)/1.1 var(--serif); margin: 0 0 16px; }
 .music p { font: 400 19px/1.6 var(--serif); color: var(--ink-2); margin: 0 0 14px; }
+.informants { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(22px, 4vw, 56px); align-items: center; margin: 0 0 26px; }
+.informants .pair { display: flex; gap: 12px; align-items: flex-start; }
+.informants .pair figure { margin: 0; min-width: 0; }
+.informants .pair img { width: 100%; height: auto; display: block; border-radius: 14px; }
+.informants figcaption, .informants .src { font-size: 13px; color: var(--ink-3); margin-top: 8px; }
+.home .informants p { font: 400 18px/1.6 var(--serif); color: var(--ink-2); margin: 0 0 14px; }
+.inf-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.inf-card { display: flex; flex-direction: column; align-items: flex-start; text-align: left; border: 1px solid var(--rule); border-top: 3px solid #7a1c22; background: var(--paper); border-radius: 12px; padding: 16px 16px 14px; cursor: pointer; color: var(--ink); font: inherit; transition: background .2s, transform .2s; }
+.inf-card:hover { background: var(--linen-2); transform: translateY(-2px); }
+.inf-card b { display: block; font: 700 19px/1.2 var(--serif); }
+.inf-card span { display: block; color: var(--ink-2); font-size: 14px; margin-top: 4px; }
+.inf-card small { display: block; color: var(--thread); font-size: 13px; font-weight: 600; margin-top: auto; padding-top: 10px; }
+.home .inf-hint { font-size: 14px; color: var(--ink-3); margin: 12px 0 0; }
+.history { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(22px, 4vw, 56px); align-items: start; margin: 0 0 26px; }
+.tl { list-style: none; margin: 4px 0 0 6px; padding: 0; border-left: 2px solid var(--rule); }
+.tl li { position: relative; padding: 0 0 18px 22px; }
+.tl li:last-child { padding-bottom: 0; }
+.tl li::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: #7a1c22; box-shadow: 0 0 0 3px var(--paper); }
+.tl b { display: block; font: 700 15px/1.3 var(--sans); letter-spacing: .04em; color: var(--thread); margin: 0 0 3px; }
+.home .tl p { font: 400 17px/1.55 var(--serif); color: var(--ink-2); margin: 0; }
+.how h3 { font: 700 24px/1.2 var(--serif); margin: 0 0 12px; }
+.home .how p { font: 400 17px/1.6 var(--serif); color: var(--ink-2); margin: 0 0 12px; }
+.home .how p.src { font: 400 13px/1.45 var(--sans); color: var(--ink-3); }
+.home .how ul.marks { list-style: none; margin: -4px 0 14px; padding: 0; font: 400 17px/1.6 var(--serif); color: var(--ink-2); }
+.how .marks b { display: inline-block; min-width: 3.2em; font-family: var(--serif); color: var(--ink); }
+.how .ex { display: block; margin: 4px 0 14px; padding: 10px 12px; background: #fff; border: 1px solid var(--rule); border-radius: 12px; text-decoration: none; color: #5d5552; transition: transform .2s; }
+.how .ex:hover { transform: translateY(-2px); }
+.how .ex img { width: 100%; height: auto; display: block; }
+.how .ex span { display: block; font-size: 13px; margin-top: 6px; }
 .people { display: flex; gap: 14px; align-items: flex-start; }
 .people img { width: 100%; height: auto; border-radius: 14px; display: block; }
 .people figure { margin: 0; min-width: 0; }
@@ -485,6 +514,10 @@ a.place { text-decoration: none; }
 .song-ph .phc { position: absolute; z-index: 1; right: 14px; bottom: 10px; font-size: 12.5px; color: rgba(255, 255, 255, .75); text-shadow: 0 1px 6px rgba(0,0,0,.6); }
 @media (max-width: 760px) {
   .music { grid-template-columns: 1fr; }
+  .informants { grid-template-columns: 1fr; }
+  .history { grid-template-columns: 1fr; }
+  .inf-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .inf-card { padding: 13px 12px 12px; } .inf-card b { font-size: 17px; }
   .people { flex-wrap: wrap; gap: 12px; } .people figure:first-child { flex-basis: 100% !important; }
   .hero-ph { min-height: 560px; height: 86vh; }
   .hero-ph.split { grid-template-columns: 1fr; height: auto; min-height: 0; }
@@ -610,7 +643,7 @@ a.place { text-decoration: none; }
         <div class="rail-top">
           <label class="search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             <span class="vh">Пошук песні</span>
-            <input id="q" type="search" name="q" placeholder="Нумар, радок, выканаўца…" autocomplete="off" spellcheck="false" enterkeyhint="search">
+            <input id="q" type="search" name="q" placeholder="Нумар, радок, імя…" autocomplete="off" spellcheck="false" enterkeyhint="search">
             <button class="icon-btn" id="qclear" aria-label="Ачысціць пошук" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button>
           </label>
         </div>
@@ -660,6 +693,7 @@ a.place { text-decoration: none; }
 </script>
 <script src="places.js"></script>
 <script src="melodies.js"></script>
+<script src="notators.js"></script>
 <script src="folk-player.js"></script>
 <script>
 (function () {
@@ -767,7 +801,7 @@ a.place { text-decoration: none; }
     p = p.replace(/[\s,.;:]+$/, '').trim();
     return p || 'без назвы';
   }
-  var NO_REGION = 'павет не пазначаны', NO_INF = 'не пазначаны';
+  var NO_REGION = 'павет не пазначаны', NO_INF = 'не пазначана';
   SONGS.forEach(function (s) {
     s.fRegion = s.region || NO_REGION;
     s.fPlace = placeOf(s);
@@ -820,7 +854,7 @@ a.place { text-decoration: none; }
     { key: 'cat', url: 't', label: 'Тып', all: 'усе тыпы', chips: true, vals: function (s) { return [s.cat]; } },
     { key: 'sec', url: 's', label: 'Раздзел', all: 'усе раздзелы', tree: true, vals: function (s) { return [s.part, s.part + SEP + s.chapter]; } },
     { key: 'place', url: 'm', label: 'Мясціна', all: 'усе мясціны', tree: true, search: 'Шукаць мясцовасць…', vals: function (s) { return [s.fRegion, s.fRegion + SEP + s.fPlace]; } },
-    { key: 'inf', url: 'i', label: 'Выканаўца', all: 'усе выканаўцы', search: 'Шукаць выканаўцу…', vals: function (s) { return s.fInf.length ? s.fInf : [NO_INF]; } }
+    { key: 'inf', url: 'i', label: 'Ад каго запісана', all: 'усе імёны', search: 'Шукаць імя…', vals: function (s) { return s.fInf.length ? s.fInf : [NO_INF]; } }
   ];
   var FBY = {}; FACETS.forEach(function (f) { FBY[f.key] = f; });
   // book order for sections, first appearance for the rest
@@ -977,6 +1011,14 @@ a.place { text-decoration: none; }
   //  Melody playback through folk-player.js: сапілка, цымбалы, кларнет
   // =====================================================================
   var FP = window.FolkPlayer;
+  // who wrote the melody down: the mark (Tr., J. K., L. P.) under the notes, read from the scans into notators.js
+  var NOTATORS = window.NOTATORS || {}, NOTATOR_NAMES = { Tr: ['Іахім Трачык', 'Tr.'], JK: ['Ян Карловіч', 'J. K.'], LP: ['Лідзія Патулоўна', 'L. P.'] };
+  function notatorOf(s) {
+    var imgs = s.own.length ? s.own : [];
+    if (!imgs.length) for (var i = 0; i < s.refm.length; i++) if (s.refm[i].imgs.length) { imgs = s.refm[i].imgs; break; }
+    for (var j = imgs.length - 1; j >= 0; j--) { var k = NOTATORS[imgs[j].src.split('/').pop()]; if (k) return k; }
+    return '';
+  }
   // a song's melody: events from its own sheets, or from the referenced tune
   function melodyOf(s) {
     var imgs = s.own.length ? s.own : [];
@@ -1132,7 +1174,10 @@ a.place { text-decoration: none; }
     h.push('<div><dt>Мясціна</dt><dd>' + (s.region ? fl('place', s.fRegion, esc(s.region)) + '<br>' : '') + '<span class="orig" lang="pl" translate="no">' + esc(s.header) + '</span>' +
       '<br>' + fl('place', s.fRegion + SEP + s.fPlace, 'Іншыя песні адсюль') +
       ((SONG_PLACES[s.id] || []).length ? '<br><a href="#map/' + encodeURIComponent(SONG_PLACES[s.id][0]) + '">Паказаць на мапе</a>' : '') + '</dd></div>');
-    if (s.informant.length) h.push('<div><dt>Выканаўца</dt><dd>' + s.informant.map(function (x, k) { return fl('inf', s.fInf[k] || '', esc(s.informant_cyr[k])) + '<br><span class="orig" translate="no">' + esc(x) + '</span>'; }).join('<br>') + '</dd></div>');
+    if (s.informant.length) h.push('<div><dt>Ад каго запісана</dt><dd>' + s.informant.map(function (x, k) { return fl('inf', s.fInf[k] || '', esc(s.informant_cyr[k])) + '<br><span class="orig" translate="no">' + esc(x) + '</span>'; }).join('<br>') + '</dd></div>');
+    var nt = notatorOf(s);
+    var ntRef = s.own.length ? null : s.refm.filter(function (r) { return r.imgs.length; })[0];
+    if (nt) h.push('<div><dt>Мелодыю ' + (ntRef ? '№ ' + esc(ntRef.n) + ' ' : '') + (nt === 'LP' ? 'запісала' : 'запісаў') + '</dt><dd>' + NOTATOR_NAMES[nt][0] + '<br><span class="orig" translate="no">' + NOTATOR_NAMES[nt][1] + '</span></dd></div>');
     if (s.recorder.length) h.push('<div><dt>Запіс</dt><dd class="orig" translate="no">' + esc(s.recorder.join('; ')) + '</dd></div>');
     if (s.dance) h.push('<div><dt>Танец</dt><dd>' + esc(s.dance) + '</dd></div>');
     if ((s.tempo_by || []).length) h.push('<div><dt>Тэмп</dt><dd>' + esc(s.tempo_by.join(', ')) + ' <span class="orig" lang="pl" translate="no">(' + esc(s.tempo_lat.join('; ')) + ')</span></dd></div>');
@@ -1158,7 +1203,7 @@ a.place { text-decoration: none; }
 
     h.push('<h1 class="song-title"><span class="no num"><small>№</small>' + esc(s.id) + '</span>' + esc(stress(s.title)) + '</h1>');
     h.push('<p class="print-src">Федароўскі М. Lud białoruski na Rusi Litewskiej, ' + pageRef(s.vol, s.page) + '. ' + (s.region ? esc(s.region) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
-      (s.informant.length ? ' Выканаўца: ' + s.informant_cyr.map(function (x) { return esc(x.replace(/́/g, '')); }).join(', ') + '.' : '') + '</p>');
+      (s.informant.length ? ' Ад каго запісана: ' + s.informant_cyr.map(function (x) { return esc(x.replace(/́/g, '')); }).join(', ') + '.' : '') + '</p>');
     h.push('<div class="subline"><button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="Паказаць усе песні тыпу «' + esc(s.cat) + '»">' + esc(s.cat) + '</button>');
     if (s.group === 'own') h.push('<span class="pill">' + noteIcon(s) + 'свае ноты</span>');
     else if (s.group === 'ref') h.push('<span class="pill">' + noteIcon(s) + 'на мелодыю № ' + esc(s.refm.filter(function (r) { return r.imgs.length; }).map(function (r) { return r.n; }).join(', ')) + '</span>');
@@ -1248,6 +1293,18 @@ a.place { text-decoration: none; }
       var r = c[2].replace(' павет', ' пав.');
       return '<button class="place" data-facet-set="place" data-value="' + r + '">' + fig + '<span>' + c[2] + ' · ' + rc(r) + '</span><small>' + c[3] + '</small></button>';
     };
+    // people the songs were written down from (the edition calls them informants): one spelling per person in s.fInf
+    var infMap = {}, infSongs = 0;
+    SONGS.forEach(function (s) {
+      if (s.fInf.length) infSongs++;
+      s.fInf.forEach(function (n) {
+        var o = infMap[n] || (infMap[n] = { n: n, c: 0, pl: [], reg: s.fRegion });
+        o.c++;
+        (SPh[s.id] || []).forEach(function (k) { var p = PLh[k]; if (p && o.pl.indexOf(placeName(p)) < 0) o.pl.push(placeName(p)); });
+      });
+    });
+    var infTop = Object.keys(infMap).map(function (k) { return infMap[k]; }).sort(function (a, b) { return b.c - a.c; }).slice(0, 12);
+    var plural = function (n, one, few, many) { var a = n % 10, b = n % 100; return a === 1 && b !== 11 ? one : a >= 2 && a <= 4 && (b < 12 || b > 14) ? few : many; };
     var rc = function (r) { var n = SONGS.filter(function (s) { return s.fRegion === r; }).length, m10 = n % 10, m100 = n % 100; return n + (m10 === 1 && m100 !== 11 ? ' песня' : m10 >= 2 && m10 <= 4 && (m100 < 12 || m100 > 14) ? ' песні' : ' песень'); };
     var own = SONGS.filter(function (s) { return s.group === 'own'; }).length, ref = SONGS.filter(function (s) { return s.group === 'ref'; }).length;
     var first = visible[0] || SONGS[0];
@@ -1255,11 +1312,11 @@ a.place { text-decoration: none; }
       '<article class="home">' +
       '<section class="hero-ph split">' +
       '<div class="hero-in"><p class="kicker">Міхал Федароўскі · Lud białoruski · ' + (ADULT ? 'т. VIa' : 'т. V–VI') + '</p><h1>' + NAME + (ADULT ? ' <span class="age">18+</span>' : '') + '</h1>' +
-      '<p class="sub">' + nf.format(SONGS.length) + ' ' + songsWord(SONGS.length) + ' з вёсак і мястэчак Гродзеншчыны і Случчыны, запісаных у канцы XIX стагоддзя. Тэксты, ноты і мелодыі.</p>' +
-      '<button class="home-search" id="homeSearch">' + svg('search', '') + 'Нумар, радок, выканаўца…</button></div>' +
+      '<p class="sub">' + (ADULT ? nf.format(SONGS.length) + ' ' + plural(SONGS.length, 'мужчынская песня і прыпеўка, запісаная', 'мужчынскія песні і прыпеўкі, запісаныя', 'мужчынскіх песень і прыпевак, запісаных') + ' ў канцы XIX стагоддзя, з тома VIa зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>, раздзелы «Pieśni obsceniczne» і «Pieśni obsceniczne taneczne»: жартоўныя і непрыстойныя песні, дыялогі, прыпеўкі да круцёлкі, полькі і мяцеліцы. Песні, якія спяваюцца ад імя жанчыны, сюды не ўвайшлі. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць. Гэты раздзел асобны: у асноўны каталог і пошук ён не трапляе.'
+        : nf.format(SONGS.length) + ' ' + plural(SONGS.length, 'песня, запісаная', 'песні, запісаныя', 'песень, запісаных') + ' ў канцы XIX стагоддзя, з V і VI тамоў зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць.') + '</p>' +
+      '<button class="home-search" id="homeSearch">' + svg('search', '') + 'Нумар, радок, імя…</button></div>' +
       '<figure><img src="img/sluck-sielanin.jpg" alt="Стары селянін у кажуху і футравай шапцы, з люлькай і кіем" fetchpriority="high">' +
       '<figcaption class="ph-cap">«Тып беларускага селяніна», Слуцк, да 1917. Фота С. Юхніна, грамадскі набытак</figcaption></figure></section>' +
-      (ADULT ? '<p class="lead">' + nf.format(SONGS.length) + ' мужчынскіх песень і прыпевак з тома VIa зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>, раздзелы «Pieśni obsceniczne» і «Pieśni obsceniczne taneczne»: жартоўныя і непрыстойныя песні, дыялогі, прыпеўкі да круцёлкі, полькі і мяцеліцы. Песні, якія спяваюцца ад імя жанчыны, сюды не ўвайшлі. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць. Гэты раздзел асобны: у асноўны каталог і пошук ён не трапляе.</p>' : '<p class="lead">' + nf.format(SONGS.length) + ' песень з V і VI тамоў зборніка <a href="' + WIKI + '" rel="noopener" target="_blank">Міхала Федароўскага</a> <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для ' + nf.format(own + ref) + ' з іх ёсць ноты, і мелодыю можна праслухаць.</p>') +
       '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + 'Адкрыць першую песню</a><a class="btn quiet" href="#map">' + svg('map', '') + 'Мапа мясцін</a>' + (ADULT ? '<a class="btn quiet" href="' + MAIN + '">Асноўны каталог</a>' : '') + '</p>' +
       '<div class="sec-title"><div><p class="eyebrow">Адкуль песні</p><h2>Мясціны</h2></div><a href="#map">Уся мапа →</a></div>' +
       '<div class="places">' + PLACE_CARDS.map(placeCard).join('') + '</div>' +
@@ -1271,13 +1328,42 @@ a.place { text-decoration: none; }
       '</div><p class="ph-credit">Фота: Wikimedia Commons, грамадскі набытак</p>' +
       '<figure class="ph-band"><img src="img/navahrudak-lata.jpg" alt="Летні луг і агароджа з дрэвамі каля вёскі" loading="lazy"><figcaption>«Лета», ваколіцы Навагрудка, каля 1920. Фота Яна Булгака. Polona, грамадскі набытак</figcaption></figure>' +
       '<section class="music collector"><figure><img src="img/fedarouski.jpg" alt="Міхал Федароўскі" loading="lazy"><figcaption>Міхал Федароўскі (1853–1923). Фота з IV тома «Lud białoruski», 1935. Polona, грамадскі набытак</figcaption></figure>' +
-      '<div><p class="eyebrow">Збіральнік</p><h2>Міхал Федароўскі</h2><p>З 1877 па 1905 год ён збіраў песні, казкі, прыказкі і павер\'і з Ваўкавышчыны, Слонімшчыны, Лідчыны, Сакольшчыны і суседніх паветаў. Запісы паходзілі з розных крыніц. З гэтых матэрыялаў склалася восем тамоў «Lud białoruski na Rusi Litewskiej».</p><p>Песні з нотамі ўвайшлі ў V і VI тамы. Пры кожнай песні пазначана вёска і, калі вядома, хто яе спяваў.</p></div></section>' +
+      '<div><p class="eyebrow">Збіральнік</p><h2>Міхал Федароўскі</h2><p>З 1877 па 1905 год ён збіраў песні, казкі, прыказкі і павер\'і з Ваўкавышчыны, Слонімшчыны, Лідчыны, Сакольшчыны і суседніх паветаў. Запісы паходзілі з розных крыніц. З гэтых матэрыялаў склалася восем тамоў «Lud białoruski na Rusi Litewskiej».</p><p>Песні з нотамі ўвайшлі ў V і VI тамы. Пры кожнай песні пазначана мясціна і, калі вядома, ад каго яе запісалі.</p></div></section>' +
+      // how the songs were gathered and the tunes written down: Lud białoruski t. V (1958) «Od redakcji» and t. VII (1969), articles by Kozerska, Obrębska-Jabłońska, Damrosz and Stęszewski
+      '<div class="sec-title"><div><p class="eyebrow">Як збіралі песні</p><h2>Ад слоў да нот</h2></div></div>' +
+      '<section class="history"><ol class="tl">' + [
+        ['1877', 'Федароўскі пачынае запісваць тэксты песень. Нот ён не ведаў, таму доўгі час запісваў толькі словы. Імёны спевакоў спачатку не пазначаў, як тады рабіў Оскар Кольберг, таму пры многіх ранніх запісах імя няма.'],
+        ['1878–1890-я', 'Частку тэкстаў дасылаюць памочнікі: Ксаверы і Фелікс Вярцінскія, Ян Дзежка і Пауліна Дзежкаўна з Устроня, Мяжэеўскі з ваколіц Моўчадзі.'],
+        ['1889', 'У фальварак Косін на Ваўкавышчыне, які арандуе Федароўскі, на тыдзень прыязджае этнограф Ян Карловіч і пачынае запісваць мелодыі. Спявачак запрашаюць з некалькіх паветаў.'],
+        ['1891', 'Карловіч зноў у Косіне, з ім Іахім Трачык, гуралец з-пад Бабяй Гары. Спявачак восем, усе з Ваўкавыскага павета. Калі яны праспявалі ўсё, што памяталі, для іх зладзілі нешта накшталт дажынак: з пачастункам, скрыпачом з суседняй вёскі і танцамі да поўначы.'],
+        ['1892–1895', 'Трачык прыязджае на канікулы. Мелодыі запісваюць у дварах, куды запрашаюць спявачак з бліжэйшых і далёкіх вёсак: у Голне каля Крынак, у Косіне, у Навасадах на Навагрудчыне, у Начы каля Ляхавіч, у Вішаве на Слонімшчыне. Усяго ў васьмі паветах.'],
+        ['каля 1910', 'Лідзія Патулоўна перапісвае песні начыста і дасылае 11 мелодый з ваколіц Васілішак.'],
+        ['1923', 'Федароўскі памірае, так і не выдаўшы песні. У Другую сусветную вайну частка яго рукапісаў загінула.'],
+        ['1958–1969', 'Песні выдае Польская акадэмія навук: V том у 1958 годзе, VI у 1960, VII з каментарамі і паказальнікамі ў 1969. Тэксты рыхтаваў Ежы Дамрош, мелодыі Ян Стэнжэўскі.']
+      ].map(function (t) { return '<li><b>' + t[0] + '</b><p>' + t[1] + '</p></li>'; }).join('') + '</ol>' +
+      '<div class="how"><h3>Як запісвалі мелодыі</h3>' +
+      '<p>Фанографа не было, мелодыі запісвалі на слых. Карловіч, віяланчэліст, які вучыўся ў Брусельскай кансерваторыі, адразу лавіў праспяваны матыў, ціха пасвістваў яго сабе і пераносіў на паперу. Працаваў з раніцы да пяці-шасці вечара з перапынкамі і запісваў каля 50 мелодый у дзень. З 1891 года да абеду пісаў Карловіч, а пасля Трачык, музыка-самавук, які ў дзяцінстве пасвіў кароў і іграў на самаробнай скрыпцы.</p>' +
+      '<p>Спявачкі спявалі па чарзе, пакуль не праспявалі ўсё, што памяталі. Словы і мелодыю адной песні не заўсёды запісвалі адначасова: многія тэксты Федароўскі сабраў яшчэ да 1889 года, і мелодыі да іх шукалі потым. Пры кароткіх прыпеўках і фрывольных песнях імёнаў ён звычайна не пісаў, часам на просьбу саміх спевакоў.</p>' +
+      '<p>Пад кожнай мелодыяй у выданні стаіць пазнака таго, хто яе запісаў:</p><ul class="marks"><li><b>Tr.</b>Іахім Трачык, каля 1050 мелодый</li><li><b>J. K.</b>Ян Карловіч, каля 445</li><li><b>L. P.</b>Лідзія Патулоўна, 11</li></ul>' +
+      '<p>Квадратнымі дужкамі пазначана тое, што дадалі рэдактары. Калі ў дужках словы пад нотамі, нотапісец запісаў толькі напеў.</p>' +
+      (ADULT ? '' : '<a class="ex" href="#9"><img src="notes/m_9_1.png" alt="Ноты песні № 9 з пазнакай Tr." loading="lazy"><span>№ 9, ад Анны Сладкай з-пад Крынак. Мелодыю і словы пад ёй запісаў Трачык.</span></a>' +
+      '<a class="ex" href="#6"><img src="notes/m_6_1.png" alt="Ноты песні № 6 з пазнакай J. K. і словамі ў дужках" loading="lazy"><span>№ 6, ад Марылі Мулярчыкавай са Шандраў каля Мсцібава. Карловіч запісаў толькі напеў, словы ў дужках дадалі рэдактары.</span></a>') +
+      '<p class="src">Паводле VII тома «Lud białoruski» (Варшава, 1969) і ўспамінаў Федароўскага пра Карловіча (1904). На старонцы кожнай песні пазначана, хто запісаў яе мелодыю.</p></div></section>' +
+      (ADULT || !infTop.length ? '' : '<div class="sec-title"><div><p class="eyebrow">Людзі</p><h2>Ад каго запісаныя песні</h2></div></div>' +
+      '<section class="informants"><div class="pair">' +
+        '<figure style="flex: .70 1 0"><img src="img/spjavacka-bajarczykava-1891.jpg" alt="Маладая жанчына ў светлай світцы і хустцы, усміхаецца" loading="lazy"><figcaption>Марыля Баярчыкова з Вялікіх Азяранак, 1891</figcaption></figure>' +
+        '<figure style="flex: .68 1 0"><img src="img/spjavacka-goslauska-1891.jpg" alt="Пажылая жанчына ў фартуху каля сцяны хаты" loading="lazy"><figcaption>Юзэфа Гаслаўская з Мсцібава, 1891</figcaption></figure>' +
+      '</div><div><p>Пры ' + nf.format(infSongs) + ' песнях пазначана, ад каго іх запісалі. Рэдактары выдання называюць гэтых людзей інфарматарамі. Большасць з іх вясковыя спявачкі: у 1889–1895 гадах іх запрашалі ў двары, дзе Ян Карловіч і Іахім Трачык запісвалі мелодыі.</p>' +
+      '<p>Словы і ноты адной песні часам запісвалі ад розных людзей, частку тэкстаў дыктавалі, а частку даслалі памочнікі Федароўскага. Таму імя пры песні паказвае, ад каго яе запісалі, а не абавязкова таго, хто яе спяваў.</p>' +
+      '<p class="src">На фота — адзіныя вядомыя партрэты спявачак Федароўскага. З кнігі «Życie i prace Jana Karłowicza», Варшава, 1904. Polona, грамадскі набытак</p></div></section>' +
+      '<div class="inf-grid">' + infTop.map(function (o) { return '<button class="inf-card" data-facet-set="inf" data-value="' + esc(o.n) + '"><b>' + esc(o.n) + '</b><span>' + esc(o.pl.length ? o.pl.slice(0, 2).join(', ') : (o.reg || '').replace(' пав.', ' павет')) + '</span><small>' + o.c + ' ' + songsWord(o.c) + '</small></button>'; }).join('') + '</div>' +
+      '<p class="inf-hint">Усяго ' + nf.format(Object.keys(infMap).length) + ' ' + plural(Object.keys(infMap).length, 'імя', 'імёны', 'імёнаў') + '. Націсніце на імя, каб убачыць песні, запісаныя ад гэтага чалавека, або выберыце яго ў фільтры «Ад каго запісана».</p>') +
       '<section class="music melody"><div><p class="eyebrow">Мелодыі</p><h2>Песні, запісаныя больш за сто гадоў таму, гучаць зноў</h2><p>Для ' + nf.format(own + ref) + ' песень ёсць ноты. Іх можна праслухаць голасам, на дудзе, сапілцы, цымбалах або кларнеце, развучыць павольна і па крузе, падабраць вышыню пад свой голас.</p><p>Курсор паказвае на нотах, што гучыць зараз.</p></div>' +
       '<figure><img src="img/lud-t1.jpg" alt="Тытульны ліст I тома Lud białoruski, 1897" loading="lazy"><figcaption>Тытульны ліст I тома, Кракаў, 1897. Polona, грамадскі набытак</figcaption></figure></section>' +
       '<h2>Па тамах</h2><ul class="cats vols">' + VOLS.map(function (v) { return '<li><button data-facet-set="vol" data-value="т. ' + v[0] + '"><span>Том ' + v[0] + ' <small>' + v[1] + '</small></span><span class="num">' + SONGS.filter(function (s) { return s.vol === v[0]; }).length + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Па тыпах</h2><ul class="cats">' + catNames.map(function (c) { return '<li><button data-facet-set="cat" data-value="' + esc(c) + '"><span>' + esc(c) + '</span><span class="num">' + cats[c] + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>Па мясцінах</h2><p>Усе вёскі і мястэчкі, адкуль паходзяць гэтыя песні, — на <a href="#map">мапе</a>.</p><ul class="cats">' + regionList().map(function (r) { return '<li><button data-facet-set="place" data-value="' + esc(r[0]) + '"><span>' + esc(r[0]) + '</span><span class="num">' + r[1] + '</span></button></li>'; }).join('') + '</ul>' +
-      '<h2>Што ёсць пры песні</h2><p>Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), выканаўца, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні, нават калі яна ў іншым томе. Пры песнях VI тома пазначаны і танец («Kruciołka», «Polka drobna»…), калі ён ёсць у выданні.</p>' +
+      '<h2>Што ёсць пры песні</h2><p>Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), ад каго запісана, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні, нават калі яна ў іншым томе. Пры песнях VI тома пазначаны і танец («Kruciołka», «Polka drobna»…), калі ён ёсць у выданні.</p>' +
       '<h2>Мелодыі</h2><p>Ноты распазнаныя аўтаматычна і гучаць праз сінтэзатар голасам сапілкі, цымбалаў або кларнета, з бурдонам на выбар. «Паслухаць» іграе мелодыю адзін раз, «Развучыць» — павольней і па крузе. Актаву, вышыню і тэмп можна падабраць пад свой голас, а курсор паказвае на нотах, што гучыць зараз. У рытме і асобных нотах магчымыя памылкі распазнавання.</p>' +
       '<h2>Тэкст</h2><p>Тэкст пераведзены з польскай лацінкі Федароўскага ў беларускую кірыліцу з захаваннем дыялектнага вымаўлення і націскаў. Арыгінальны запіс можна паглядзець кнопкай «Арыгінал» або «Побач».</p>' +
       (ADULT ? '' : '<h2>Фрывольныя песні <span class="age">18+</span></h2><p>Абсцэнныя песні і прыпеўкі да танцаў з тома VIa сабраныя ў <a href="' + A18 + '">асобным раздзеле</a> толькі для дарослых. У гэты каталог і пошук яны не трапляюць.</p>') +
