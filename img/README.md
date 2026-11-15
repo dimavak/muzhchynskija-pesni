@@ -18,6 +18,8 @@
 | `lachavicy-siamja.jpg` | «Людзі» | Сялянская сям'я ў святочных строях, Ляхавічы. Фота Е. Раманава | 1913 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Еўдакім_Раманаў._Сялянская_сям'я_ў_святочных_строях._Ляхавічы._1913.webp) (з калекцыі МАЭ РАН) |
 | `padlipcy.jpg` | «Людзі» | Селянін з дзяўчынкай, Падліпцы Слуцкага павета. Фота В. Косткі | 1905 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Padlipcy,_sielianin._Падліпцы,_селянін_(1905).jpg) |
 | `navahrudak-lata.jpg` | шырокая палоса | «Лета», ваколіцы Навагрудка. Фота Я. Булгака (подпіс на адвароце паштоўкі) | каля 1920 | [Polona](https://polona.pl/item-view/62846b56-5684-4618-b47d-a14f299fe233) |
+| `spjavacka-bajarczykava-1891.jpg` | «Ад каго запісаныя песні» | спявачка Марыля Баярчыкова з вёскі Вялікія Азяранкі (Ваўкавыскі павет) | 1891 | [Polona](https://polona.pl/item-view/cbf823b9-5e54-4371-9484-cf939b5d544d): «Życie i prace Jana Karłowicza», Варшава, 1904, арт. М. Федароўскага «Z nad Niemna», с. 81 |
+| `spjavacka-goslauska-1891.jpg` | «Ад каго запісаныя песні» | спявачка Юзэфа Гаслаўская з Мсцібава (Ваўкавыскі павет) | 1891 | тая ж кніга, с. 82 |
 | `fedarouski.jpg` | «Збіральнік» | Міхал Федароўскі, партрэт з IV тома «Lud białoruski» | 1935 | [Polona](https://polona.pl/item-view/b712c7b4-2927-4766-96fd-c2b7d488f468) |
 | `lud-t1.jpg` | «Мелодыі» | тытульны ліст I тома «Lud białoruski», Кракаў | 1897 | [Polona](https://polona.pl/item-view/52fadc09-1d9a-473b-8666-cd3d25f629b8) |
 | `vaukavysk-hara.jpg` | банер Ваўкавыскага павета | Ваўкавыск, Шведская гара | да 1939 | [Polona](https://polona.pl/item-view/2a9e9acc-24a4-4207-ab1b-5aeeb9e0bc56) |
