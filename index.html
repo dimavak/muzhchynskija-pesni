@@ -1380,7 +1380,7 @@ a.place { text-decoration: none; }
         var shown = false, sh = [];
         s.refm.forEach(function (r) {
           var inSet = byId[r.n] || byId[r.n + 'a'];
-          var inMain = !inSet && ADULT && r.vol !== 'VIa', inAll = !inSet && !ADULT && !ALL && r.vol === 'V';
+          var inMain = !inSet && ADULT && r.vol !== 'VIa', inAll = !inSet && !ADULT && !ALL && (r.vol === 'V' || r.vol === 'VI');
           var link = inSet ? '<a href="#' + esc(inSet.id) + '">' + NO + ' ' + esc(r.n) + '</a>' : inMain ? '<a href="' + MAIN + '#' + esc(r.n) + '">' + NO + ' ' + esc(r.n) + '</a>' : inAll ? '<a href="' + allHref(r.n) + '">' + NO + ' ' + esc(r.n) + '</a>' : NO + ' ' + esc(r.n);
           var where = (r.imgs.length ? pageRef(r.vol, r.imgs[0].page) : tv('т. ' + r.vol)) + (r.header ? ', <span lang="pl" translate="no">' + esc(r.header) + '</span>' : '');
           h.push('<p class="refnote">' + t('Спяваецца на мелодыю {link} ({where})', { link: link, where: where }) +
@@ -1675,9 +1675,10 @@ a.place { text-decoration: none; }
       if (!matchQuery(cur)) { st.q = ''; $('q').value = ''; $('qclear').hidden = true; }
       saveFilters(); compute(); counts(); syncUrl();
     }
+    function inAllCat(n) { return n >= 1 && n <= 4171 && !(n >= 2960 && n <= 3312); }
     renderList();
     if (cur) renderSong(cur);
-    else if (id && !ADULT && !ALL && /^\d{1,4}[a-z]?$/.test(id) && +id.replace(/\D/g, '') <= 2105) {
+    else if (id && !ADULT && !ALL && /^\d{1,4}[a-z]?$/.test(id) && inAllCat(+id.replace(/\D/g, ''))) {
       unloadSong();
       $('view').innerHTML = '<article class="home"><h1>' + NO + ' ' + esc(id) + '</h1><p class="cat-note">' + t('Гэтай песні няма ў мужчынскім каталогу. Яна ёсць у агульным каталогу, дзе сабраныя ўсе песні V і VI тамоў.') + '</p><p class="actions"><a class="btn primary" href="' + allHref(id) + '">' + t('Адкрыць у агульным каталогу') + '</a></p></article>';
     }
