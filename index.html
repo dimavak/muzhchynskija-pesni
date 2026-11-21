@@ -329,6 +329,36 @@ kbd { font: 500 13px var(--sans); border: 1px solid var(--rule-2); border-bottom
 .cols.one .lat .ln { color: var(--ink); }
 .notice { background: var(--thread-wash); border-radius: 8px; padding: 10px 14px; margin: 0 0 16px; color: var(--ink); font-size: 16px; }
 
+/* ---------- corrections ---------- */
+.corr-fab { position: fixed; z-index: 55; display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 16px; border: 0; border-radius: 20px; background: var(--thread); color: var(--thread-ink); font: 600 15px/1 var(--sans); box-shadow: var(--shadow); cursor: pointer; }
+.corr-fab[hidden] { display: none; }
+.corr-fab svg { width: 18px; height: 18px; fill: currentColor; }
+.corr-hint { display: flex; align-items: center; gap: 8px; margin: 20px 0 0; font-size: 15px; color: var(--ink-3); }
+.corr-hint svg { flex: none; width: 16px; height: 16px; fill: var(--ink-3); }
+dialog.corr-dlg { width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 24px); padding: 20px 20px 16px; border: 0; border-radius: 12px; background: var(--page); color: var(--ink); box-shadow: var(--shadow); overscroll-behavior: contain; }
+dialog.corr-dlg::backdrop { background: rgba(18, 12, 12, .5); }
+.corr-dlg h2 { margin: 0 44px 2px 0; font: 700 21px/1.25 var(--serif); }
+.corr-dlg .sub { margin: 0 44px 6px 0; color: var(--ink-3); font-size: 15px; }
+.corr-dlg .close { position: absolute; top: 10px; right: 10px; }
+.corr-dlg label { display: block; margin: 12px 0 4px; font-weight: 600; font-size: 15px; }
+.corr-dlg label small { font-weight: 400; color: var(--ink-3); }
+.corr-dlg select, .corr-dlg textarea, .corr-dlg input { display: block; width: 100%; font: 16px/1.4 var(--sans); color: var(--ink); background: var(--linen); border: 1px solid var(--rule-2); border-radius: 8px; padding: 8px 10px; }
+.corr-dlg select:focus, .corr-dlg textarea:focus, .corr-dlg input:focus { outline: 2px solid var(--thread); outline-offset: 0; border-color: transparent; }
+.corr-dlg textarea { resize: vertical; min-height: 60px; }
+.corr-dlg textarea.sugg { font: 17px/1.5 var(--serif); }
+.corr-dlg blockquote { margin: 0; padding: 8px 12px; border-left: 3px solid var(--thread); background: var(--thread-wash); border-radius: 0 8px 8px 0; font: 17px/1.5 var(--serif); white-space: pre-wrap; max-height: 9em; overflow: auto; }
+.corr-dlg blockquote .ctx { color: var(--ink-3); }
+.corr-dlg blockquote mark { background: var(--thread-soft); color: var(--on-soft); border-radius: 2px; }
+.corr-dlg .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
+@media (max-width: 520px) { .corr-dlg .row2 { grid-template-columns: 1fr; } }
+.corr-dlg .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.corr-dlg .privacy { margin: 10px 0 0; font-size: 13.5px; color: var(--ink-3); }
+.corr-dlg .err { margin: 10px 0 0; color: var(--thread); font-size: 15px; }
+.corr-dlg .btns { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+.corr-dlg .btn { min-height: 40px; padding: 0 18px; border-radius: 20px; border: 1px solid var(--rule-2); background: transparent; color: var(--ink); font: 600 15px var(--sans); cursor: pointer; }
+.corr-dlg .btn:hover { background: var(--hover); }
+.corr-dlg .btn.primary { background: var(--thread); color: var(--thread-ink); border-color: transparent; }
+.corr-dlg .btn:disabled { opacity: .6; cursor: default; }
 /* ---------- likes (giscus) ---------- */
 .likes p { margin: 0 0 12px; color: var(--ink-2); font-size: 15.5px; max-width: 60ch; }
 .likes .giscus { min-height: 120px; }
@@ -613,7 +643,7 @@ a.place { text-decoration: none; }
 @media print {
   @page { margin: 14mm 16mm; }
   html, body { background: #fff !important; color: #000 !important; height: auto; }
-  .mast, .rail, .scrim, .skip, .map-wrap, .map-legend, .crumbbar, .subline, .sec-h, .player, .pnote, .zoom-btn, .cap, .refnote small, .apparatus, .likes, .pager, .snack, .mini, dialog, .cur-band, .cur-dot { display: none !important; }
+  .mast, .rail, .scrim, .skip, .map-wrap, .map-legend, .crumbbar, .subline, .sec-h, .player, .pnote, .zoom-btn, .cap, .refnote small, .apparatus, .likes, .pager, .snack, .mini, dialog, .corr-fab, .corr-hint, .cur-band, .cur-dot { display: none !important; }
   .app, .layout, .grid { display: block; height: auto; }
   .doc { overflow: visible; }
   .page { max-width: none; padding: 0; }
@@ -822,6 +852,8 @@ a.place { text-decoration: none; }
     book: 'M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z',
     search: 'M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z',
     map: 'M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z',
+    flag: 'M14.4 6 14 4H5v17h2v-7h5.6l.4 2h7V6z',
+    edit: 'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z',
     print: 'M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z'
   };
   function svg(name, cls) { return '<svg class="' + (cls || 'i') + '" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="' + IC[name] + '"/></svg>'; }
@@ -1247,6 +1279,126 @@ a.place { text-decoration: none; }
     if (el) el.textContent = n ? nf.format(n) : '';
   });
 
+  // =====================================================================
+  //  Corrections: a visitor selects wrong text (or uses the button) and proposes a fix.
+  //  Stored in Supabase through submit_correction() (supabase/corrections.sql); hidden until config.js has url and key.
+  // =====================================================================
+  var CC = CFG.corrections || {};
+  var corrOn = !!(CC.url && CC.key);
+  var KINDS = [['text', 'Тэкст песні'], ['notes', 'Ноты ці мелодыя'], ['place', 'Мясціна, павет, ад каго запісана'], ['translation', 'Пераклад ці надпісы сайта'], ['other', 'Іншае']];
+  var corrSel = null, corrCtx = null;
+  // what is selected in the song text: the quote, its line and a little text around it
+  function selectionInfo() {
+    var sel = window.getSelection(); if (!sel || sel.isCollapsed || !sel.rangeCount) return null;
+    var rg = sel.getRangeAt(0), box = rg.commonAncestorContainer; if (box.nodeType !== 1) box = box.parentNode;
+    var block = box && box.closest && box.closest('#view .text'); if (!block) return null;
+    var raw = sel.toString().replace(/[ \t ]+\n/g, '\n').replace(/\n{2,}/g, '\n'), quote = raw.trim(); if (!quote) return null;
+    var lead = raw.match(/^\s*/)[0].replace(/\n/g, ''), trail = raw.match(/\s*$/)[0].replace(/\n/g, '');
+    var el = function (n) { return n.nodeType === 1 ? n : n.parentNode; };
+    var sl = el(rg.startContainer).closest('.ln'), el2 = el(rg.endContainer).closest('.ln');
+    var before = '', after = '', lineNo = null;
+    if (sl) {
+      var a = document.createRange(); a.selectNodeContents(sl); a.setEnd(rg.startContainer, rg.startOffset); before = (a.toString() + lead).slice(-80);
+      lineNo = [].indexOf.call(block.children, sl) + 1;
+    }
+    if (el2) { var b = document.createRange(); b.selectNodeContents(el2); b.setStart(rg.endContainer, rg.endOffset); after = (trail + b.toString()).slice(0, 80); }
+    return { quote: quote.slice(0, 1000), before: before, after: after, line: lineNo, script: block.classList.contains('lat') ? 'lat' : 'cyr', rect: rg.getBoundingClientRect() };
+  }
+  function corrFab() {
+    var f = $('corrFab'); if (f) return f;
+    f = document.createElement('button'); f.type = 'button'; f.id = 'corrFab'; f.className = 'corr-fab'; f.hidden = true;
+    f.innerHTML = svg('edit', '') + '<span>' + t('Прапанаваць праўку') + '</span>';
+    // keep the selection when the button is pressed
+    f.addEventListener('mousedown', function (e) { e.preventDefault(); });
+    f.addEventListener('click', function () { var s = corrSel; f.hidden = true; openCorr(s); });
+    document.body.appendChild(f); return f;
+  }
+  function hideFab() { var f = $('corrFab'); if (f) f.hidden = true; }
+  function placeFab() {
+    if (!corrOn || !cur) return;
+    var s = selectionInfo(); corrSel = s;
+    if (!s || !s.rect.width && !s.rect.height) { hideFab(); return; }
+    var f = corrFab(); f.hidden = false;
+    var w = f.offsetWidth, h = f.offsetHeight, r = s.rect, vw = document.documentElement.clientWidth, vh = window.innerHeight;
+    var top = r.bottom + 10; if (top + h > vh - 12) top = Math.max(12, r.top - h - 10);
+    f.style.top = Math.round(top) + 'px';
+    f.style.left = Math.round(Math.max(12, Math.min(vw - w - 12, r.left + r.width / 2 - w / 2))) + 'px';
+  }
+  if (corrOn) {
+    document.addEventListener('selectionchange', function () { clearTimeout(placeFab.tm); placeFab.tm = setTimeout(placeFab, 220); });
+    $('main').addEventListener('scroll', function () { if (corrSel) placeFab(); }, { passive: true });
+    window.addEventListener('scroll', function () { if (corrSel) placeFab(); }, { passive: true });
+  }
+  function corrDialog() {
+    var d = $('corrDlg'); if (d) return d;
+    d = document.createElement('dialog'); d.className = 'corr-dlg'; d.id = 'corrDlg'; d.setAttribute('aria-labelledby', 'corrH');
+    var who = load('corr.who', {}) || {};
+    d.innerHTML = '<form method="dialog" id="corrForm" novalidate>' +
+      '<button type="button" class="icon-btn close" id="corrClose" aria-label="' + t('Закрыць') + '">' + svg('close') + '</button>' +
+      '<h2 id="corrH">' + t('Прапанаваць праўку') + '</h2><p class="sub" id="corrSong"></p>' +
+      '<label for="corrKind">' + t('Дзе памылка') + '</label><select id="corrKind">' + KINDS.map(function (k) { return '<option value="' + k[0] + '">' + t(k[1]) + '</option>'; }).join('') + '</select>' +
+      '<div id="corrQuoteBox"><label>' + t('Выдзелены тэкст') + '</label><blockquote id="corrQuote"></blockquote></div>' +
+      '<label for="corrSugg" id="corrSuggL">' + t('Як павінна быць') + '</label><textarea id="corrSugg" class="sugg" rows="3" maxlength="2000"></textarea>' +
+      '<label for="corrCom">' + t('Каментар') + ' <small>' + t('(па жаданні: чаму так, крыніца)') + '</small></label><textarea id="corrCom" rows="3" maxlength="3000"></textarea>' +
+      '<div class="row2"><div><label for="corrName">' + t('Імя') + ' <small>' + t('(па жаданні)') + '</small></label><input id="corrName" autocomplete="name" maxlength="100" value="' + esc(who.name || '') + '"></div>' +
+      '<div><label for="corrMail">Email <small>' + t('(па жаданні)') + '</small></label><input id="corrMail" type="email" autocomplete="email" maxlength="200" value="' + esc(who.mail || '') + '"></div></div>' +
+      '<div class="hp" aria-hidden="true"><label for="corrWeb">Website</label><input id="corrWeb" tabindex="-1" autocomplete="off"></div>' +
+      '<p class="privacy">' + t('Email патрэбны, толькі каб удакладніць праўку. Мы яго нікому не паказваем.') + '</p>' +
+      '<p class="err" id="corrErr" role="alert" hidden></p>' +
+      '<div class="btns"><button type="button" class="btn" id="corrCancel">' + t('Скасаваць') + '</button><button type="submit" class="btn primary" id="corrSend">' + t('Адправіць') + '</button></div></form>';
+    document.body.appendChild(d);
+    $('corrClose').addEventListener('click', function () { d.close(); });
+    $('corrCancel').addEventListener('click', function () { d.close(); });
+    d.addEventListener('click', function (e) { if (e.target === d) d.close(); });
+    $('corrKind').addEventListener('change', corrKindUI);
+    $('corrForm').addEventListener('submit', function (e) { e.preventDefault(); sendCorr(); });
+    return d;
+  }
+  function corrKindUI() {
+    var q = corrCtx && corrCtx.quote, k = $('corrKind').value;
+    $('corrQuoteBox').hidden = !q;
+    $('corrSuggL').textContent = t(q || k === 'text' ? 'Як павінна быць' : 'Што не так');
+  }
+  function openCorr(s) {
+    if (!cur) return;
+    var d = corrDialog(); corrCtx = s || null;
+    $('corrSong').textContent = NO + ' ' + cur.id + ' · ' + T(cur);
+    $('corrKind').value = s ? 'text' : 'other';
+    $('corrQuote').innerHTML = s ? (s.before ? '<span class="ctx">' + (s.before.length >= 80 ? '…' : '') + esc(s.before) + '</span>' : '') + '<mark>' + esc(s.quote) + '</mark>' + (s.after ? '<span class="ctx">' + esc(s.after) + (s.after.length >= 80 ? '…' : '') + '</span>' : '') : '';
+    $('corrSugg').value = s ? s.quote : '';
+    $('corrCom').value = ''; $('corrWeb').value = ''; $('corrErr').hidden = true; $('corrSend').disabled = false;
+    corrKindUI();
+    d.showModal();
+    var ta = $('corrSugg'); ta.focus(); if (s) ta.setSelectionRange(0, ta.value.length);
+  }
+  function corrError(code) {
+    var m = { empty: 'Напішыце, як павінна быць, або каментар.', same: 'Прапанова супадае з выдзеленым тэкстам. Выпраўце яе або дадайце каментар.',
+      email: 'Праверце email.', rate: 'Занадта шмат правак за кароткі час. Паспрабуйце пазней.' }[code] || 'Не атрымалася адправіць. Праверце сетку і паспрабуйце яшчэ раз.';
+    var el = $('corrErr'); el.textContent = t(m); el.hidden = false; $('corrSend').disabled = false;
+  }
+  function sendCorr() {
+    var s = corrCtx || {}, sugg = $('corrSugg').value.trim(), com = $('corrCom').value.trim(), name = $('corrName').value.trim(), mail = $('corrMail').value.trim();
+    if (!sugg && !com) return corrError('empty');
+    if (s.quote && sugg === s.quote && !com) return corrError('same');
+    if (mail && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) return corrError('email');
+    save('corr.who', { name: name, mail: mail });
+    var p = { song_id: cur.id, section: ADULT ? '18' : 'main', kind: $('corrKind').value, script: s.script || '', line_no: s.line || '',
+      quote: s.quote || '', context_before: s.before || '', context_after: s.after || '', suggestion: sugg, comment: com,
+      author_name: name, author_email: mail, ui_lang: LANG, page_url: location.href.slice(0, 500), website: $('corrWeb').value };
+    var hd = { 'Content-Type': 'application/json', apikey: CC.key };
+    if (/^eyJ/.test(CC.key)) hd.Authorization = 'Bearer ' + CC.key;   // the old JWT anon key; the new publishable key goes only in apikey
+    $('corrSend').disabled = true; $('corrErr').hidden = true;
+    fetch(CC.url.replace(/\/+$/, '') + '/rest/v1/rpc/submit_correction', { method: 'POST', headers: hd, body: JSON.stringify({ p: p }) })
+      .then(function (r) { return r.ok ? r.json() : { ok: false }; })
+      .then(function (j) {
+        if (!j || !j.ok) return corrError(j && j.error);
+        $('corrDlg').close(); corrCtx = null;
+        try { window.getSelection().removeAllRanges(); } catch (e) {}
+        snack(t('Дзякуй! Праўка адпраўлена, мы яе праглядзім.'));
+      })
+      .catch(function () { corrError('net'); });
+  }
+
   // ---------- song view ----------
   function stress(t) { return st.acc ? t : t.replace(/́/g, ''); }
   function lineHtml(ln, lat) {
@@ -1316,6 +1468,7 @@ a.place { text-decoration: none; }
     h.push('<div class="subline"><button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="' + esc(t('Паказаць усе песні тыпу «{c}»', { c: tv(s.cat) })) + '">' + esc(tv(s.cat)) + '</button>');
     if (s.group === 'own') h.push('<span class="pill">' + noteIcon(s) + t('свае ноты') + '</span>');
     else if (s.group === 'ref') h.push('<span class="pill">' + noteIcon(s) + t('на мелодыю № {n}', { n: esc(s.refm.filter(function (r) { return r.imgs.length; }).map(function (r) { return r.n; }).join(', ')) }) + '</span>');
+    if (corrOn) h.push('<button class="pill" id="corrBtn">' + svg('flag', '') + t('Паведаміць пра памылку') + '</button>');
     if (likesOn) h.push('<a class="pill" href="#likes" id="toLikes">' + svg('heart', '') + '<span>' + t('Адзначыць') + '</span><span class="num" id="likeCount"></span></a>');
     h.push('</div>');
 
@@ -1358,6 +1511,7 @@ a.place { text-decoration: none; }
     else if (mode === 'both') h.push('<div class="cols two"><div><h3>' + t('Кірыліца') + '</h3>' + textBlock(s.cyr, 'cyr', cyrLang) + '</div><div><h3>' + t('Арыгінал Федароўскага') + '</h3>' + textBlock(s.lat, 'lat', 'be-Latn') + '</div></div>');
     else if (mode === 'lat') h.push('<div class="cols one">' + textBlock(s.lat, 'lat', pl ? 'pl' : 'be-Latn') + '</div>');
     else h.push('<div class="cols one">' + textBlock(s.cyr, 'cyr', cyrLang) + '</div>');
+    if (corrOn) h.push('<p class="corr-hint">' + svg('edit', '') + t('Заўважылі памылку ў тэксце? Выдзеліце яе, і з’явіцца кнопка «Прапанаваць праўку».') + '</p>');
     h.push('</section>');
 
     h.push('</div>' + apparatusHtml(s) + '</div>');
@@ -1725,6 +1879,7 @@ a.place { text-decoration: none; }
     if (t.tagName === 'IMG' && t.matches(PH_SEL)) { phOpen(t); return; }
     if (t.closest('#prev')) return go(-1);
     if (t.closest('#next')) return go(1);
+    if (t.closest('#corrBtn')) { openCorr(null); return; }
     if (t.closest('#toLikes')) { e.preventDefault(); var L = $('likes'); if (L) L.scrollIntoView(); return; }
     if (t.closest('#pListen')) { if (playing() && FP.mode() === 'listen') stopPlay(); else startPlay('listen'); return; }
     if (t.closest('#pLearn')) { if (playing() && FP.mode() === 'learn') stopPlay(); else startPlay('learn', 0); return; }

@@ -6,5 +6,12 @@ window.SONGBOOK_CONFIG = {
     repoId: '',      // data-repo-id з giscus.app
     category: '',    // напрыклад 'Announcements' або ўласная катэгорыя «Песні»
     categoryId: ''   // data-category-id з giscus.app
+  },
+  // Прапановы правак ад наведвальнікаў (Supabase, праект pesni). Пакуль поля пустыя, кнопак правак на сайце няма.
+  // Project URL і anon / publishable key з Supabase → Project Settings → API. Яны не сакрэтныя: даступ абараняюць
+  // правілы ў базе (supabase/corrections.sql). Ключ service_role / secret сюды ніколі не ўстаўляць.
+  corrections: {
+    url: '',         // напрыклад 'https://abcd1234.supabase.co'
+    key: ''          // anon / publishable key
   }
 };
