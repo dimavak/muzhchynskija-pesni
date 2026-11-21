@@ -133,9 +133,9 @@ h1, h2, h3 { text-wrap: balance; }
 .catsw a[aria-current] small { color: inherit; opacity: .85; }
 .kat { display: inline-flex; align-items: center; flex: none; font: 700 12px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--thread-ink); background: var(--thread); border-radius: 6px; padding: 5px 7px; vertical-align: middle; white-space: nowrap; }
 .home h1 .kat { font-size: .3em; position: relative; top: -.2em; }
-.mtag { display: inline-block; margin-left: 6px; font: 700 11px/1 var(--sans); color: #b0141e; border: 1px solid currentColor; border-radius: 4px; padding: 2px 3px; vertical-align: 1px; }
-:root[data-theme="dark"] .mtag { color: #ff8f93; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mtag { color: #ff8f93; } }
+.mtag { display: inline-block; margin-left: 6px; font: 700 11px/1 var(--sans); color: #1d4f91; border: 1px solid currentColor; border-radius: 4px; padding: 2px 3px; vertical-align: 1px; }
+:root[data-theme="dark"] .mtag { color: #8fb6ff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mtag { color: #8fb6ff; } }
 .cat-note { border-left: 4px solid var(--thread); background: var(--thread-wash); padding: 10px 14px; border-radius: 0 var(--r) var(--r) 0; }
 @media (max-width: 520px) { .brand .kat { display: none; } }
 .rail-top { position: sticky; top: 0; z-index: 2; background: var(--linen); padding: 14px 14px 10px; }
@@ -505,6 +505,11 @@ dialog.ph-box .ph-prev svg { transform: rotate(180deg); }
 .hero-ph.split figure { position: relative; margin: 0; height: 100%; overflow: hidden; }
 .hero-ph.split figure img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
 .hero-ph.split figure::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #ddd6ca 0, rgba(221, 214, 202, 0) 26%), linear-gradient(0deg, rgba(221, 214, 202, .9) 0, rgba(221, 214, 202, 0) 14%); pointer-events: none; }
+.hero-ph.split.wide { grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); height: auto; min-height: min(84vh, 640px); }
+.hero-ph.split.wide figure { height: auto; align-self: center; padding: 28px clamp(16px, 3vw, 40px) 28px 0; }
+.hero-ph.split.wide figure img { height: auto; object-fit: initial; border-radius: 6px; box-shadow: 0 18px 40px -22px rgba(40, 20, 10, .55); }
+.hero-ph.split.wide figure::before { display: none; }
+.home .hero-ph.split.wide .ph-cap { position: static; display: block; max-width: none; margin-top: 10px; padding: 0; background: none; color: #6b605a; font-size: 13px; }
 .home .hero-ph.split .ph-cap { z-index: 2; top: 12px; right: 12px; bottom: auto; max-width: min(72%, 360px); padding: 4px 9px; border-radius: 6px; background: rgba(24, 17, 18, .6); color: #f4ede3; }
 .sec-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 52px 0 18px; }
 .sec-title h2 { margin: 0; font: 700 clamp(26px, 3vw, 34px)/1.15 var(--serif); }
@@ -577,6 +582,11 @@ a.place { text-decoration: none; }
   .hero-ph { min-height: 560px; height: 86vh; }
   .hero-ph.split { grid-template-columns: 1fr; height: auto; min-height: 0; }
   .hero-ph.split figure { order: -1; height: 58vh; }
+  .hero-ph.split.wide { grid-template-columns: 1fr; min-height: 0; }
+  .hero-ph.split.wide figure { height: auto; padding: 0; }
+  .hero-ph.split.wide figure img { border-radius: 0; box-shadow: none; }
+  .hero-ph.split.wide .hero-in { margin-top: 0; padding-top: 18px; bottom: auto; }
+  .home .hero-ph.split.wide .ph-cap { margin: 6px 12px 0; font-size: 12px; }
   .hero-ph.split figure::before { background: linear-gradient(0deg, #ddd6ca 0, rgba(221, 214, 202, 0) 30%); }
   .hero-ph.split .hero-in { padding: 0 20px 30px; margin-top: -40px; position: relative; z-index: 2; }
   .ph-cap { display: none; }
@@ -1121,7 +1131,7 @@ a.place { text-decoration: none; }
 
   // ---------- list ----------
   var cur = null, visible = [];
-  function order(a, b) { return (hasMusic(b) - hasMusic(a)) || (a.n - b.n) || (a.id < b.id ? -1 : 1); }
+  function order(a, b) { return (a.n - b.n) || (a.id < b.id ? -1 : 1); }
   function compute() { visible = SONGS.filter(function (s) { return matchAll(s, null); }).sort(order); }
   function counts() {
     var base = SONGS.filter(function (s) { return matchAll(s, 'group'); });
@@ -1139,10 +1149,8 @@ a.place { text-decoration: none; }
   // the list is drawn in portions: the first ones at once, the rest as it is scrolled
   var LIST_STEP = 120, listShown = 0, listObs = null;
   function itemsHtml(from, to) {
-    var h = [], lastG = from > 0 ? (hasMusic(visible[from - 1]) ? 'music' : 'none') : null;
+    var h = [];
     visible.slice(from, to).forEach(function (s) {
-      var g = hasMusic(s) ? 'music' : 'none';
-      if (st.group === 'all' && g !== lastG) { h.push('<div class="ghead">' + t(g === 'music' ? 'З нотамі' : 'Без нот') + '</div>'); lastG = g; }
       h.push('<a class="item" href="#' + esc(s.id) + '"' + (cur && cur.id === s.id ? ' aria-current="page"' : '') + '><span class="n num">' + esc(s.id) + '</span><span class="t"><span' + titleLang(s) + '>' + esc(T(s)) + '</span>' + (ALL && s.men ? '<span class="mtag" title="' + t('Мужчынская песня') + '">' + t('муж.') + '</span>' : '') + '</span>' + (noteIcon(s) || '<span></span>') + '</a>');
     });
     return h.join('');
@@ -1481,7 +1489,7 @@ a.place { text-decoration: none; }
       return (sub ? '<h3 class="people-h">' + t('Сяляне Слуцкага павета') + '</h3><p class="people-note">' + t('Гэта не спевакі Федароўскага, а сяляне і вясковыя музыкі Слуцкага павета, адкуль таксама паходзяць песні зборніка, на здымках пачатку XX стагоддзя. Жарабковічы — суседняя вёска са Шчаснавічамі і Заляшанамі, дзе запісвалі песні.') + '</p>'
         : '<div class="sec-title"><div><p class="eyebrow">' + t('Людзі') + '</p><h2>' + t('Сяляне Слуцкага павета') + '</h2></div></div>') +
         '<div class="people">' +
-          '<figure class="wide" style="flex: 1.56 1 0"><img src="img/lachavicy-muzyki.jpg" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты, побач жанчыны з дзецьмі') + '" loading="lazy"><figcaption>' + t('Вясковыя музыкі, Ляхавічы, 1913') + '</figcaption></figure>' +
+          (ALL && !ADULT ? '<figure style="flex: .67 1 0"><img src="img/lachavicy-muzyki-hero.jpg" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты пад саламянай страхой') + '" loading="lazy"><figcaption>' + t('Вясковыя музыкі, Ляхавічы, 1913') + '</figcaption></figure>' : '<figure class="wide" style="flex: 1.56 1 0"><img src="img/lachavicy-muzyki.jpg" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты, побач жанчыны з дзецьмі') + '" loading="lazy"><figcaption>' + t('Вясковыя музыкі, Ляхавічы, 1913') + '</figcaption></figure>') +
           '<figure style="flex: .72 1 0"><img src="img/lachavicy-siamja.jpg" alt="' + t('Мужчына, жанчына і дзяўчынка ў святочным строі каля сцяны хаты') + '" loading="lazy"><figcaption>' + t('Сям\'я ў святочных строях, Ляхавічы, 1913. Фота Е. Раманава') + '</figcaption></figure>' +
           '<figure style="flex: .73 1 0"><img src="img/padlipcy.jpg" alt="' + t('Мужчына ў шапцы з казырком трымае на руках дзяўчынку') + '" loading="lazy"><figcaption>' + t('Селянін з дзяўчынкай, Падліпцы, 1905. Фота В. Косткі') + '</figcaption></figure>' +
           '<figure style="flex: .68 1 0"><img src="img/padlipcy-praca.jpg" alt="' + t('Босы мужчына ў камізэльцы і палатняных портках') + '" loading="lazy"><figcaption>' + t('Селянін у рабочым строі, Падліпцы, да 1907') + '</figcaption></figure>' +
@@ -1501,12 +1509,12 @@ a.place { text-decoration: none; }
     var first = visible[0] || SONGS[0];
     $('view').innerHTML =
       '<article class="home">' +
-      '<section class="hero-ph split">' +
+      '<section class="hero-ph split' + (ALL && !ADULT ? ' wide' : '') + '">' +
       '<div class="hero-in"><p class="kicker">' + t('Міхал Федароўскі') + ' · Lud białoruski · ' + tv(ADULT ? 'т. VIa' : 'т. V–VI') + '</p><h1>' + NAME + (ADULT ? ' <span class="age">18+</span>' : ' <span class="kat">' + KAT + '</span>') + '</h1>' +
       '<p class="sub">' + (ALL && !ADULT ? t('{n} {songs} ў канцы XIX стагоддзя: усе песні V і VI тамоў зборніка {fed} <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: любоўныя, вясельныя, сямейныя, каляндарныя, вайсковыя, балады, жартоўныя, танцавальныя, абрадавыя і песні, запісаныя па-польску. Мужчынскія пазначаны ў спісе знакам «муж.». Для {m} з іх ёсць ноты, і мелодыю можна праслухаць.', { n: nf.format(SONGS.length), songs: plural(SONGS.length, 'песня, запісаная', 'песні, запісаныя', 'песень, запісаных'), fed: fed, m: nf.format(own + ref) }) : ADULT ? t('{n} {songs} ў канцы XIX стагоддзя, з тома VIa зборніка {fed} <i lang="pl">Lud białoruski na Rusi Litewskiej</i>, раздзелы «Pieśni obsceniczne» і «Pieśni obsceniczne taneczne»: жартоўныя і непрыстойныя песні, дыялогі, прыпеўкі да круцёлкі, полькі і мяцеліцы.', { n: nf.format(SONGS.length), songs: ALL ? plural(SONGS.length, 'песня і прыпеўка, запісаная', 'песні і прыпеўкі, запісаныя', 'песень і прыпевак, запісаных') : plural(SONGS.length, 'мужчынская песня і прыпеўка, запісаная', 'мужчынскія песні і прыпеўкі, запісаныя', 'мужчынскіх песень і прыпевак, запісаных'), fed: fed }) + ' ' + t(ALL ? 'Тут і мужчынскія песні (у спісе са знакам «муж.»), і песні ад імя жанчыны.' : 'Песні, якія спяваюцца ад імя жанчыны, тут не паказаныя: іх уключае пераключальнік «Усе песні».') + ' ' + t('Для {m} з іх ёсць ноты, і мелодыю можна праслухаць. Гэты раздзел асобны: у асноўны каталог і пошук ён не трапляе.', { m: nf.format(own + ref) })
         : t('{n} {songs} ў канцы XIX стагоддзя, з V і VI тамоў зборніка {fed} <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для {m} з іх ёсць ноты, і мелодыю можна праслухаць.', { n: nf.format(SONGS.length), songs: plural(SONGS.length, 'песня, запісаная', 'песні, запісаныя', 'песень, запісаных'), fed: fed, m: nf.format(own + ref) })) + '</p>' +
       '<button class="home-search" id="homeSearch">' + svg('search', '') + t('Нумар, радок, імя…') + '</button></div>' +
-      '<figure><img src="img/lachavicy-muzyki-hero.jpg" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты пад саламянай страхой') + '" fetchpriority="high">' +
+      (ALL && !ADULT ? '<figure><img src="img/lachavicy-muzyki.jpg" width="1100" height="707" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты, побач жанчыны з дзецьмі') + '" fetchpriority="high">' : '<figure><img src="img/lachavicy-muzyki-hero.jpg" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты пад саламянай страхой') + '" fetchpriority="high">') +
       '<figcaption class="ph-cap">' + t('Вясковыя музыкі, Ляхавічы, 1913. Wikimedia Commons, грамадскі набытак') + '</figcaption></figure></section>' +
       '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + t('Адкрыць першую песню') + '</a><a class="btn quiet" href="#map">' + svg('map', '') + t('Мапа мясцін') + '</a>' + (ADULT ? '<a class="btn quiet" href="' + MAIN + '">' + t('Асноўны каталог') + '</a>' : '') + '</p>' +
       '<section class="music collector"><figure><img src="img/fedarouski.jpg" alt="' + t('Міхал Федароўскі') + '" loading="lazy"><figcaption>' + t('Міхал Федароўскі (1853–1923). Фота з IV тома «Lud białoruski», 1935. Polona, грамадскі набытак') + '</figcaption></figure>' +
