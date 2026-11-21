@@ -120,6 +120,24 @@ h1, h2, h3 { text-wrap: balance; }
 /* ---------- rail: search, filters, list ---------- */
 .rail { background: var(--linen); border-right: 1px solid var(--rule); min-height: 0; display: flex; flex-direction: column; }
 .rail-scroll { overflow-y: auto; overscroll-behavior: contain; flex: 1; scrollbar-color: var(--rule-2) transparent; scrollbar-width: thin; }
+/* catalogue switch: men's songs (red) or all songs (blue); the whole accent colour follows the catalogue */
+:root.cat-men { --thread: #1d4f91; --thread-soft: #e1eaf6; --thread-wash: #f1f5fb; --on-soft: #0c2a52; --ornament: #1d4f91; --hover: rgba(29, 79, 145, .07); --press: rgba(29, 79, 145, .13); }
+:root.cat-men[data-theme="dark"] { --thread: #8fb6ff; --thread-ink: #071a3a; --thread-soft: #1c2a44; --thread-wash: #161c27; --on-soft: #d6e4ff; --ornament: #4f7fd0; --hover: rgba(143, 182, 255, .08); --press: rgba(143, 182, 255, .14); }
+@media (prefers-color-scheme: dark) { :root.cat-men:not([data-theme="light"]) { --thread: #8fb6ff; --thread-ink: #071a3a; --thread-soft: #1c2a44; --thread-wash: #161c27; --on-soft: #d6e4ff; --ornament: #4f7fd0; --hover: rgba(143, 182, 255, .08); --press: rgba(143, 182, 255, .14); } }
+.catsw { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0 0 10px; }
+.catsw a { display: grid; gap: 1px; align-content: center; min-height: 52px; padding: 6px 10px; border-radius: var(--r); border: 2px solid var(--rule-2); background: var(--page); color: var(--ink); text-decoration: none; line-height: 1.15; }
+.catsw a b { font-size: 15px; font-weight: 700; }
+.catsw a small { font-size: 13px; color: var(--ink-3); }
+.catsw a:hover { border-color: var(--thread); }
+.catsw a[aria-current] { background: var(--thread); border-color: var(--thread); color: var(--thread-ink); }
+.catsw a[aria-current] small { color: inherit; opacity: .85; }
+.kat { display: inline-flex; align-items: center; flex: none; font: 700 12px/1 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--thread-ink); background: var(--thread); border-radius: 6px; padding: 5px 7px; vertical-align: middle; white-space: nowrap; }
+.home h1 .kat { font-size: .3em; position: relative; top: -.2em; }
+.mtag { display: inline-block; margin-left: 6px; font: 700 11px/1 var(--sans); color: #b0141e; border: 1px solid currentColor; border-radius: 4px; padding: 2px 3px; vertical-align: 1px; }
+:root[data-theme="dark"] .mtag { color: #ff8f93; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mtag { color: #ff8f93; } }
+.cat-note { border-left: 4px solid var(--thread); background: var(--thread-wash); padding: 10px 14px; border-radius: 0 var(--r) var(--r) 0; }
+@media (max-width: 520px) { .brand .kat { display: none; } }
 .rail-top { position: sticky; top: 0; z-index: 2; background: var(--linen); padding: 14px 14px 10px; }
 .search { display: flex; align-items: center; gap: 6px; height: 46px; padding: 0 4px 0 14px; border-radius: 23px; background: var(--page); border: 1px solid var(--rule-2); color: var(--ink-3); }
 .search:focus-within { border-color: var(--thread); box-shadow: 0 0 0 1px var(--thread); }
@@ -678,6 +696,7 @@ a.place { text-decoration: none; }
     <aside class="rail" id="rail" aria-label="Песні">
       <div class="rail-scroll" id="railScroll">
         <div class="rail-top">
+          <nav class="catsw" id="catsw" aria-label="Каталог" hidden><a class="k-men" data-k="men" href="?k=men"><b data-t>Мужчынскія</b><small id="k-men"></small></a><a class="k-all" data-k="all" href="?k=all"><b data-t>Усе песні</b><small id="k-all"></small></a></nav>
           <label class="search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             <span class="vh" data-t>Пошук песні</span>
             <input id="q" type="search" name="q" placeholder="Нумар, радок, імя…" autocomplete="off" spellcheck="false" enterkeyhint="search">
@@ -727,11 +746,18 @@ a.place { text-decoration: none; }
   var lm = location.search.match(/[?&]lang=(be|pl|en)(&|$)/);
   try { L = lm ? lm[1] : localStorage.getItem('fed5.lang') || 'be'; if (lm) localStorage.setItem('fed5.lang', L); } catch (e) { if (lm) L = lm[1]; }
   if (['be', 'pl', 'en'].indexOf(L) < 0) L = 'be';
+  // ?k=all opens the general catalogue (all songs of vol. V and the men's songs of vol. VI), ?k=men the men's one; the choice is remembered
+  // the 18+ section has its own choice: ?r=18&k=all adds the songs sung by a woman
+  var km = location.search.match(/[?&]k=(all|men)(&|$)/), K = false, KS = a ? 'fed5.catalog18' : 'fed5.catalog';
+  try { K = km ? km[1] === 'all' : localStorage.getItem(KS) === 'all'; if (km) localStorage.setItem(KS, km[1]); } catch (e) { K = !!km && km[1] === 'all'; }
+  window.ALLCAT = K;
+  // the general catalogue keeps the red theme, the men's one is blue with its own ornament
+  if (!K) document.documentElement.classList.add('cat-men');
   window.ADULT = a; window.ADULT_OK = ok; window.LANG = L;
   document.documentElement.lang = L;
   if (a) { var m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex'; document.head.appendChild(m); document.documentElement.classList.add('adult'); }
-  document.write(!a ? '<script src="data.js"><\/script>' : ok ? '<script src="data-18.js"><\/script>' : '');
-  if (L !== 'be') document.write('<script src="i18n.js"><\/script>' + (!a ? '<script src="texts-lat.js"><\/script>' : ok ? '<script src="texts-lat-18.js"><\/script>' : ''));
+  document.write(!a ? '<script src="data.js"><\/script>' + (K ? '<script src="data-all.js"><\/script><script src="melodies-all.js"><\/script>' : '') : ok ? '<script src="data-18.js"><\/script>' + (K ? '<script src="data-18-all.js"><\/script><script src="melodies-all.js"><\/script>' : '') : '');
+  if (L !== 'be') document.write('<script src="i18n.js"><\/script>' + (!a ? '<script src="texts-lat.js"><\/script>' + (K ? '<script src="texts-lat-all.js"><\/script>' : '') : ok ? '<script src="texts-lat-18.js"><\/script>' + (K ? '<script src="texts-lat-18-all.js"><\/script>' : '') : ''));
 })();
 </script>
 <script src="places.js"></script>
@@ -742,6 +768,15 @@ a.place { text-decoration: none; }
 (function () {
   'use strict';
   var SONGS = window.SONGS || [], MEL = window.MELODIES || {}, CFG = window.SONGBOOK_CONFIG || {};
+  // general catalogue: the men's songs (data.js) plus the other songs of vol. V (data-all.js, melodies-all.js)
+  var ALL = !!window.ALLCAT && !!window.SONGS_ALL, MEN_COUNT = SONGS.length, ALL_EXTRA = window.ADULT ? 70 : 2988;
+  SONGS.forEach(function (s) { if (s.men == null) s.men = true; });
+  if (ALL) {
+    SONGS = SONGS.concat(window.SONGS_ALL);
+    Object.keys(window.MELODIES_ALL || {}).forEach(function (k) { MEL[k] = window.MELODIES_ALL[k]; });
+    var SPT = window.ADULT ? window.SONG_PLACES_18 : window.SONG_PLACES;
+    if (SPT) Object.keys(window.SONG_PLACES_ALL || {}).forEach(function (k) { SPT[k] = window.SONG_PLACES_ALL[k]; });
+  }
 
   // ---------- language: the Belarusian strings in this file are the keys of the Polish and English texts in i18n.js ----------
   var LANG = window.LANG || 'be', BE = LANG === 'be', DICT = (window.I18N && window.I18N[LANG]) || {}, SEP = ' › ';
@@ -782,11 +817,29 @@ a.place { text-decoration: none; }
       if (to === location.pathname + location.search + location.hash) location.reload(); else location.href = to;
     });
   })();
-  var ADULT = !!window.ADULT, NAME = t(ADULT ? 'Фрывольныя песні' : 'Мужчынскія песні'), MAIN = location.pathname + (BE ? '' : '?lang=' + LANG), A18 = location.pathname + '?r=18' + (BE ? '' : '&lang=' + LANG);
+  var ADULT = !!window.ADULT, NAME = t(ADULT ? 'Фрывольныя песні' : ALL ? 'Усе песні' : 'Мужчынскія песні'), MAIN = location.pathname + (BE ? '' : '?lang=' + LANG), A18 = location.pathname + '?r=18' + (BE ? '' : '&lang=' + LANG);
+  // men's catalogue: its own band, a hollow rhombus with hooks ("рог") between small crosses, on top of the blue colours
+  if (document.documentElement.classList.contains('cat-men')) (function () {
+    var o = document.getElementById('orn'); if (!o) return;
+    o.setAttribute('width', '28');
+    o.innerHTML = '<g style="fill: var(--ornament)"><rect x="14" y="0" width="2" height="2"/><rect x="12" y="2" width="2" height="2"/><rect x="16" y="2" width="2" height="2"/><rect x="8" y="2" width="2" height="2"/><rect x="20" y="2" width="2" height="2"/><rect x="10" y="4" width="2" height="2"/><rect x="18" y="4" width="2" height="2"/><rect x="6" y="4" width="2" height="2"/><rect x="22" y="4" width="2" height="2"/><rect x="8" y="6" width="2" height="2"/><rect x="20" y="6" width="2" height="2"/><rect x="14" y="6" width="2" height="2"/><rect x="10" y="8" width="2" height="2"/><rect x="18" y="8" width="2" height="2"/><rect x="6" y="8" width="2" height="2"/><rect x="22" y="8" width="2" height="2"/><rect x="12" y="10" width="2" height="2"/><rect x="16" y="10" width="2" height="2"/><rect x="8" y="10" width="2" height="2"/><rect x="20" y="10" width="2" height="2"/><rect x="14" y="12" width="2" height="2"/></g><g style="fill: var(--ornament-2)"><rect x="26" y="6" width="2" height="2"/><rect x="0" y="4" width="2" height="2"/><rect x="0" y="6" width="2" height="2"/><rect x="0" y="8" width="2" height="2"/><rect x="2" y="6" width="2" height="2"/></g>';
+  })();
+  // which catalogue is open: brand title, a badge and the switch at the top of the list (in the 18+ section too)
+  var KAT = t(ALL ? 'агульны каталог' : 'мужчынскі каталог');
+  if (!ADULT || window.ADULT_OK) {
+    document.querySelector('.brand b').textContent = NAME;
+    if (ALL && !ADULT) document.querySelector('.brand small').textContent = t('усе песні V і VI тамоў Федароўскага');
+    if (!ADULT) document.querySelector('.brand span').insertAdjacentHTML('afterend', '<span class="kat">' + KAT + '</span>');
+    var ksw = document.getElementById('catsw'), kq = function (k) { var u = new URLSearchParams(location.search); ['g', 'q', 'v', 't', 's', 'm', 'i'].forEach(function (x) { u.delete(x); }); u.set('k', k); return location.pathname + '?' + u.toString(); };
+    ksw.hidden = false;
+    [].forEach.call(ksw.querySelectorAll('a'), function (a) { var k = a.getAttribute('data-k'); a.href = kq(k); if ((k === 'all') === ALL) a.setAttribute('aria-current', 'page'); });
+    document.getElementById('k-men').textContent = MEN_COUNT;
+    document.getElementById('k-all').textContent = ALL ? SONGS.length : MEN_COUNT + ALL_EXTRA;
+  }
   if (ADULT) {
     document.querySelector('.brand b').textContent = NAME;
     document.querySelector('.brand small').textContent = t('т. VIa зборніка Федароўскага · толькі для дарослых');
-    document.querySelector('.brand span').insertAdjacentHTML('afterend', '<span class="age" title="' + t('Толькі для дарослых') + '">18+</span>');
+    document.querySelector('.brand span').insertAdjacentHTML('afterend', '<span class="age" title="' + t('Толькі для дарослых') + '">18+</span>' + (window.ADULT_OK ? '<span class="kat">' + t(ALL ? 'усе песні' : 'мужчынскія') + '</span>' : ''));
   }
   if (ADULT && !window.ADULT_OK) {
     // age gate: nothing of the section is loaded until the visitor confirms
@@ -829,7 +882,7 @@ a.place { text-decoration: none; }
   // ---------- preferences (per viewer, optional) ----------
   function load(k, d) { try { var v = localStorage.getItem('fed5.' + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } }
   function save(k, v) { try { localStorage.setItem('fed5.' + k, JSON.stringify(v)); } catch (e) {} }
-  var FK = ADULT ? 'a18.' : '';
+  var FK = ADULT ? (ALL ? 'a18all.' : 'a18.') : ALL ? 'all.' : '';
   var st = { group: load(FK + 'group', 'all'), f: load(FK + 'facets', null), mode: load(BE ? 'mode' : 'mode.' + LANG, BE ? 'cyr' : 'lat'), acc: load('acc', true), fs: load('fs', 20), theme: load('theme', ''), q: '' };
   // filters may also come from the address (shareable links)
   if (!st.f || typeof st.f !== 'object') st.f = { cat: ADULT ? '' : load('cat', '') };
@@ -848,7 +901,7 @@ a.place { text-decoration: none; }
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var fold = function (s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/ł/g, 'l'); };
   var hasMusic = function (s) { return s.group === 'own' || s.group === 'ref'; };
-  var nf = new Intl.NumberFormat(LANG);
+  var nf = new Intl.NumberFormat(LANG === 'be' ? 'ru' : LANG);   // Belarusian groups thousands with a space, as Russian does
   function snack(msg) { var el = $('snack'); el.textContent = msg; el.classList.add('on'); clearTimeout(snack.tm); snack.tm = setTimeout(function () { el.classList.remove('on'); }, 2600); }
   function isDark() { return st.theme ? st.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
 
@@ -875,14 +928,18 @@ a.place { text-decoration: none; }
     latWait.push(cb);
     if (latState) return;
     latState = 1;
-    var sc = document.createElement('script'); sc.src = ADULT ? 'texts-lat-18.js' : 'texts-lat.js';
-    sc.onload = sc.onerror = function () {
+    var srcs = ADULT ? (ALL ? ['texts-lat-18.js', 'texts-lat-18-all.js'] : ['texts-lat-18.js']) : ALL ? ['texts-lat.js', 'texts-lat-all.js'] : ['texts-lat.js'];
+    (function next() {
+      var sc = document.createElement('script'); sc.src = srcs.shift();
+      sc.onload = sc.onerror = srcs.length ? next : done;
+      document.body.appendChild(sc);
+    })();
+    function done() {
       var L = window.SONGS_LAT || {};
       SONGS.forEach(function (s) { s.lat = L[s.id] || []; buildHay(s); });
       latState = 2;
       var q = latWait; latWait = []; q.forEach(function (f) { f(); });
-    };
-    document.body.appendChild(sc);
+    }
   }
   if (latState === 2) SONGS.forEach(function (s) { s.lat = window.SONGS_LAT[s.id] || []; buildHay(s); });
 
@@ -1051,6 +1108,7 @@ a.place { text-decoration: none; }
     try {
       var u = new URLSearchParams();
       if (ADULT) u.set('r', '18');
+      if (ALL) u.set('k', 'all');
       if (st.group !== 'all') u.set('g', st.group);
       FACETS.forEach(function (f) { if (st.f[f.key]) u.set(f.url, st.f[f.key]); });
       if (st.q) u.set('q', st.q);
@@ -1085,7 +1143,7 @@ a.place { text-decoration: none; }
     visible.slice(from, to).forEach(function (s) {
       var g = hasMusic(s) ? 'music' : 'none';
       if (st.group === 'all' && g !== lastG) { h.push('<div class="ghead">' + t(g === 'music' ? 'З нотамі' : 'Без нот') + '</div>'); lastG = g; }
-      h.push('<a class="item" href="#' + esc(s.id) + '"' + (cur && cur.id === s.id ? ' aria-current="page"' : '') + '><span class="n num">' + esc(s.id) + '</span><span class="t"' + titleLang(s) + '>' + esc(T(s)) + '</span>' + (noteIcon(s) || '<span></span>') + '</a>');
+      h.push('<a class="item" href="#' + esc(s.id) + '"' + (cur && cur.id === s.id ? ' aria-current="page"' : '') + '><span class="n num">' + esc(s.id) + '</span><span class="t"><span' + titleLang(s) + '>' + esc(T(s)) + '</span>' + (ALL && s.men ? '<span class="mtag" title="' + t('Мужчынская песня') + '">' + t('муж.') + '</span>' : '') + '</span>' + (noteIcon(s) || '<span></span>') + '</a>');
     });
     return h.join('');
   }
@@ -1314,6 +1372,7 @@ a.place { text-decoration: none; }
     h.push('<p class="print-src">' + t('Федароўскі М.') + ' Lud białoruski na Rusi Litewskiej, ' + pageRef(s.vol, s.page) + '. ' + (s.region ? esc(tv(s.region)) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
       (s.informant.length ? ' ' + t('Ад каго запісана') + ': ' + (BE ? s.informant_cyr.map(function (x) { return esc(x.replace(/́/g, '')); }) : s.informant.map(function (x) { return esc(noGrave(x)); })).join(', ') + '.' : '') + '</p>');
     h.push('<div class="subline"><button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="' + esc(t('Паказаць усе песні тыпу «{c}»', { c: tv(s.cat) })) + '">' + esc(tv(s.cat)) + '</button>');
+    if (ALL && !ADULT) h.push('<span class="pill">' + t(s.men ? 'ёсць у мужчынскім каталогу' : 'толькі ў агульным каталогу') + '</span>');
     if (s.group === 'own') h.push('<span class="pill">' + noteIcon(s) + t('свае ноты') + '</span>');
     else if (s.group === 'ref') h.push('<span class="pill">' + noteIcon(s) + t('на мелодыю № {n}', { n: esc(s.refm.filter(function (r) { return r.imgs.length; }).map(function (r) { return r.n; }).join(', ')) }) + '</span>');
     if (likesOn) h.push('<a class="pill" href="#likes" id="toLikes">' + svg('heart', '') + '<span>' + t('Адзначыць') + '</span><span class="num" id="likeCount"></span></a>');
@@ -1329,12 +1388,12 @@ a.place { text-decoration: none; }
         var shown = false, sh = [];
         s.refm.forEach(function (r) {
           var inSet = byId[r.n] || byId[r.n + 'a'];
-          var inMain = !inSet && ADULT && r.vol !== 'VIa';
-          var link = inSet ? '<a href="#' + esc(inSet.id) + '">' + NO + ' ' + esc(r.n) + '</a>' : inMain ? '<a href="' + MAIN + '#' + esc(r.n) + '">' + NO + ' ' + esc(r.n) + '</a>' : NO + ' ' + esc(r.n);
+          var inMain = !inSet && ADULT && r.vol !== 'VIa', inAll = !inSet && !ADULT && !ALL && (r.vol === 'V' || r.vol === 'VI');
+          var link = inSet ? '<a href="#' + esc(inSet.id) + '">' + NO + ' ' + esc(r.n) + '</a>' : inMain ? '<a href="' + MAIN + '#' + esc(r.n) + '">' + NO + ' ' + esc(r.n) + '</a>' : inAll ? '<a href="' + allHref(r.n) + '">' + NO + ' ' + esc(r.n) + '</a>' : NO + ' ' + esc(r.n);
           var where = (r.imgs.length ? pageRef(r.vol, r.imgs[0].page) : tv('т. ' + r.vol)) + (r.header ? ', <span lang="pl" translate="no">' + esc(r.header) + '</span>' : '');
           h.push('<p class="refnote">' + t('Спяваецца на мелодыю {link} ({where})', { link: link, where: where }) +
             (r.via ? t('. Выданне адсылае да № {n}, а тая песня — да гэтай мелодыі', { n: esc(r.via) }) : '') +
-            (inSet ? '' : inMain ? '<small>' + t('Гэтая песня — у асноўным каталогу.') + '</small>' : '<small>' + t('Песня № {n} не ўвайшла ў гэты зборнік: тут толькі яе ноты, словы пад нотамі — з той песні.', { n: esc(r.n) }) + '</small>') + '</p>');
+            (inSet ? '' : inMain ? '<small>' + t('Гэтая песня — у асноўным каталогу.') + '</small>' : inAll ? '<small>' + t('Гэтая песня — у агульным каталогу.') + '</small>' : '<small>' + t('Песня № {n} не ўвайшла ў гэты зборнік: тут толькі яе ноты, словы пад нотамі — з той песні.', { n: esc(r.n) }) + '</small>') + '</p>');
           if (!shown && r.imgs.length) { r.imgs.forEach(function (im) { sh.push(sheet(im, t('Ноты мелодыі № {n}', { n: r.n }), k, k === 0)); k++; }); shown = true; }
           else r.imgs.forEach(function (im) { sh.push(sheet(im, t('Ноты мелодыі № {n}', { n: r.n }), -1, false)); });
         });
@@ -1443,8 +1502,8 @@ a.place { text-decoration: none; }
     $('view').innerHTML =
       '<article class="home">' +
       '<section class="hero-ph split">' +
-      '<div class="hero-in"><p class="kicker">' + t('Міхал Федароўскі') + ' · Lud białoruski · ' + tv(ADULT ? 'т. VIa' : 'т. V–VI') + '</p><h1>' + NAME + (ADULT ? ' <span class="age">18+</span>' : '') + '</h1>' +
-      '<p class="sub">' + (ADULT ? t('{n} {songs} ў канцы XIX стагоддзя, з тома VIa зборніка {fed} <i lang="pl">Lud białoruski na Rusi Litewskiej</i>, раздзелы «Pieśni obsceniczne» і «Pieśni obsceniczne taneczne»: жартоўныя і непрыстойныя песні, дыялогі, прыпеўкі да круцёлкі, полькі і мяцеліцы. Песні, якія спяваюцца ад імя жанчыны, сюды не ўвайшлі. Для {m} з іх ёсць ноты, і мелодыю можна праслухаць. Гэты раздзел асобны: у асноўны каталог і пошук ён не трапляе.', { n: nf.format(SONGS.length), songs: plural(SONGS.length, 'мужчынская песня і прыпеўка, запісаная', 'мужчынскія песні і прыпеўкі, запісаныя', 'мужчынскіх песень і прыпевак, запісаных'), fed: fed, m: nf.format(own + ref) })
+      '<div class="hero-in"><p class="kicker">' + t('Міхал Федароўскі') + ' · Lud białoruski · ' + tv(ADULT ? 'т. VIa' : 'т. V–VI') + '</p><h1>' + NAME + (ADULT ? ' <span class="age">18+</span>' : ' <span class="kat">' + KAT + '</span>') + '</h1>' +
+      '<p class="sub">' + (ALL && !ADULT ? t('{n} {songs} ў канцы XIX стагоддзя: усе песні V і VI тамоў зборніка {fed} <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: любоўныя, вясельныя, сямейныя, каляндарныя, вайсковыя, балады, жартоўныя, танцавальныя, абрадавыя і песні, запісаныя па-польску. Мужчынскія пазначаны ў спісе знакам «муж.». Для {m} з іх ёсць ноты, і мелодыю можна праслухаць.', { n: nf.format(SONGS.length), songs: plural(SONGS.length, 'песня, запісаная', 'песні, запісаныя', 'песень, запісаных'), fed: fed, m: nf.format(own + ref) }) : ADULT ? t('{n} {songs} ў канцы XIX стагоддзя, з тома VIa зборніка {fed} <i lang="pl">Lud białoruski na Rusi Litewskiej</i>, раздзелы «Pieśni obsceniczne» і «Pieśni obsceniczne taneczne»: жартоўныя і непрыстойныя песні, дыялогі, прыпеўкі да круцёлкі, полькі і мяцеліцы.', { n: nf.format(SONGS.length), songs: ALL ? plural(SONGS.length, 'песня і прыпеўка, запісаная', 'песні і прыпеўкі, запісаныя', 'песень і прыпевак, запісаных') : plural(SONGS.length, 'мужчынская песня і прыпеўка, запісаная', 'мужчынскія песні і прыпеўкі, запісаныя', 'мужчынскіх песень і прыпевак, запісаных'), fed: fed }) + ' ' + t(ALL ? 'Тут і мужчынскія песні (у спісе са знакам «муж.»), і песні ад імя жанчыны.' : 'Песні, якія спяваюцца ад імя жанчыны, тут не паказаныя: іх уключае пераключальнік «Усе песні».') + ' ' + t('Для {m} з іх ёсць ноты, і мелодыю можна праслухаць. Гэты раздзел асобны: у асноўны каталог і пошук ён не трапляе.', { m: nf.format(own + ref) })
         : t('{n} {songs} ў канцы XIX стагоддзя, з V і VI тамоў зборніка {fed} <i lang="pl">Lud białoruski na Rusi Litewskiej</i>: тыя, што спяваюцца ад імя хлопца, казака, жаўнера, рэкрута, мужа, дыялогі з мужчынскай партыяй, балады і думы, рэкруцкія, чумацкія, жартоўныя і застольныя, круцёлкі і іншыя танцы, валачобныя, калядныя і хрэсьбінныя. Для {m} з іх ёсць ноты, і мелодыю можна праслухаць.', { n: nf.format(SONGS.length), songs: plural(SONGS.length, 'песня, запісаная', 'песні, запісаныя', 'песень, запісаных'), fed: fed, m: nf.format(own + ref) })) + '</p>' +
       '<button class="home-search" id="homeSearch">' + svg('search', '') + t('Нумар, радок, імя…') + '</button></div>' +
       '<figure><img src="img/lachavicy-muzyki-hero.jpg" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты пад саламянай страхой') + '" fetchpriority="high">' +
@@ -1490,6 +1549,7 @@ a.place { text-decoration: none; }
       '<h2>' + t('Што ёсць пры песні') + '</h2><p>' + t('Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), ад каго запісана, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні, нават калі яна ў іншым томе. Пры песнях VI тома пазначаны і танец («Kruciołka», «Polka drobna»…), калі ён ёсць у выданні.') + '</p>' +
       '<h2>' + t('Мелодыі') + '</h2><p>' + t('Ноты распазнаныя аўтаматычна і гучаць праз сінтэзатар голасам сапілкі, цымбалаў або кларнета, з бурдонам на выбар. «Паслухаць» іграе мелодыю адзін раз, «Развучыць» — павольней і па крузе. Актаву, вышыню і тэмп можна падабраць пад свой голас, а курсор паказвае на нотах, што гучыць зараз. У рытме і асобных нотах магчымыя памылкі распазнавання.') + '</p>' +
       '<h2>' + t('Тэкст') + '</h2><p>' + t('Тэкст пераведзены з польскай лацінкі Федароўскага ў беларускую кірыліцу з захаваннем дыялектнага вымаўлення і націскаў. Арыгінальны запіс можна паглядзець кнопкай «Арыгінал» або «Побач».') + '</p>' +
+      (ALL && !ADULT ? '<p class="cat-note">' + t('Тэксты і ноты песень, якіх няма ў мужчынскім каталогу, падрыхтаваныя аўтаматычна: тэкст узяты з распазнанага скана выдання і пераведзены ў кірыліцу праграмай, мелодыі распазнаныя праграмай. У іх магчымыя памылкі, асабліва ў націсках і рэдкіх літарах; калі сумняваецеся, глядзіце арыгінал.') + '</p>' : '') +
       (ADULT ? '' : '<h2>' + t('Фрывольныя песні') + ' <span class="age">18+</span></h2><p>' + t('Абсцэнныя песні і прыпеўкі да танцаў з тома VIa сабраныя ў <a href="{href}">асобным раздзеле</a> толькі для дарослых. У гэты каталог і пошук яны не трапляюць.', { href: A18 }) + '</p>') +
       '<h2>' + t('Клавішы') + '</h2><dl class="keys"><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>' + t('папярэдняя і наступная песня') + '</dd><dt><kbd>/</kbd></dt><dd>' + t('пошук') + '</dd><dt><kbd>' + t('Прабел') + '</kbd></dt><dd>' + t('паслухаць мелодыю або спыніць') + '</dd></dl>' +
       '</article>';
@@ -1605,6 +1665,7 @@ a.place { text-decoration: none; }
     MAP.setView(m.getLatLng(), Math.max(MAP.getZoom(), 10)); m.openPopup();
   }
 
+  function allHref(id) { return location.pathname + '?k=all' + (BE ? '' : '&lang=' + LANG) + '#' + encodeURIComponent(id); }
   // ---------- routing ----------
   function show() {
     var id = decodeURIComponent(location.hash.slice(1));
@@ -1622,10 +1683,16 @@ a.place { text-decoration: none; }
       if (!matchQuery(cur)) { st.q = ''; $('q').value = ''; $('qclear').hidden = true; }
       saveFilters(); compute(); counts(); syncUrl();
     }
+    function inAllCat(n) { return n >= 1 && n <= 4171 && !(n >= 2960 && n <= 3312); }
     renderList();
-    if (cur) renderSong(cur); else renderIntro();
+    if (cur) renderSong(cur);
+    else if (id && !ADULT && !ALL && /^\d{1,4}[a-z]?$/.test(id) && inAllCat(+id.replace(/\D/g, ''))) {
+      unloadSong();
+      $('view').innerHTML = '<article class="home"><h1>' + NO + ' ' + esc(id) + '</h1><p class="cat-note">' + t('Гэтай песні няма ў мужчынскім каталогу. Яна ёсць у агульным каталогу, дзе сабраныя ўсе песні V і VI тамоў.') + '</p><p class="actions"><a class="btn primary" href="' + allHref(id) + '">' + t('Адкрыць у агульным каталогу') + '</a></p></article>';
+    }
+    else renderIntro();
     $('main').scrollTop = 0;
-    document.title = cur ? NO + ' ' + cur.id + ' ' + T(cur).replace(/́/g, '') + ' — ' + NAME : t(ADULT ? 'Фрывольныя песні (18+) — Федароўскі, т. VIa' : 'Мужчынскія песні — Федароўскі, т. V–VI');
+    document.title = cur ? NO + ' ' + cur.id + ' ' + T(cur).replace(/́/g, '') + ' — ' + NAME : t(ADULT ? 'Фрывольныя песні (18+) — Федароўскі, т. VIa' : ALL ? 'Усе песні — Федароўскі, т. V–VI' : 'Мужчынскія песні — Федароўскі, т. V–VI');
     scrollListToCur();
     closeMenu();
   }
