@@ -137,7 +137,7 @@ h1, h2, h3 { text-wrap: balance; }
 :root[data-theme="dark"] .mtag { color: #8fb6ff; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .mtag { color: #8fb6ff; } }
 .cat-note { border-left: 4px solid var(--thread); background: var(--thread-wash); padding: 10px 14px; border-radius: 0 var(--r) var(--r) 0; }
-@media (max-width: 520px) { .brand .kat { display: none; } }
+@media (max-width: 520px) { .brand .kat { display: none; } .brand b.long { font-size: 16px; line-height: 1.15; } }
 .rail-top { position: sticky; top: 0; z-index: 2; background: var(--linen); padding: 14px 14px 10px; }
 .search { display: flex; align-items: center; gap: 6px; height: 46px; padding: 0 4px 0 14px; border-radius: 23px; background: var(--page); border: 1px solid var(--rule-2); color: var(--ink-3); }
 .search:focus-within { border-color: var(--thread); box-shadow: 0 0 0 1px var(--thread); }
@@ -217,9 +217,11 @@ h1, h2, h3 { text-wrap: balance; }
 .ghead::after { content: ""; flex: 1; height: 1px; background: var(--rule-2); }
 .item { display: grid; grid-template-columns: 46px minmax(0, 1fr) 20px; align-items: center; gap: 2px; min-height: 44px; padding: 3px 10px 3px 4px; border-radius: 8px; text-decoration: none; color: var(--ink); content-visibility: auto; contain-intrinsic-size: auto 44px; }
 .item:hover { background: var(--hover); }
-.item[aria-current="page"] { background: var(--thread-soft); color: var(--on-soft); }
+/* the open song: a light wash with a thin thread line on the left; it stays in view at the top or bottom of the list while it scrolls */
+.item[aria-current="page"] { position: sticky; top: var(--railtop, 74px); bottom: 0; z-index: 1; content-visibility: visible; background: var(--thread-wash); color: var(--ink); box-shadow: inset 3px 0 0 var(--thread), 0 2px 10px -6px rgba(40, 10, 10, .25); }
+.item[aria-current="page"] .t { font-weight: 500; }
 .item .n { font-size: 14px; color: var(--ink-3); text-align: right; padding-right: 10px; }
-.item[aria-current="page"] .n { color: inherit; }
+.item[aria-current="page"] .n { color: var(--thread); }
 .item .t { font: 17px/1.25 var(--serif); display: flex; align-items: center; min-width: 0; white-space: nowrap; }
 .item .t > span:first-child { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .item .t .mtag { flex: none; }
@@ -788,10 +790,10 @@ a.place { text-decoration: none; }
   var lm = location.search.match(/[?&]lang=(be|pl|en)(&|$)/);
   try { L = lm ? lm[1] : localStorage.getItem('fed5.lang') || 'be'; if (lm) localStorage.setItem('fed5.lang', L); } catch (e) { if (lm) L = lm[1]; }
   if (['be', 'pl', 'en'].indexOf(L) < 0) L = 'be';
-  // the general catalogue (all songs of vols V and VI) is the default; ?k=men opens the men's one, ?k=all the general one; the choice is remembered
+  // the site opens as the general catalogue (all songs of vols V and VI); ?k=men opens the men's one (its links keep ?k=men)
   // the 18+ section has its own choice: ?r=18&k=all adds the songs sung by a woman
   var km = location.search.match(/[?&]k=(all|men)(&|$)/), K = false, KS = a ? 'fed5.catalog18' : 'fed5.catalog';
-  try { K = km ? km[1] === 'all' : a ? localStorage.getItem(KS) === 'all' : localStorage.getItem(KS) !== 'men'; if (km) localStorage.setItem(KS, km[1]); } catch (e) { K = km ? km[1] === 'all' : !a; }
+  try { K = km ? km[1] === 'all' : a ? localStorage.getItem(KS) === 'all' : true; if (km) localStorage.setItem(KS, km[1]); } catch (e) { K = km ? km[1] === 'all' : !a; }
   window.ALLCAT = K;
   // the general catalogue keeps the red theme, the men's one is blue with its own ornament
   if (!K) document.documentElement.classList.add('cat-men');
@@ -869,7 +871,7 @@ a.place { text-decoration: none; }
   // which catalogue is open: brand title and the switch at the top of the list (in the 18+ section too)
   if (!ADULT || window.ADULT_OK) {
     document.querySelector('.brand b').textContent = NAME;
-    if (ALL && !ADULT) document.querySelector('.brand small').textContent = t('усе песні V і VI тамоў Федароўскага');
+    if (ALL && !ADULT) { document.querySelector('.brand b').textContent = t('Песні V і VI тамоў Федароўскага'); document.querySelector('.brand b').classList.add('long'); document.querySelector('.brand small').hidden = true; }
     var ksw = document.getElementById('catsw'), kq = function (k) { var u = new URLSearchParams(location.search); ['g', 'q', 'v', 't', 's', 'm', 'i'].forEach(function (x) { u.delete(x); }); u.set('k', k); return location.pathname + '?' + u.toString(); };
     ksw.hidden = false;
     [].forEach.call(ksw.querySelectorAll('a'), function (a) { var k = a.getAttribute('data-k'); a.href = kq(k); if ((k === 'all') === ALL) a.setAttribute('aria-current', 'page'); });
@@ -1215,7 +1217,8 @@ a.place { text-decoration: none; }
     FACETS.forEach(function (f) { st.f[f.key] = ''; }); fq = {};
     saveFilters(); refilter();
   }
-  function scrollListToCur() { var el = $('list').querySelector('[aria-current]'); if (el) el.scrollIntoView({ block: 'nearest' }); }
+  (function () { var rt = document.querySelector('.rail-top'), set = function () { $('railScroll').style.setProperty('--railtop', rt.offsetHeight + 'px'); }; set(); if (window.ResizeObserver) new ResizeObserver(set).observe(rt); })();
+  function scrollListToCur() { var el = $('list').querySelector('[aria-current]'); if (!el) return; el.style.position = 'static'; el.scrollIntoView({ block: 'nearest' }); el.style.position = ''; }
 
   // =====================================================================
   //  Melody playback through folk-player.js: сапілка, цымбалы, кларнет
