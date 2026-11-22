@@ -5,7 +5,7 @@
 
 | Файл | Дзе на сайце | Што на фота | Дата | Крыніца |
 |---|---|---|---|---|
-| `lachavicy-muzyki-hero.jpg` | галоўная, вялікае фота | Тры музыкі (скрыпка, басэтля, бубен), фрагмент здымка `lachavicy-muzyki.jpg`, Ляхавічы | 1913 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Lachowiccy_muzycy.jpg) |
+| `lachavicy-muzyki-hero.jpg` | галоўная мужчынскага каталога, вялікае фота (у агульным каталогу — у «Людзі») | Тры музыкі (скрыпка, басэтля, бубен), фрагмент здымка `lachavicy-muzyki.jpg`, Ляхавічы | 1913 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Lachowiccy_muzycy.jpg) |
 | `sluck-sielanin.jpg` | «Людзі» | «Тып беларускага селяніна», Слуцк. Фота С. Юхніна | да 1917 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:23_Slucak_Bielaruski_sielanin.jpg) |
 | `vaukavysk-1919.jpg` | «Мясціны» | Ваўкавыск, паштоўка | 1919 | [Polona](https://polona.pl/item-view/dcce3761-025b-4d1b-86cb-345beb16927e) |
 | `svislach.jpg` | «Мясціны» | Свіслач, касцёл (паштоўка паводле малюнка Н. Орды) | 1910–1930 | [Polona](https://polona.pl/item-view/5de2e631-60f9-49de-9ca5-191b99c86cbe) |
@@ -18,7 +18,7 @@
 | `lucniki.jpg` | «Людзі» | Сяляне вёскі Лучнікі Слуцкага павета. Паштоўка паводле фота С. Юхніна | да 1917 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:25_Slucak_Sialanie_vioski_Lucniki.jpg) |
 | `lachavicy-siamja.jpg` | «Людзі» | Сялянская сям'я ў святочных строях, Ляхавічы. Фота Е. Раманава | 1913 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Еўдакім_Раманаў._Сялянская_сям'я_ў_святочных_строях._Ляхавічы._1913.webp) (з калекцыі МАЭ РАН) |
 | `padlipcy.jpg` | «Людзі» | Селянін з дзяўчынкай, Падліпцы Слуцкага павета. Фота В. Косткі | 1905 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Padlipcy,_sielianin._Падліпцы,_селянін_(1905).jpg) |
-| `lachavicy-muzyki.jpg` | «Людзі» | Вясковыя музыкі (скрыпка, басэтля, бубен) каля хаты, Ляхавічы Слуцкага павета. Аўтар невядомы | 1913 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Lachowiccy_muzycy.jpg) (з кнігі Я. Мірановіча «Найноўшая гісторыя Беларусі», 2003, с. 243) |
+| `lachavicy-muzyki.jpg` | «Людзі»; у агульным каталогу — галоўнае фота | Вясковыя музыкі (скрыпка, басэтля, бубен) каля хаты, Ляхавічы Слуцкага павета. Аўтар невядомы | 1913 | [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Lachowiccy_muzycy.jpg) (з кнігі Я. Мірановіча «Найноўшая гісторыя Беларусі», 2003, с. 243) |
 | `zarabkovicy-sialanin.jpg` | «Людзі» | Селянін у святочным строі, Жарабковічы Слуцкага павета. Аўтар не пазначаны | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72285), МАЭ № 1629-9, з Этнаграфічнага аддзела Рускага музея |
 | `zarabkovicy-chlopiec.jpg` | «Людзі» | Малады селянін у святочным строі, Жарабковічы | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72286), МАЭ № 1629-11 |
 | `zarabkovicy-muzcyna.jpg` | «Людзі» | Селянін 40 гадоў, Жарабковічы | да 1907 | [Кунсткамера (МАЭ РАН)](https://collection.kunstkamera.ru/entity/OBJECT/72275), МАЭ № 1629-4 |
