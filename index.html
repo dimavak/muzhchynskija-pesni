@@ -758,10 +758,10 @@ a.place { text-decoration: none; }
   var lm = location.search.match(/[?&]lang=(be|pl|en)(&|$)/);
   try { L = lm ? lm[1] : localStorage.getItem('fed5.lang') || 'be'; if (lm) localStorage.setItem('fed5.lang', L); } catch (e) { if (lm) L = lm[1]; }
   if (['be', 'pl', 'en'].indexOf(L) < 0) L = 'be';
-  // ?k=all opens the general catalogue (all songs of vol. V and the men's songs of vol. VI), ?k=men the men's one; the choice is remembered
+  // the general catalogue (all songs of vols V and VI) is the default; ?k=men opens the men's one, ?k=all the general one; the choice is remembered
   // the 18+ section has its own choice: ?r=18&k=all adds the songs sung by a woman
   var km = location.search.match(/[?&]k=(all|men)(&|$)/), K = false, KS = a ? 'fed5.catalog18' : 'fed5.catalog';
-  try { K = km ? km[1] === 'all' : localStorage.getItem(KS) === 'all'; if (km) localStorage.setItem(KS, km[1]); } catch (e) { K = !!km && km[1] === 'all'; }
+  try { K = km ? km[1] === 'all' : a ? localStorage.getItem(KS) === 'all' : localStorage.getItem(KS) !== 'men'; if (km) localStorage.setItem(KS, km[1]); } catch (e) { K = km ? km[1] === 'all' : !a; }
   window.ALLCAT = K;
   // the general catalogue keeps the red theme, the men's one is blue with its own ornament
   if (!K) document.documentElement.classList.add('cat-men');
@@ -1118,7 +1118,7 @@ a.place { text-decoration: none; }
     try {
       var u = new URLSearchParams();
       if (ADULT) u.set('r', '18');
-      if (ALL) u.set('k', 'all');
+      if (ALL) u.set('k', 'all'); else if (!ADULT) u.set('k', 'men');
       if (st.group !== 'all') u.set('g', st.group);
       FACETS.forEach(function (f) { if (st.f[f.key]) u.set(f.url, st.f[f.key]); });
       if (st.q) u.set('q', st.q);
@@ -1510,6 +1510,8 @@ a.place { text-decoration: none; }
         '</div><p class="ph-credit">' + t('Фота: Wikimedia Commons, Polona і Кунсткамера (МАЭ РАН), грамадскі набытак') + '</p>';
     };
     var first = visible[0] || SONGS[0];
+    // the men's catalogue home is short: search, browse by volume/type/place and the help; the story of the collection lives on the general home
+    var MINI = !ALL && !ADULT;
     $('view').innerHTML =
       '<article class="home">' +
       '<section class="hero-ph split' + (ALL && !ADULT ? ' wide' : '') + '">' +
@@ -1520,7 +1522,7 @@ a.place { text-decoration: none; }
       (ALL && !ADULT ? '<figure><img src="img/lachavicy-muzyki.jpg" width="1100" height="707" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты, побач жанчыны з дзецьмі') + '" fetchpriority="high">' : '<figure><img src="img/lachavicy-muzyki-hero.jpg" alt="' + t('Скрыпач, музыка з басэтляй і хлопчык з бубнам каля хаты пад саламянай страхой') + '" fetchpriority="high">') +
       '<figcaption class="ph-cap">' + t('Вясковыя музыкі, Ляхавічы, 1913. Wikimedia Commons, грамадскі набытак') + '</figcaption></figure></section>' +
       '<p class="actions"><a class="btn primary" href="#' + esc(first.id) + '">' + svg('book', '') + t('Адкрыць першую песню') + '</a><a class="btn quiet" href="#map">' + svg('map', '') + t('Мапа мясцін') + '</a>' + (ADULT ? '<a class="btn quiet" href="' + MAIN + '">' + t('Асноўны каталог') + '</a>' : '') + '</p>' +
-      '<section class="music collector"><figure><img src="img/fedarouski.jpg" alt="' + t('Міхал Федароўскі') + '" loading="lazy"><figcaption>' + t('Міхал Федароўскі (1853–1923). Фота з IV тома «Lud białoruski», 1935. Polona, грамадскі набытак') + '</figcaption></figure>' +
+      (MINI ? '' : '<section class="music collector"><figure><img src="img/fedarouski.jpg" alt="' + t('Міхал Федароўскі') + '" loading="lazy"><figcaption>' + t('Міхал Федароўскі (1853–1923). Фота з IV тома «Lud białoruski», 1935. Polona, грамадскі набытак') + '</figcaption></figure>' +
       '<div><p class="eyebrow">' + t('Збіральнік') + '</p><h2>' + t('Міхал Федароўскі') + '</h2><p>' + t('З 1877 па 1905 год ён збіраў песні, казкі, прыказкі і павер\'і з Ваўкавышчыны, Слонімшчыны, Лідчыны, Сакольшчыны і суседніх паветаў. Запісы паходзілі з розных крыніц. З гэтых матэрыялаў склалася восем тамоў «Lud białoruski na Rusi Litewskiej».') + '</p><p>' + t('Песні з нотамі ўвайшлі ў V і VI тамы. Пры кожнай песні пазначана мясціна і, калі вядома, ад каго яе запісалі.') + '</p></div></section>' +
       // how the songs were gathered and the tunes written down: Lud białoruski t. V (1958) «Od redakcji» and t. VII (1969), articles by Kozerska, Obrębska-Jabłońska, Damrosz and Stęszewski
       '<div class="sec-title"><div><p class="eyebrow">' + t('Як збіралі песні') + '</p><h2>' + t('Ад слоў да нот') + '</h2></div></div>' +
@@ -1552,16 +1554,16 @@ a.place { text-decoration: none; }
       '<div class="inf-grid">' + infTop.map(function (o) { return '<button class="inf-card" data-facet-set="inf" data-value="' + esc(o.n) + '"><b' + (BE ? '' : ' translate="no"') + '>' + esc(infName(o.n)) + '</b><span>' + esc(o.pl.length ? o.pl.slice(0, 2).join(', ') : BE ? (o.reg || '').replace(' пав.', ' павет') : tv(o.reg || '')) + '</span><small>' + o.c + ' ' + songsWord(o.c) + '</small></button>'; }).join('') + '</div>' +
       '<p class="inf-hint">' + t('Усяго {n} {names}. Націсніце на імя, каб убачыць песні, запісаныя ад гэтага чалавека, або выберыце яго ў фільтры «Ад каго запісана».', { n: nf.format(Object.keys(infMap).length), names: plural(Object.keys(infMap).length, 'імя', 'імёны', 'імёнаў') }) + '</p>' + people(true)) +
       '<section class="music melody"><div><p class="eyebrow">' + t('Мелодыі') + '</p><h2>' + t('Песні, запісаныя больш за сто гадоў таму, гучаць зноў') + '</h2><p>' + t('Для {n} песень ёсць ноты. Іх можна праслухаць голасам, на дудзе, сапілцы, цымбалах або кларнеце, развучыць павольна і па крузе, падабраць вышыню пад свой голас.', { n: nf.format(own + ref) }) + '</p><p>' + t('Курсор паказвае на нотах, што гучыць зараз.') + '</p></div>' +
-      '<figure><img src="img/lud-t1.jpg" alt="' + t('Тытульны ліст I тома Lud białoruski, 1897') + '" loading="lazy"><figcaption>' + t('Тытульны ліст I тома, Кракаў, 1897. Polona, грамадскі набытак') + '</figcaption></figure></section>' +
+      '<figure><img src="img/lud-t1.jpg" alt="' + t('Тытульны ліст I тома Lud białoruski, 1897') + '" loading="lazy"><figcaption>' + t('Тытульны ліст I тома, Кракаў, 1897. Polona, грамадскі набытак') + '</figcaption></figure></section>') +
       '<h2>' + t('Па тамах') + '</h2><ul class="cats vols">' + VOLS.map(function (v) { return '<li><button data-facet-set="vol" data-value="т. ' + v[0] + '"><span>' + t('Том {v}', { v: v[0] }) + ' <small>' + v[1] + '</small></span><span class="num">' + SONGS.filter(function (s) { return s.vol === v[0]; }).length + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>' + t('Па тыпах') + '</h2><ul class="cats">' + catNames.map(function (c) { return '<li><button data-facet-set="cat" data-value="' + esc(c) + '"><span>' + esc(tv(c)) + '</span><span class="num">' + cats[c] + '</span></button></li>'; }).join('') + '</ul>' +
       '<h2>' + t('Па мясцінах') + '</h2><p>' + t('Усе вёскі і мястэчкі, адкуль паходзяць гэтыя песні, — на <a href="#map">мапе</a>.') + '</p><ul class="cats">' + regionList().map(function (r) { return '<li><button data-facet-set="place" data-value="' + esc(r[0]) + '"><span>' + esc(tv(r[0])) + '</span><span class="num">' + r[1] + '</span></button></li>'; }).join('') + '</ul>' +
-      '<div class="places after-cats">' + PLACE_CARDS.map(placeCard).join('') + '</div>' +
+      (MINI ? '' : '<div class="places after-cats">' + PLACE_CARDS.map(placeCard).join('') + '</div>') +
       '<h2>' + t('Што ёсць пры песні') + '</h2><p>' + t('Нумар паводле выдання, мясціна (павет і арыгінальны загаловак), ад каго запісана, тэмп, зноскі і старонка. Ноты выразаныя са сканаў; калі ў выданні напісана «na mel. nr …», ноты той мелодыі пастаўлены проста пры песні, нават калі яна ў іншым томе. Пры песнях VI тома пазначаны і танец («Kruciołka», «Polka drobna»…), калі ён ёсць у выданні.') + '</p>' +
       '<h2>' + t('Мелодыі') + '</h2><p>' + t('Ноты распазнаныя аўтаматычна і гучаць праз сінтэзатар голасам сапілкі, цымбалаў або кларнета, з бурдонам на выбар. «Паслухаць» іграе мелодыю адзін раз, «Развучыць» — павольней і па крузе. Актаву, вышыню і тэмп можна падабраць пад свой голас, а курсор паказвае на нотах, што гучыць зараз. У рытме і асобных нотах магчымыя памылкі распазнавання.') + '</p>' +
       '<h2>' + t('Тэкст') + '</h2><p>' + t('Тэкст пераведзены з польскай лацінкі Федароўскага ў беларускую кірыліцу з захаваннем дыялектнага вымаўлення і націскаў. Арыгінальны запіс можна паглядзець кнопкай «Арыгінал» або «Побач».') + '</p>' +
       (ALL && !ADULT ? '<p class="cat-note">' + t('Тэксты і ноты песень, якіх няма ў мужчынскім каталогу, падрыхтаваныя аўтаматычна: тэкст узяты з распазнанага скана выдання і пераведзены ў кірыліцу праграмай, мелодыі распазнаныя праграмай. У іх магчымыя памылкі, асабліва ў націсках і рэдкіх літарах; калі сумняваецеся, глядзіце арыгінал.') + '</p>' : '') +
-      (ADULT ? '' : '<h2>' + t('Фрывольныя песні') + ' <span class="age">18+</span></h2><p>' + t('Абсцэнныя песні і прыпеўкі да танцаў з тома VIa сабраныя ў <a href="{href}">асобным раздзеле</a> толькі для дарослых. У гэты каталог і пошук яны не трапляюць.', { href: A18 }) + '</p>') +
+      (ADULT || MINI ? '' : '<h2>' + t('Фрывольныя песні') + ' <span class="age">18+</span></h2><p>' + t('Абсцэнныя песні і прыпеўкі да танцаў з тома VIa сабраныя ў <a href="{href}">асобным раздзеле</a> толькі для дарослых. У гэты каталог і пошук яны не трапляюць.', { href: A18 }) + '</p>') +
       '<h2>' + t('Клавішы') + '</h2><dl class="keys"><dt><kbd>←</kbd> <kbd>→</kbd></dt><dd>' + t('папярэдняя і наступная песня') + '</dd><dt><kbd>/</kbd></dt><dd>' + t('пошук') + '</dd><dt><kbd>' + t('Прабел') + '</kbd></dt><dd>' + t('паслухаць мелодыю або спыніць') + '</dd></dl>' +
       '</article>';
     unloadSong();
