@@ -440,6 +440,7 @@
     ["агульны каталог", "katalog ogólny", "general catalogue"],
     ["мужчынскі каталог", "katalog męski", "men’s catalogue"],
     ["усе песні V і VI тамоў Федароўскага", "wszystkie pieśni z tomów V i VI Federowskiego", "all songs of Federowski’s vols. V and VI"],
+    ["Песні V і VI тамоў Федароўскага", "Pieśni z tomów V i VI Federowskiego", "Songs of Federowski’s vols. V and VI"],
     ["Мужчынская песня", "Pieśń męska", "Men’s song"],
     ["муж.", "męs.", "men"],
     ["ёсць у мужчынскім каталогу", "jest w katalogu męskim", "also in the men’s catalogue"],
