@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Мужчынскія песні — Федароўскі, т. V–VI</title>
-<meta name="description" content="845 мужчынскіх песень з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.">
+<meta name="description" content="902 мужчынскія песні з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.">
 <!-- link previews in messengers and social networks; og:image needs the site's full address -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Мужчынскія песні">
 <meta property="og:title" content="Мужчынскія песні — Федароўскі, т. V–VI">
-<meta property="og:description" content="845 мужчынскіх песень з зборніка Міхала Федароўскага: тэксты, ноты і мелодыі для праслухоўвання.">
+<meta property="og:description" content="902 мужчынскія песні з зборніка Міхала Федароўскага: тэксты, ноты і мелодыі для праслухоўвання.">
 <meta property="og:url" content="https://dimavak.github.io/muzhchynskija-pesni/">
 <meta property="og:image" content="https://dimavak.github.io/muzhchynskija-pesni/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -38,7 +38,7 @@
 :root {
   --page: #ffffff; --linen: #f4f2ef; --linen-2: #ebe7e3; --paper: #ffffff;
   --ink: #1c1918; --ink-2: #5d5552; --ink-3: #736965; --rule: #e3ddd8; --rule-2: #cfc6c0;
-  --thread: #b0141e; --thread-ink: #ffffff; --thread-soft: #fbe5e4; --thread-wash: #fdf2f1; --on-soft: #6f0b12;
+  --ref: #b0141e; --thread: #b0141e; --thread-ink: #ffffff; --thread-soft: #fbe5e4; --thread-wash: #fdf2f1; --on-soft: #6f0b12;
   --ornament: #b0141e; --ornament-2: #1c1918;
   --hover: rgba(176, 20, 30, .06); --press: rgba(176, 20, 30, .12);
   --cursor: #c8102e; --cursor-band: rgba(200, 16, 46, .10); --own: #2e7d32;
@@ -52,7 +52,7 @@
   :root:not([data-theme="light"]) {
     --page: #151213; --linen: #1c1819; --linen-2: #262021; --paper: #f6f1ec;
     --ink: #eee6e2; --ink-2: #bdb2ad; --ink-3: #958985; --rule: #332b2b; --rule-2: #463c3b;
-    --thread: #ff8f93; --thread-ink: #3b0006; --thread-soft: #4a1d20; --thread-wash: #241a1b; --on-soft: #ffd9d8;
+    --ref: #ff8f93; --thread: #ff8f93; --thread-ink: #3b0006; --thread-soft: #4a1d20; --thread-wash: #241a1b; --on-soft: #ffd9d8;
     --ornament: #c3313b; --ornament-2: #eee6e2;
     --hover: rgba(255, 143, 147, .08); --press: rgba(255, 143, 147, .14);
     --cursor: #c8102e; --cursor-band: rgba(200, 16, 46, .12); --own: #7fcf8c;
@@ -63,7 +63,7 @@
 :root[data-theme="dark"] {
   --page: #151213; --linen: #1c1819; --linen-2: #262021; --paper: #f6f1ec;
   --ink: #eee6e2; --ink-2: #bdb2ad; --ink-3: #958985; --rule: #332b2b; --rule-2: #463c3b;
-  --thread: #ff8f93; --thread-ink: #3b0006; --thread-soft: #4a1d20; --thread-wash: #241a1b; --on-soft: #ffd9d8;
+  --ref: #ff8f93; --thread: #ff8f93; --thread-ink: #3b0006; --thread-soft: #4a1d20; --thread-wash: #241a1b; --on-soft: #ffd9d8;
   --ornament: #c3313b; --ornament-2: #eee6e2;
   --hover: rgba(255, 143, 147, .08); --press: rgba(255, 143, 147, .14);
   --cursor: #c8102e; --cursor-band: rgba(200, 16, 46, .12);
@@ -200,7 +200,7 @@ h1, h2, h3 { text-wrap: balance; }
 .legend span { display: inline-flex; align-items: center; gap: 4px; }
 .ic { width: 17px; height: 17px; flex: none; }
 .ic.own { fill: var(--own); }
-.ic.ref { fill: var(--thread); }
+.ic.ref { fill: var(--ref); }
 .flink { border: 0; background: transparent; padding: 0; color: var(--thread); text-align: left; font: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; cursor: pointer; }
 .flink:hover { text-decoration-thickness: 2px; }
 .apparatus .flink, .apparatus a { display: inline-block; padding: 4px 0; margin: -2px 0; }
@@ -779,7 +779,7 @@ a.place { text-decoration: none; }
   'use strict';
   var SONGS = window.SONGS || [], MEL = window.MELODIES || {}, CFG = window.SONGBOOK_CONFIG || {};
   // general catalogue: the men's songs (data.js) plus the other songs of vol. V (data-all.js, melodies-all.js)
-  var ALL = !!window.ALLCAT && !!window.SONGS_ALL, MEN_COUNT = SONGS.length, ALL_EXTRA = window.ADULT ? 70 : 2988;
+  var ALL = !!window.ALLCAT && !!window.SONGS_ALL, MEN_COUNT = SONGS.length, ALL_EXTRA = window.ADULT ? 70 : 2887;
   SONGS.forEach(function (s) { if (s.men == null) s.men = true; });
   if (ALL) {
     SONGS = SONGS.concat(window.SONGS_ALL);
@@ -1359,7 +1359,7 @@ a.place { text-decoration: none; }
     // the Polish version shows the tempo as the edition gives it, the others translate it and add the original
     if ((s.tempo_by || []).length) h.push('<div><dt>' + t('Тэмп') + '</dt><dd>' + (LANG === 'pl' ? '<span class="orig" translate="no">' + esc(s.tempo_lat.join('; ')) + '</span>' : esc(s.tempo_by.map(tv).filter(Boolean).join(', ')) + ' <span class="orig" lang="pl" translate="no">(' + esc(s.tempo_lat.join('; ')) + ')</span>') + '</dd></div>');
     if (s.melref && !s.refm.length) h.push('<div><dt>' + t('Мелодыя') + '</dt><dd class="orig" lang="pl" translate="no">' + esc(s.melref) + '</dd></div>');
-    if (s.notes.length) h.push('<div><dt>' + t('Заўвага') + '</dt><dd class="orig" translate="no">' + esc(s.notes.join('; ')) + '</dd></div>');
+    if (s.notes.length) h.push('<div><dt>' + t(s.notes.length > 1 ? 'Заўвагі' : 'Заўвага') + '</dt><dd class="orig" translate="no">' + s.notes.map(esc).join('<br>') + '</dd></div>');
     h.push('<div><dt>' + t('Крыніца') + '</dt><dd>' + fl('vol', 'т. ' + s.vol, t('Федароўскі, т. {v}', { v: s.vol })) + t(', с. {p}', { p: s.pages && s.pages.length > 1 ? s.pages[0] + '–' + s.pages[s.pages.length - 1] : s.page }) + '</dd></div>');
     h.push('</dl>');
     if (s.footnotes.length) h.push('<div class="fn"><h3>' + t('Зноскі выдання') + '</h3><p class="fn-note">' + t('Па-польску, як у арыгінале; «v.» — варыянт радка.') + '</p><ol lang="pl" translate="no">' + s.footnotes.map(function (f) { return '<li>' + esc(f.replace(/^\d+\s+/, '')) + '</li>'; }).join('') + '</ol></div>');
@@ -1411,6 +1411,8 @@ a.place { text-decoration: none; }
 
     var pl = s.lang === 'pl';
     h.push('<div class="grid"><div class="main-col">');
+    if (!s.cyr.length) h.push('<section class="sec lyr" aria-labelledby="h-text"><div class="sec-h"><h2 id="h-text">' + t('Тэкст') + '</h2></div><p class="notice">' + t('Пры гэтым нумары ў выданні толькі ноты, без слоў: гэта найгрыш або мелодыя.') + '</p></section>');
+    else {
     h.push('<section class="sec lyr" aria-labelledby="h-text"><div class="sec-h"><h2 id="h-text">' + t('Тэкст') + '</h2><span class="grow"></span><div class="ctl-row">');
     if (!pl) h.push('<div class="seg" id="mode" role="group" aria-label="' + t('Як паказваць тэкст') + '">' +
       [['cyr', 'Кірыліца'], ['lat', 'Арыгінал'], ['both', 'Побач']].map(function (m) { return '<button data-m="' + m[0] + '" aria-pressed="' + (st.mode === m[0]) + '">' + t(m[1]) + '</button>'; }).join('') + '</div>');
@@ -1424,6 +1426,7 @@ a.place { text-decoration: none; }
     else if (mode === 'lat') h.push('<div class="cols one">' + textBlock(s.lat, 'lat', pl ? 'pl' : 'be-Latn') + '</div>');
     else h.push('<div class="cols one">' + textBlock(s.cyr, 'cyr', cyrLang) + '</div>');
     h.push('</section>');
+    }
 
     h.push('</div>' + apparatusHtml(s) + '</div>');
     if (likesOn) h.push('<section class="sec likes" id="likes" aria-labelledby="h-likes"><div class="sec-h"><h2 id="h-likes">' + t('Адзнакі і каментары') + '</h2></div><p>' + t('Адзначце песню сардэчкам або іншай рэакцыяй і пакіньце каментар. Для гэтага трэба ўвайсці праз GitHub; усё захоўваецца ў GitHub Discussions.') + '</p><div class="giscus"></div></section>');
@@ -1689,7 +1692,9 @@ a.place { text-decoration: none; }
       if (!matchQuery(cur)) { st.q = ''; $('q').value = ''; $('qclear').hidden = true; }
       saveFilters(); compute(); counts(); syncUrl();
     }
-    function inAllCat(n) { return n >= 1 && n <= 4171 && !(n >= 2960 && n <= 3312); }
+    // numbers not on the site: no words and no notes cut from the scan (or absent from the edition)
+    var NOT_ON_SITE = { 2252: 1, 2416: 1, 2480: 1, 2504: 1, 2571: 1, 2695: 1, 2804: 1, 2930: 1, 3435: 1, 3449: 1, 3451: 1, 3452: 1, 3454: 1, 3472: 1, 3474: 1, 3482: 1, 3487: 1, 3554: 1, 3589: 1, 3601: 1, 3602: 1, 3708: 1, 3710: 1, 3724: 1, 3733: 1, 3802: 1, 3806: 1, 3819: 1, 3880: 1, 3908: 1, 3914: 1, 3919: 1, 3948: 1, 3977: 1, 4005: 1, 4011: 1, 4015: 1, 4021: 1, 4025: 1, 4029: 1, 4032: 1, 4035: 1, 4057: 1, 4158: 1, 1026: 1, 1027: 1 };
+    function inAllCat(n) { return n >= 1 && n <= 4171 && !(n >= 2960 && n <= 3312) && !NOT_ON_SITE[n]; }
     renderList();
     if (cur) renderSong(cur);
     else if (id && !ADULT && !ALL && /^\d{1,4}[a-z]?$/.test(id) && inAllCat(+id.replace(/\D/g, ''))) {
