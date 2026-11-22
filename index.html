@@ -104,6 +104,11 @@ h1, h2, h3 { text-wrap: balance; }
 .brand b .sh { display: none; }
 @media (max-width: 600px) { .brand b .fl { display: none; } .brand b .sh { display: inline; } .brand { padding-right: 2px; } .brand b.long { font-size: clamp(15px, 4.2vw, 20px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .brand span:has(> b.long) { min-width: 0; } }
 @media (max-width: 380px) { .brand:has(b.long) svg { display: none; } .brand:has(b.long) { gap: 0; } }
+.booting { display: flex; justify-content: center; gap: 8px; padding: 18vh 0; }
+.booting span { width: 10px; height: 10px; background: var(--thread); transform: rotate(45deg); animation: boot 1s infinite ease-in-out; }
+.booting span:nth-child(2) { animation-delay: .15s; } .booting span:nth-child(3) { animation-delay: .3s; }
+@keyframes boot { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .booting span { animation: none; opacity: .6; } }
 /* phones: the ornament band folds away while reading and comes back on scrolling up */
 @media (max-width: 760px) { .mast .band { transition: height .2s; } .mast.compact .band { height: 0; } }
 @media (max-width: 760px) and (prefers-reduced-motion: reduce) { .mast .band { transition: none; } }
@@ -790,7 +795,7 @@ a.place { text-decoration: none; }
         <nav class="list" id="list" aria-label="Спіс песень"></nav>
       </div>
     </aside>
-    <main class="doc" id="main" tabindex="-1"><div class="page" id="view"></div></main>
+    <main class="doc" id="main" tabindex="-1"><div class="page" id="view"><div class="booting" aria-busy="true"><span></span><span></span><span></span></div></div></main>
   </div>
   <div class="scrim" id="scrim"></div>
 </div>
@@ -976,6 +981,8 @@ a.place { text-decoration: none; }
   var fold = function (s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/ł/g, 'l'); };
   var hasMusic = function (s) { return s.group === 'own' || s.group === 'ref'; };
   var nf = new Intl.NumberFormat(LANG === 'be' ? 'ru' : LANG);   // Belarusian groups thousands with a space, as Russian does
+  // saved copy of the site for reading without internet (sw.js)
+  if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
   // phones: fold the ornament band while scrolling down, show it again on scrolling up
   (function () {
     var mast = document.querySelector('.mast'), last = 0;
