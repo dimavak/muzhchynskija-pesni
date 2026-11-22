@@ -147,10 +147,28 @@
 
 Пакуль `url` і `key` пустыя, кнопак правак на сайце няма.
 
-Праглядаць праўкі: Supabase → Table Editor → `corrections`. Стоўбік `status`: `новая` → `прынята` → `выпраўлена`, або `адхілена`
+### Адмінка і аўтаматычнае ўнясенне
+
+Старонка `admin.html` (https://dimavak.github.io/muzhchynskija-pesni/admin.html): уваход па спасылцы з email, спіс правак
+па статусах, «Прыняць» (прапанову можна паправіць), «Адхіліць», «Заблакаваць аўтара» / «Разблакаваць», нататка для сябе.
+Наладзіць адзін раз:
+
+1. Supabase → Authentication → Users → **Add user → Create new user**: ваш email, пароль любы, **Auto Confirm User**.
+2. SQL Editor: запусціць [supabase/corrections-2-admin.sql](supabase/corrections-2-admin.sql) (адміністратарамі становяцца ўсе карыстальнікі праекта).
+3. Authentication → URL Configuration: Site URL `https://dimavak.github.io/muzhchynskija-pesni/admin.html`,
+   у Redirect URLs дадаць той жа адрас.
+
+Штодня `.github/workflows/apply-corrections.yml` бярэ прынятыя праўкі тэксту, знаходзіць месца ў `data*.js` / `texts-lat*.js`
+па выдзеленым тэксце і кантэксце (націскі не ўлічваюцца) і адкрывае адзін PR «Праўкі з сайта». Пасля зліцця наступны запуск
+ставіць ім «выпраўлена». Што знайсці не ўдалося (праўкі нот, неадназначны тэкст), застаецца «прынята» з нататкай «аўта: …».
+Наладзіць: GitHub → Settings → Secrets and variables → Actions → секрэт `SUPABASE_SECRET_KEY` (Supabase → Project Settings → API Keys →
+Secret key) і Settings → Actions → General → «Allow GitHub Actions to create and approve pull requests».
+
+Праглядаць праўкі можна і ў Supabase → Table Editor → `corrections`. Стоўбік `status`: `новая` → `прынята` → `выпраўлена`, або `адхілена`
 (дата прагляду ставіцца сама). Выдзелены тэкст ляжыць у `quote`, вакол яго `context_before` / `context_after`, нумар радка `line_no`,
-`script` — кірыліца ці арыгінал. Абарона ад спаму: поле-пастка для ботаў, не больш за 10 правак у гадзіну і 40 у суткі з аднаго адраса,
-500 у суткі агулам; сам адрас не захоўваецца, толькі хэш.
+`script` — кірыліца ці арыгінал. Абарона ад спаму: поле-пастка для ботаў, адмова пры адпраўцы хутчэй за 3 секунды, без спасылак, без паўтораў,
+не больш за 10 правак у гадзіну і 40 у суткі з аднаго адраса, 500 у суткі агулам, блакаванне аўтара ў адмінцы;
+сам адрас не захоўваецца, толькі хэш.
 
 Бясплатны праект засынае пасля 7 дзён без запытаў, таму `.github/workflows/supabase-ping.yml` двойчы на тыдзень робіць адзін лёгкі запыт.
 

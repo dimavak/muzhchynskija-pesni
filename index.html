@@ -1353,7 +1353,7 @@ a.place { text-decoration: none; }
   var CC = CFG.corrections || {};
   var corrOn = !!(CC.url && CC.key);
   var KINDS = [['text', 'Тэкст песні'], ['notes', 'Ноты ці мелодыя'], ['place', 'Мясціна, павет, ад каго запісана'], ['translation', 'Пераклад ці надпісы сайта'], ['other', 'Іншае']];
-  var corrSel = null, corrCtx = null;
+  var corrSel = null, corrCtx = null, corrCtx0 = 0;
   // what is selected in the song text: the quote, its line and a little text around it
   function selectionInfo() {
     var sel = window.getSelection(); if (!sel || sel.isCollapsed || !sel.rangeCount) return null;
@@ -1435,12 +1435,12 @@ a.place { text-decoration: none; }
     $('corrSugg').value = s ? s.quote : '';
     $('corrCom').value = ''; $('corrWeb').value = ''; $('corrErr').hidden = true; $('corrSend').disabled = false;
     corrKindUI();
-    d.showModal();
+    d.showModal(); corrCtx0 = Date.now();
     var ta = $('corrSugg'); ta.focus(); if (s) ta.setSelectionRange(0, ta.value.length);
   }
   function corrError(code) {
     var m = { empty: 'Напішыце, як павінна быць, або каментар.', same: 'Прапанова супадае з выдзеленым тэкстам. Выпраўце яе або дадайце каментар.',
-      email: 'Праверце email.', rate: 'Занадта шмат правак за кароткі час. Паспрабуйце пазней.' }[code] || 'Не атрымалася адправіць. Праверце сетку і паспрабуйце яшчэ раз.';
+      email: 'Праверце email.', links: 'Калі ласка, без спасылак на сайты.', rate: 'Занадта шмат правак за кароткі час. Паспрабуйце пазней.' }[code] || 'Не атрымалася адправіць. Праверце сетку і паспрабуйце яшчэ раз.';
     var el = $('corrErr'); el.textContent = t(m); el.hidden = false; $('corrSend').disabled = false;
   }
   function sendCorr() {
@@ -1451,7 +1451,7 @@ a.place { text-decoration: none; }
     save('corr.who', { name: name, mail: mail });
     var p = { song_id: cur.id, section: ADULT ? '18' : 'main', kind: $('corrKind').value, script: s.script || '', line_no: s.line || '',
       quote: s.quote || '', context_before: s.before || '', context_after: s.after || '', suggestion: sugg, comment: com,
-      author_name: name, author_email: mail, ui_lang: LANG, page_url: location.href.slice(0, 500), website: $('corrWeb').value };
+      author_name: name, author_email: mail, ui_lang: LANG, elapsed_ms: Date.now() - corrCtx0, page_url: location.href.slice(0, 500), website: $('corrWeb').value };
     var hd = { 'Content-Type': 'application/json', apikey: CC.key };
     if (/^eyJ/.test(CC.key)) hd.Authorization = 'Bearer ' + CC.key;   // the old JWT anon key; the new publishable key goes only in apikey
     $('corrSend').disabled = true; $('corrErr').hidden = true;

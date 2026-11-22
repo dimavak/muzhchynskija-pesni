@@ -62,6 +62,7 @@
     ["Напішыце, як павінна быць, або каментар.", "Napisz, jak powinno być, albo dodaj komentarz.", "Write what it should be, or add a comment."],
     ["Прапанова супадае з выдзеленым тэкстам. Выпраўце яе або дадайце каментар.", "Propozycja jest taka sama jak zaznaczony tekst. Popraw ją albo dodaj komentarz.", "The suggestion is the same as the selected text. Change it or add a comment."],
     ["Праверце email.", "Sprawdź adres e-mail.", "Please check the email address."],
+    ["Калі ласка, без спасылак на сайты.", "Prosimy bez linków do stron.", "Please do not include links to websites."],
     ["Занадта шмат правак за кароткі час. Паспрабуйце пазней.", "Zbyt wiele poprawek w krótkim czasie. Spróbuj później.", "Too many corrections in a short time. Please try later."],
     ["Не атрымалася адправіць. Праверце сетку і паспрабуйце яшчэ раз.", "Nie udało się wysłać. Sprawdź połączenie i spróbuj ponownie.", "Could not send. Check your connection and try again."],
     ["Дзякуй! Праўка адпраўлена, мы яе праглядзім.", "Dziękujemy! Poprawka wysłana, przejrzymy ją.", "Thank you! Your correction has been sent and we will review it."],

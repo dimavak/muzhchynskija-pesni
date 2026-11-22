@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Праўкі — адміністратар</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root {
+  --page: #fff; --linen: #f4f2ef; --ink: #1c1918; --ink-2: #5d5552; --ink-3: #736965; --rule: #e3ddd8; --rule-2: #cfc6c0;
+  --thread: #b0141e; --thread-ink: #fff; --thread-soft: #fbe5e4; --thread-wash: #fdf2f1; --on-soft: #6f0b12; --ok: #2e7d32;
+  --sans: "Alegreya Sans", "Segoe UI", Roboto, Arial, sans-serif; --serif: Alegreya, "PT Serif", Georgia, serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #151213; --linen: #1c1819; --ink: #eee6e2; --ink-2: #bdb2ad; --ink-3: #958985; --rule: #332b2b; --rule-2: #463c3b;
+    --thread: #ff8f93; --thread-ink: #3b0006; --thread-soft: #4a1d20; --thread-wash: #241a1b; --on-soft: #ffd9d8; --ok: #7fcf8c;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.5 var(--sans); }
+header { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--page); border-bottom: 1px solid var(--rule); }
+header h1 { margin: 0; font: 700 19px/1.2 var(--serif); }
+header .grow { flex: 1; }
+header small { color: var(--ink-3); }
+main { max-width: 860px; margin: 0 auto; padding: 16px; }
+a { color: var(--thread); }
+button, input, textarea { font: inherit; color: inherit; }
+.btn { min-height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid var(--rule-2); background: transparent; cursor: pointer; font-weight: 600; font-size: 15px; }
+.btn:hover { background: var(--thread-wash); }
+.btn.primary { background: var(--thread); color: var(--thread-ink); border-color: transparent; }
+.btn.ok { background: var(--ok); color: var(--page); border-color: transparent; }
+.btn:disabled { opacity: .55; cursor: default; }
+input[type=email], textarea, input.note { width: 100%; padding: 8px 10px; border: 1px solid var(--rule-2); border-radius: 8px; background: var(--linen); }
+textarea { resize: vertical; min-height: 44px; }
+.login { max-width: 420px; margin: 48px auto; }
+.login form { display: flex; gap: 8px; margin-top: 12px; }
+.msg { padding: 10px 14px; border-radius: 8px; background: var(--thread-wash); margin: 12px 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.tabs button { min-height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid var(--rule-2); background: transparent; cursor: pointer; font-size: 15px; }
+.tabs button[aria-pressed=true] { background: var(--thread-soft); color: var(--on-soft); border-color: transparent; font-weight: 600; }
+.tabs .n { margin-left: 4px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.card { border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; margin: 0 0 12px; }
+.card .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; font-size: 14.5px; color: var(--ink-3); }
+.card .meta b { color: var(--ink); font-size: 16px; }
+.card .meta .st { padding: 0 8px; border-radius: 10px; background: var(--linen); color: var(--ink-2); }
+.card .meta .blk { color: var(--thread); font-weight: 600; }
+.card h3 { margin: 12px 0 4px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); }
+blockquote { margin: 0; padding: 8px 12px; border-left: 3px solid var(--thread); background: var(--thread-wash); border-radius: 0 8px 8px 0; font: 17px/1.5 var(--serif); white-space: pre-wrap; }
+blockquote .ctx { color: var(--ink-3); }
+blockquote mark { background: var(--thread-soft); color: var(--on-soft); }
+.sugg { font: 17px/1.5 var(--serif); }
+.com { white-space: pre-wrap; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.row .grow { flex: 1; }
+.empty { color: var(--ink-3); padding: 24px 0; text-align: center; }
+.hint { color: var(--ink-3); font-size: 14.5px; margin: 0 0 16px; }
+</style>
+</head>
+<body>
+<header><h1>Праўкі ад наведвальнікаў</h1><span class="grow"></span><small id="who"></small><button class="btn" id="logout" hidden>Выйсці</button></header>
+<main id="app"><p class="empty">Загрузка…</p></main>
+<script src="config.js"></script>
+<script>
+(function () {
+  'use strict';
+  var C = (window.SONGBOOK_CONFIG || {}).corrections || {}, URL0 = String(C.url || '').replace(/\/+$/, ''), KEY = C.key || '';
+  var SK = 'pesni.admin.session', app = document.getElementById('app');
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var KIND = { text: 'Тэкст песні', notes: 'Ноты ці мелодыя', place: 'Мясціна, павет, ад каго', translation: 'Пераклад ці надпісы', other: 'Іншае' };
+  var STATUSES = [['новая', 'Новыя'], ['прынята', 'Прынятыя'], ['выпраўлена', 'Выпраўленыя'], ['адхілена', 'Адхіленыя'], ['', 'Усе']];
+  var sess = null, tab = 'новая', rows = [], blocked = {};
+
+  function load() { try { return JSON.parse(localStorage.getItem(SK)); } catch (e) { return null; } }
+  function store(s) { sess = s; try { if (s) localStorage.setItem(SK, JSON.stringify(s)); else localStorage.removeItem(SK); } catch (e) {} }
+  function hdr(extra) {
+    var h = { apikey: KEY, 'Content-Type': 'application/json' };
+    if (sess) h.Authorization = 'Bearer ' + sess.access_token;
+    for (var k in extra || {}) h[k] = extra[k];
+    return h;
+  }
+  function api(path, opt) {
+    opt = opt || {};
+    return fresh().then(function () {
+      return fetch(URL0 + path, { method: opt.method || 'GET', headers: hdr(opt.headers), body: opt.body ? JSON.stringify(opt.body) : undefined });
+    }).then(function (r) {
+      if (r.status === 401) { store(null); render(); throw new Error('Сесія скончылася, увайдзіце зноў.'); }
+      if (!r.ok) return r.text().then(function (t) { throw new Error(t || r.statusText); });
+      return r.status === 204 ? null : r.json();
+    });
+  }
+  // the access token lives an hour: refresh it a minute before it ends
+  function fresh() {
+    if (!sess || Date.now() < sess.expires_at - 60000) return Promise.resolve();
+    return fetch(URL0 + '/auth/v1/token?grant_type=refresh_token', { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: sess.refresh_token }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (!j || !j.access_token) { store(null); throw new Error('Сесія скончылася, увайдзіце зноў.'); } keep(j); });
+  }
+  function keep(j) { store({ access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (+j.expires_in || 3600) * 1000, email: (j.user && j.user.email) || (sess && sess.email) || '' }); }
+
+  // the link from the e-mail brings the session in the address: #access_token=…&refresh_token=…
+  (function () {
+    var h = new URLSearchParams(location.hash.slice(1));
+    if (h.get('access_token')) {
+      keep({ access_token: h.get('access_token'), refresh_token: h.get('refresh_token'), expires_in: h.get('expires_in') });
+      history.replaceState(null, '', location.pathname);
+    } else if (h.get('error_description')) {
+      app.dataset.err = h.get('error_description').replace(/\+/g, ' ');
+      history.replaceState(null, '', location.pathname);
+    }
+    if (!sess) sess = load();
+  })();
+
+  function loginView(msg) {
+    app.innerHTML = '<div class="login"><h2>Уваход</h2><p>Увядзіце свой email. Прыйдзе ліст са спасылкай; адкрыйце яе на гэтай прыладзе.</p>' +
+      (msg ? '<p class="msg">' + esc(msg) + '</p>' : '') +
+      '<form id="lf"><input type="email" id="em" required autocomplete="email" placeholder="email"><button class="btn primary">Даслаць спасылку</button></form></div>';
+    document.getElementById('lf').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var em = document.getElementById('em').value.trim(), b = this.querySelector('button'); b.disabled = true;
+      var back = location.origin + location.pathname;
+      fetch(URL0 + '/auth/v1/otp?redirect_to=' + encodeURIComponent(back), { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: em, create_user: false }) })
+        .then(function (r) { return r.ok ? null : r.json().then(function (j) { throw new Error(j.msg || j.error_description || j.message || r.statusText); }); })
+        .then(function () { loginView('Ліст адпраўлены на ' + em + '. Адкрыйце спасылку з яго (праверце і «Спам»).'); })
+        .catch(function (err) { loginView('Не атрымалася: ' + err.message); });
+    });
+  }
+
+  function render() {
+    document.getElementById('logout').hidden = !sess;
+    document.getElementById('who').textContent = sess ? sess.email || '' : '';
+    if (!URL0 || !KEY) { app.innerHTML = '<p class="msg">У config.js не зададзены corrections.url і corrections.key.</p>'; return; }
+    if (!sess) { loginView(app.dataset.err); delete app.dataset.err; return; }
+    if (!sess.email) api('/auth/v1/user').then(function (u) { if (u && u.email && sess) { sess.email = u.email; store(sess); document.getElementById('who').textContent = u.email; } }).catch(function () {});
+    api('/rest/v1/rpc/is_admin', { method: 'POST', body: {} }).then(function (ok) {
+      if (!ok) { app.innerHTML = '<p class="msg">Гэты ўліковы запіс не адміністратар. Запусціце supabase/corrections-2-admin.sql пасля стварэння карыстальніка.</p>'; return; }
+      refresh();
+    }).catch(fail);
+  }
+  function fail(err) { app.innerHTML = '<p class="msg">' + esc(err.message) + '</p>'; }
+
+  function refresh() {
+    var q = '/rest/v1/corrections?select=*&order=created_at.desc&limit=300' + (tab ? '&status=eq.' + encodeURIComponent(tab) : '');
+    Promise.all([api(q), api('/rest/v1/corrections?select=status&limit=10000')]).then(function (res) {
+      rows = res[0];
+      var cnt = { '': res[1].length }; res[1].forEach(function (r) { cnt[r.status] = (cnt[r.status] || 0) + 1; });
+      return api('/rest/v1/rpc/blocked_ids', { method: 'POST', body: { p_ids: rows.map(function (r) { return r.id; }) } }).then(function (ids) {
+        blocked = {}; (ids || []).forEach(function (i) { blocked[i] = true; });
+        draw(cnt);
+      });
+    }).catch(fail);
+  }
+
+  function fmtDate(d) { var p = function (n) { return (n < 10 ? '0' : '') + n; }; return p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
+  function songLink(r) {
+    var base = 'index.html' + (r.section === '18' ? '?r=18' : '');
+    return '<a href="' + base + '#' + encodeURIComponent(r.song_id) + '" target="_blank" rel="noopener">№ ' + esc(r.song_id) + (r.section === '18' ? ' (18+)' : '') + '</a>';
+  }
+  function card(r) {
+    var d = new Date(r.created_at), h = [];
+    h.push('<article class="card" data-id="' + r.id + '"><div class="meta"><b>' + songLink(r) + '</b><span>' + esc(KIND[r.kind] || r.kind) + (r.script ? ' · ' + (r.script === 'lat' ? 'арыгінал' : 'кірыліца') : '') + (r.line_no ? ' · радок ' + r.line_no : '') + '</span>' +
+      '<span>' + fmtDate(d) + '</span><span class="st">' + esc(r.status) + '</span>' + (blocked[r.id] ? '<span class="blk">аўтар заблакаваны</span>' : '') + '<span>#' + r.id + '</span></div>');
+    if (r.quote) h.push('<h3>Выдзелены тэкст</h3><blockquote>' + (r.context_before ? '<span class="ctx">' + esc(r.context_before) + '</span>' : '') + '<mark>' + esc(r.quote) + '</mark>' + (r.context_after ? '<span class="ctx">' + esc(r.context_after) + '</span>' : '') + '</blockquote>');
+    if (r.suggestion != null || r.quote) h.push('<h3>' + (r.quote ? 'Як павінна быць' : 'Што не так') + '</h3>' + (r.status === 'новая' || r.status === 'прынята' ? '<textarea class="sugg" rows="2">' + esc(r.suggestion || '') + '</textarea>' : '<div class="sugg com">' + esc(r.suggestion || '') + '</div>'));
+    if (r.comment) h.push('<h3>Каментар</h3><div class="com">' + esc(r.comment) + '</div>');
+    if (r.author_name || r.author_email) h.push('<h3>Аўтар</h3><div>' + esc(r.author_name || '') + (r.author_email ? ' <a href="mailto:' + esc(r.author_email) + '">' + esc(r.author_email) + '</a>' : '') + '</div>');
+    h.push('<h3>Нататка</h3><input class="note" value="' + esc(r.admin_note || '') + '" placeholder="для сябе">');
+    var b = [];
+    if (r.status === 'новая') b.push('<button class="btn ok" data-a="accept">Прыняць</button>', '<button class="btn" data-a="reject">Адхіліць</button>', '<span class="grow"></span><button class="btn" data-a="block">Заблакаваць аўтара</button>');
+    if (r.status === 'прынята') b.push('<button class="btn" data-a="save">Захаваць прапанову</button>', '<button class="btn" data-a="new">Вярнуць у новыя</button>', '<button class="btn" data-a="reject">Адхіліць</button>');
+    if (r.status === 'адхілена') b.push('<button class="btn" data-a="new">Вярнуць у новыя</button>' + (blocked[r.id] ? '<span class="grow"></span><button class="btn" data-a="unblock">Разблакаваць аўтара</button>' : ''));
+    if (r.status === 'выпраўлена') b.push('<button class="btn" data-a="accept">Зноў у прынятыя</button>');
+    h.push('<div class="row">' + b.join('') + '</div></article>');
+    return h.join('');
+  }
+  function draw(cnt) {
+    app.innerHTML = '<p class="hint">Прынятыя праўкі тэксту штодня (і па кнопцы ў GitHub Actions) трапляюць у аўтаматычны PR; пасля яго зліцця становяцца «выпраўлена». Праўкі нот і іншыя прынятыя застаюцца ў «Прынятых», іх уносіць Claude.</p>' +
+      '<div class="tabs">' + STATUSES.map(function (s) { return '<button data-tab="' + s[0] + '" aria-pressed="' + (tab === s[0]) + '">' + s[1] + '<span class="n">' + (cnt[s[0]] || 0) + '</span></button>'; }).join('') + '</div>' +
+      (rows.length ? rows.map(card).join('') : '<p class="empty">Тут пуста.</p>');
+  }
+
+  function patch(id, body) { return api('/rest/v1/corrections?id=eq.' + id, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: body }); }
+  app.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-tab]'); if (t) { tab = t.getAttribute('data-tab'); refresh(); return; }
+    var b = e.target.closest('[data-a]'); if (!b) return;
+    var c = b.closest('.card'), id = +c.getAttribute('data-id'), a = b.getAttribute('data-a'), ta = c.querySelector('textarea.sugg');
+    var body = { admin_note: c.querySelector('.note').value.trim() || null };
+    if (ta) body.suggestion = ta.value.trim() || null;
+    var p;
+    if (a === 'accept') { body.status = 'прынята'; p = patch(id, body); }
+    else if (a === 'reject') { body.status = 'адхілена'; p = patch(id, body); }
+    else if (a === 'new') { body.status = 'новая'; p = patch(id, body); }
+    else if (a === 'save') p = patch(id, body);
+    else if (a === 'block') { if (!confirm('Адхіліць усе новыя праўкі гэтага аўтара і ігнараваць наступныя з яго адраса?')) return; p = api('/rest/v1/rpc/block_author', { method: 'POST', body: { p_id: id } }); }
+    else if (a === 'unblock') p = api('/rest/v1/rpc/unblock_author', { method: 'POST', body: { p_id: id } });
+    b.disabled = true;
+    p.then(refresh).catch(function (err) { b.disabled = false; alert(err.message); });
+  });
+  app.addEventListener('change', function (e) {
+    if (!e.target.classList.contains('note')) return;
+    var id = +e.target.closest('.card').getAttribute('data-id');
+    patch(id, { admin_note: e.target.value.trim() || null }).catch(function (err) { alert(err.message); });
+  });
+  document.getElementById('logout').addEventListener('click', function () {
+    if (sess) fetch(URL0 + '/auth/v1/logout', { method: 'POST', headers: hdr() }).catch(function () {});
+    store(null); render();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
