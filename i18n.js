@@ -135,6 +135,7 @@
     ["Танец", "Taniec", "Dance"],
     ["Заўвага", "Uwaga", "Note"],
     ["Заўвагі", "Uwagi", "Notes"],
+    ["Пры гэтым нумары ў выданні толькі ноты, без слоў: гэта найгрыш або мелодыя.", "Pod tym numerem wydanie podaje tylko nuty, bez słów: to melodia instrumentalna lub sama melodia.", "The edition gives only the music under this number, without words: a tune or melody."],
     ["Крыніца", "Źródło", "Source"],
     ["Федароўскі, т. {v}", "Federowski, t. {v}", "Federowski, vol. {v}"],
     [", с. {p}", ", s. {p}", ", p. {p}"],
