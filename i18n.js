@@ -443,6 +443,7 @@
     ["у тэмпе паланэза", "w tempie poloneza", "polonaise tempo"],
     // general catalogue (?k=all)
     ["Каталог", "Katalog", "Catalogue"],
+    ["Каталог песень", "Katalog pieśni", "Song catalogue"],
     ["Мужчынскія", "Męskie", "Men’s"],
     ["Усе песні", "Wszystkie pieśni", "All songs"],
     ["агульны каталог", "katalog ogólny", "general catalogue"],
