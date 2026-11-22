@@ -1173,7 +1173,7 @@ a.place { text-decoration: none; }
   }
   function setFacet(key, v, open) {
     st.f[key] = st.f[key] === v && !open ? '' : v;
-    if (open) { save('open.' + key, true); save('fbox', true); $('fbox').open = true; }
+    if (open) { save('open.' + key, true); $('fbox').open = true; }
     saveFilters(); refilter();
     if (open) openMenu();
   }
@@ -1856,7 +1856,7 @@ a.place { text-decoration: none; }
   var mq = matchMedia('(prefers-color-scheme: dark)'); if (mq.addEventListener) mq.addEventListener('change', applyPrefs);
 
   if (st.q) { $('q').value = st.q; $('qclear').hidden = false; }
-  $('fbox').open = load('fbox', false);
+  $('fbox').open = false; // filters always start folded (active ones show as chips under the box)
   applyPrefs(); compute(); counts(); show();
   // search by the original spelling works once the Latin texts are in
   setTimeout(function () { withLat(function () { if (st.q) refilter(); }); }, 300);
