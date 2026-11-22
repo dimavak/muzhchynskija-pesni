@@ -3,13 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Мужчынскія песні — Федароўскі, т. V–VI</title>
-<meta name="description" content="931 мужчынская песня з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.">
+<title>Песні V і VI тамоў Федароўскага</title>
+<meta name="description" content="Беларускія народныя песні з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.">
+<!-- not for search engines until the public launch (planned 2026–2027, likely at ludby.org); remove this line then -->
+<meta name="robots" content="noindex">
 <!-- link previews in messengers and social networks; og:image needs the site's full address -->
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Мужчынскія песні">
-<meta property="og:title" content="Мужчынскія песні — Федароўскі, т. V–VI">
-<meta property="og:description" content="931 мужчынская песня з зборніка Міхала Федароўскага: тэксты, ноты і мелодыі для праслухоўвання.">
+<meta property="og:site_name" content="Песні Федароўскага">
+<meta property="og:title" content="Песні V і VI тамоў Федароўскага">
+<meta property="og:description" content="Беларускія народныя песні са зборніка Міхала Федароўскага: тэксты, ноты і мелодыі для праслухоўвання.">
 <meta property="og:url" content="https://dimavak.github.io/muzhchynskija-pesni/">
 <meta property="og:image" content="https://dimavak.github.io/muzhchynskija-pesni/og-image.png">
 <meta property="og:image:width" content="1200">
@@ -205,6 +207,7 @@ h1, h2, h3 { text-wrap: balance; }
 .flink:hover { text-decoration-thickness: 2px; }
 .apparatus .flink, .apparatus a { display: inline-block; padding: 4px 0; margin: -2px 0; }
 .crumbbar .grow { flex: 1; }
+.crumbbar > .num { font-size: 16px; color: var(--ink); padding: 0 2px; white-space: nowrap; }
 .print-src, .print-url { display: none; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 10px 12px; }
 .chip { border: 1px solid var(--rule-2); background: transparent; border-radius: 8px; min-height: 36px; padding: 4px 10px; font-size: 15px; text-align: left; color: var(--ink); transition: background-color .15s, border-color .15s; max-width: 100%; }
@@ -242,6 +245,14 @@ h1, h2, h3 { text-wrap: balance; }
 button.pill:hover, a.pill:hover { background: var(--hover); color: var(--ink); }
 .pill svg { width: 16px; height: 16px; fill: var(--thread); }
 .pill svg.own { fill: var(--own); }
+.tag { display: inline-flex; align-items: center; gap: 5px; min-height: 32px; padding: 0 4px; font-size: 15px; color: var(--ink-2); text-decoration: none; }
+.tag svg { width: 16px; height: 16px; fill: var(--ref); }
+.tag svg.own { fill: var(--own); }
+a.tag.men { color: #1d4f91; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a.tag.men:hover { text-decoration-thickness: 2px; }
+:root[data-theme="dark"] a.tag.men { color: #8fb6ff; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) a.tag.men { color: #8fb6ff; } }
+@media (max-width: 600px) { #printBtn .pl-t { display: none; } #printBtn { padding: 2px 9px; } }
 .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); gap: 0 48px; align-items: start; }
 .score-sec { max-width: 1040px; }
 .main-col { min-width: 0; }
@@ -425,6 +436,11 @@ dialog.corr-dlg::backdrop { background: rgba(18, 12, 12, .5); }
 .lang-sel select { appearance: none; -webkit-appearance: none; height: 44px; padding: 0 28px 0 12px; border: 0; border-radius: 22px; background: transparent; color: inherit; font: inherit; font-weight: 500; letter-spacing: .02em; cursor: pointer; transition: background-color .15s, color .15s; }
 .lang-sel select:hover { background: var(--hover); color: var(--ink); }
 .lang-sel select option { color: #1c1918; background: #ffffff; }
+.lang-row { display: none; align-items: center; gap: 2px; flex: none; color: var(--ink-3); }
+.lang-row a { display: inline-grid; place-items: center; min-width: 44px; height: 44px; padding: 0 6px; border-radius: 22px; color: var(--ink-2); text-decoration: none; font-weight: 500; }
+.lang-row a:hover { background: var(--hover); color: var(--ink); }
+.lang-row a[aria-current] { color: var(--thread); font-weight: 700; }
+@media (min-width: 1000px) { .lang-row { display: inline-flex; } .lang-sel { display: none; } }
 .lang-sel svg { position: absolute; right: 8px; width: 18px; height: 18px; fill: currentColor; pointer-events: none; }
 .mapv { max-width: 1120px; }
 .mapv h1 { font: 800 clamp(30px, 4.2vw, 46px)/1.08 var(--serif); letter-spacing: -.015em; margin: 4px 0 10px; }
@@ -732,7 +748,8 @@ a.place { text-decoration: none; }
       </a>
       <span class="spacer"></span>
       <a class="map-link" href="#map" id="mapLink" aria-label="Мапа мясцін"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg><span data-t>Мапа</span></a>
-      <label class="lang-sel"><span class="vh" data-t>Мова сайта</span><select id="lang"><option value="be" lang="be">BY</option><option value="pl" lang="pl">PL</option><option value="en" lang="en">EN</option></select><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 10l5 5 5-5z"/></svg></label>
+      <label class="lang-sel"><span class="vh" data-t>Мова сайта</span><select id="lang"><option value="be" lang="be">Бел</option><option value="pl" lang="pl">Pol</option><option value="en" lang="en">Eng</option></select><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 10l5 5 5-5z"/></svg></label>
+      <nav class="lang-row" aria-label="Мова сайта"><a href="?" data-lang="be" lang="be">Бел</a><span aria-hidden="true">·</span><a href="?lang=pl" data-lang="pl" lang="pl">Pol</a><span aria-hidden="true">·</span><a href="?lang=en" data-lang="en" lang="en">Eng</a></nav>
       <button class="icon-btn" id="theme" aria-label="Змяніць тэму"></button>
     </div>
   </header>
@@ -860,6 +877,11 @@ a.place { text-decoration: none; }
       var q = u.toString(), to = location.pathname + (q ? '?' + q : '') + location.hash;
       if (to === location.pathname + location.search + location.hash) location.reload(); else location.href = to;
     });
+    // on wide screens the three languages stand in a row: Бел · Pol · Eng
+    document.querySelectorAll('.lang-row a').forEach(function (a) {
+      if (a.getAttribute('data-lang') === LANG) a.setAttribute('aria-current', 'true');
+      a.addEventListener('click', function (e) { e.preventDefault(); sel.value = a.getAttribute('data-lang'); sel.dispatchEvent(new Event('change')); });
+    });
   })();
   var ADULT = !!window.ADULT, NAME = t(ADULT ? 'Фрывольныя песні' : ALL ? 'Усе песні' : 'Мужчынскія песні'), MAIN = location.pathname + (BE ? '' : '?lang=' + LANG), A18 = location.pathname + '?r=18' + (BE ? '' : '&lang=' + LANG);
   // men's catalogue: its own band, a hollow rhombus with hooks ("рог") between small crosses, on top of the blue colours
@@ -918,6 +940,7 @@ a.place { text-decoration: none; }
     search: 'M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z',
     map: 'M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z',
     flag: 'M14.4 6 14 4H5v17h2v-7h5.6l.4 2h7V6z',
+    share: 'M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11A2.99 2.99 0 0 0 21 5a3 3 0 1 0-5.91.7L8.04 9.81A2.99 2.99 0 0 0 3 12a3 3 0 0 0 5.04 2.19l7.12 4.16c-.05.21-.08.43-.08.65A2.92 2.92 0 1 0 18 16.08z',
     edit: 'M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 0 0 0-1.41l-2.34-2.34a1 1 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z',
     print: 'M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z'
   };
@@ -946,6 +969,14 @@ a.place { text-decoration: none; }
   var fold = function (s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/ł/g, 'l'); };
   var hasMusic = function (s) { return s.group === 'own' || s.group === 'ref'; };
   var nf = new Intl.NumberFormat(LANG === 'be' ? 'ru' : LANG);   // Belarusian groups thousands with a space, as Russian does
+  // the phone opens its own share sheet, a computer copies the link
+  function shareSong() {
+    var url = location.href, title = document.title;
+    if (navigator.share && matchMedia('(pointer: coarse)').matches) { navigator.share({ title: title, url: url }).catch(function () {}); return; }
+    var done = function () { snack(t('Спасылка скапіявана')); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { prompt(t('Спасылка'), url); });
+    else prompt(t('Спасылка'), url);
+  }
   function snack(msg) { var el = $('snack'); el.textContent = msg; el.classList.add('on'); clearTimeout(snack.tm); snack.tm = setTimeout(function () { el.classList.remove('on'); }, 2600); }
   function isDark() { return st.theme ? st.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches; }
 
@@ -1584,18 +1615,20 @@ a.place { text-decoration: none; }
   function renderSong(s) {
     var h = [], i = visible.indexOf(s), p = i > 0 ? visible[i - 1] : null, n = i >= 0 && i < visible.length - 1 ? visible[i + 1] : null;
     h.push('<nav class="crumbbar" aria-label="' + t('Гартаць песні') + '"><button class="icon-btn" id="prev" aria-label="' + t('Папярэдняя песня') + '"' + (p ? '' : ' disabled') + '>' + svg('prev') + '</button>' +
-      '<span class="num">' + (i >= 0 ? t('{a} з {b}', { a: nf.format(i + 1), b: nf.format(visible.length) }) : '') + '</span>' +
+      '<span class="num">' + (i >= 0 ? nf.format(i + 1) + ' / ' + nf.format(visible.length) : '') + '</span>' +
       '<button class="icon-btn" id="next" aria-label="' + t('Наступная песня') + '"' + (n ? '' : ' disabled') + '>' + svg('next') + '</button>' +
-      '<span class="grow"></span><button class="pill" id="printBtn">' + svg('print', '') + t('Раздрукаваць') + '</button></nav>');
+      '<span class="grow"></span>' + (corrOn ? '<button class="pill" id="corrBtn" title="' + t('Паведаміць пра памылку') + '">' + svg('flag', '') + t('Памылка?') + '</button>' : '') +
+      '<button class="pill" id="printBtn">' + svg('print', '') + '<span class="pl-t">' + t('Раздрукаваць') + '</span></button>' +
+      '<button class="icon-btn" id="shareBtn" aria-label="' + t('Падзяліцца') + '" title="' + t('Падзяліцца') + '">' + svg('share') + '</button></nav>');
 
     h.push('<h1 class="song-title"><span class="no num"><small>' + NO + '</small>' + esc(s.id) + '</span>' + (BE ? esc(stress(s.title)) : '<span' + titleLang(s) + '>' + esc(T(s)) + '</span>') + '</h1>');
     h.push('<p class="print-src">' + t('Федароўскі М.') + ' Lud białoruski na Rusi Litewskiej, ' + pageRef(s.vol, s.page) + '. ' + (s.region ? esc(tv(s.region)) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
       (s.informant.length ? ' ' + t('Ад каго запісана') + ': ' + (BE ? s.informant_cyr.map(function (x) { return esc(x.replace(/́/g, '')); }) : s.informant.map(function (x) { return esc(noGrave(x)); })).join(', ') + '.' : '') + '</p>');
     h.push('<div class="subline"><button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="' + esc(t('Паказаць усе песні тыпу «{c}»', { c: tv(s.cat) })) + '">' + esc(tv(s.cat)) + '</button>');
-    if (ALL && !ADULT) h.push('<span class="pill">' + t(s.men ? 'ёсць у мужчынскім каталогу' : 'толькі ў агульным каталогу') + '</span>');
-    if (s.group === 'own') h.push('<span class="pill">' + noteIcon(s) + t('свае ноты') + '</span>');
-    else if (s.group === 'ref') h.push('<span class="pill">' + noteIcon(s) + t('на мелодыю № {n}', { n: esc(s.refm.filter(function (r) { return r.imgs.length; }).map(function (r) { return r.n; }).join(', ')) }) + '</span>');
-    if (corrOn) h.push('<button class="pill" id="corrBtn">' + svg('flag', '') + t('Паведаміць пра памылку') + '</button>');
+    // quiet tags describe the song; only buttons and links look like buttons
+    if (ALL && !ADULT && s.men) h.push('<a class="tag men" href="?k=men' + (BE ? '' : '&lang=' + LANG) + '#' + esc(s.id) + '" title="' + t('Адкрыць у мужчынскім каталогу') + '">' + t('мужчынская') + '</a>');
+    if (s.group === 'own') h.push('<span class="tag">' + noteIcon(s) + t('свае ноты') + '</span>');
+    else if (s.group === 'ref') h.push('<span class="tag">' + noteIcon(s) + t('на мелодыю № {n}', { n: esc(s.refm.filter(function (r) { return r.imgs.length; }).map(function (r) { return r.n; }).join(', ')) }) + '</span>');
     if (likesOn) h.push('<a class="pill" href="#likes" id="toLikes">' + svg('heart', '') + '<span>' + t('Адзначыць') + '</span><span class="num" id="likeCount"></span></a>');
     h.push('</div>');
 
@@ -2018,6 +2051,7 @@ a.place { text-decoration: none; }
     var pb = t.closest('[data-place]'); if (pb) { focusPlace(pb.getAttribute('data-place')); return; }
     if (t.closest('#homeSearch')) { openMenu(); $('q').focus(); return; }
     if (t.closest('#printBtn')) { stopPlay(); window.print(); return; }
+    if (t.closest('#shareBtn')) { shareSong(); return; }
     var zb = t.closest('.zoom-btn'); if (zb) { openZoom(zb.getAttribute('data-src')); return; }
     if (t.tagName === 'IMG' && t.matches(PH_SEL)) { phOpen(t); return; }
     if (t.closest('#prev')) return go(-1);
