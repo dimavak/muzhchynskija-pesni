@@ -779,7 +779,7 @@ a.place { text-decoration: none; }
   'use strict';
   var SONGS = window.SONGS || [], MEL = window.MELODIES || {}, CFG = window.SONGBOOK_CONFIG || {};
   // general catalogue: the men's songs (data.js) plus the other songs of vol. V (data-all.js, melodies-all.js)
-  var ALL = !!window.ALLCAT && !!window.SONGS_ALL, MEN_COUNT = SONGS.length, ALL_EXTRA = window.ADULT ? 70 : 2887;
+  var ALL = !!window.ALLCAT && !!window.SONGS_ALL, MEN_COUNT = SONGS.length, ALL_EXTRA = window.ADULT ? 70 : 2931;
   SONGS.forEach(function (s) { if (s.men == null) s.men = true; });
   if (ALL) {
     SONGS = SONGS.concat(window.SONGS_ALL);
@@ -1693,7 +1693,7 @@ a.place { text-decoration: none; }
       saveFilters(); compute(); counts(); syncUrl();
     }
     // numbers not on the site: no words and no notes cut from the scan (or absent from the edition)
-    var NOT_ON_SITE = { 2252: 1, 2416: 1, 2480: 1, 2504: 1, 2571: 1, 2695: 1, 2804: 1, 2930: 1, 3435: 1, 3449: 1, 3451: 1, 3452: 1, 3454: 1, 3472: 1, 3474: 1, 3482: 1, 3487: 1, 3554: 1, 3589: 1, 3601: 1, 3602: 1, 3708: 1, 3710: 1, 3724: 1, 3733: 1, 3802: 1, 3806: 1, 3819: 1, 3880: 1, 3908: 1, 3914: 1, 3919: 1, 3948: 1, 3977: 1, 4005: 1, 4011: 1, 4015: 1, 4021: 1, 4025: 1, 4029: 1, 4032: 1, 4035: 1, 4057: 1, 4158: 1, 1026: 1, 1027: 1 };
+    var NOT_ON_SITE = { 1026: 1, 1027: 1 };
     function inAllCat(n) { return n >= 1 && n <= 4171 && !(n >= 2960 && n <= 3312) && !NOT_ON_SITE[n]; }
     renderList();
     if (cur) renderSong(cur);
