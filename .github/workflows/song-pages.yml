@@ -1,0 +1,31 @@
+# Абнаўляе старонкі песень p/<нумар>.html (для перадпрагляду спасылак у мэсэнджарах),
+# калі мяняюцца даныя песень. Скрыпт: scripts/build-song-pages.mjs
+name: Song pages
+on:
+  push:
+    branches: [main]
+    paths:
+      - data.js
+      - data-all.js
+      - scripts/build-song-pages.mjs
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: song-pages
+  cancel-in-progress: false
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/build-song-pages.mjs
+      - name: Захаваць змены
+        run: |
+          git add -A p
+          if git diff --cached --quiet; then echo "Без змен"; exit 0; fi
+          git -c user.name="github-actions[bot]" -c user.email="41898699+github-actions[bot]@users.noreply.github.com" commit -m "Старонкі песень абноўлены"
+          git push

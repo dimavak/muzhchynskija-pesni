@@ -985,7 +985,8 @@ a.place { text-decoration: none; }
   })();
   // the phone opens its own share sheet, a computer copies the link
   function shareSong() {
-    var url = location.href, title = document.title;
+    // a song gets its own little page (p/<n>.html) whose link preview shows the song's title and first lines
+    var url = cur && !ADULT ? location.origin + location.pathname.replace(/[^/]*$/, '') + 'p/' + encodeURIComponent(cur.id) + '.html' + (BE ? '' : '?lang=' + LANG) : location.href, title = document.title;
     if (navigator.share && matchMedia('(pointer: coarse)').matches) { navigator.share({ title: title, url: url }).catch(function () {}); return; }
     var done = function () { snack(t('Спасылка скапіявана')); };
     if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(url).then(done, function () { prompt(t('Спасылка'), url); });
