@@ -15,7 +15,7 @@
     ["Толькі для дарослых", "Tylko dla dorosłych", "Adults only"],
     ["Мужчынскія песні — Федароўскі, т. V–VI", "Pieśni męskie — Federowski, t. V–VI", "Men’s songs — Federowski, vols. V–VI"],
     ["Фрывольныя песні (18+) — Федароўскі, т. VIa", "Pieśni frywolne (18+) — Federowski, t. VIa", "Bawdy songs (18+) — Federowski, vol. VIa"],
-    ["845 мужчынскіх песень з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.", "845 męskich pieśni z tomów V i VI „Ludu białoruskiego na Rusi Litewskiej” Michała Federowskiego: teksty w oryginale i cyrylicą, nuty i melodie do odsłuchania.", "845 men’s songs from volumes V and VI of Michał Federowski’s Lud białoruski na Rusi Litewskiej: lyrics in the original and in Cyrillic, sheet music and tunes to listen to."],
+    ["902 мужчынскія песні з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.", "902 męskich pieśni z tomów V i VI „Ludu białoruskiego na Rusi Litewskiej” Michała Federowskiego: teksty w oryginale i cyrylicą, nuty i melodie do odsłuchania.", "902 men’s songs from volumes V and VI of Michał Federowski’s Lud białoruski na Rusi Litewskiej: lyrics in the original and in Cyrillic, sheet music and tunes to listen to."],
     ["Мапа", "Mapa", "Map"],
     ["Мапа мясцін", "Mapa miejscowości", "Map of places"],
     ["Мова сайта", "Język strony", "Site language"],
