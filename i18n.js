@@ -17,6 +17,7 @@
     ["Фрывольныя песні (18+) — Федароўскі, т. VIa", "Pieśni frywolne (18+) — Federowski, t. VIa", "Bawdy songs (18+) — Federowski, vol. VIa"],
     ["931 мужчынская песня з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.", "931 męskich pieśni z tomów V i VI „Ludu białoruskiego na Rusi Litewskiej” Michała Federowskiego: teksty w oryginale i cyrylicą, nuty i melodie do odsłuchania.", "931 men’s songs from volumes V and VI of Michał Federowski’s Lud białoruski na Rusi Litewskiej: lyrics in the original and in Cyrillic, sheet music and tunes to listen to."],
     ["Беларускія народныя песні з V і VI тамоў «Lud białoruski na Rusi Litewskiej» Міхала Федароўскага: тэксты кірыліцай і ў арыгінале, ноты і мелодыі для праслухоўвання.", "Białoruskie pieśni ludowe z tomów V i VI „Ludu białoruskiego na Rusi Litewskiej” Michała Federowskiego: teksty w oryginale i cyrylicą, nuty i melodie do odsłuchania.", "Belarusian folk songs from volumes V and VI of Michał Federowski’s “Lud białoruski na Rusi Litewskiej”: lyrics in the original and in Cyrillic, scores and melodies to listen to."],
+    ["Песні Федароўскага", "Pieśni Federowskiego", "Federowski’s songs"],
     ["Памылка?", "Błąd?", "Error?"],
     ["Падзяліцца", "Udostępnij", "Share"],
     ["Спасылка скапіявана", "Link skopiowany", "Link copied"],

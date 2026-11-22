@@ -94,13 +94,19 @@ h1, h2, h3 { text-wrap: balance; }
 
 /* ---------- shell ---------- */
 .app { display: grid; grid-template-rows: auto 1fr; height: 100vh; height: 100dvh; }
-.mast { background: var(--page); border-bottom: 1px solid var(--rule); position: relative; z-index: 5; }
+.mast { background: var(--page); border-bottom: 1px solid var(--rule); position: relative; z-index: 5; min-width: 0; }
 .band { display: block; width: 100%; height: 21px; color: var(--ornament); }
 .mast-in { display: flex; align-items: center; gap: 8px; padding: 8px max(14px, env(safe-area-inset-right)) 10px max(10px, env(safe-area-inset-left)); }
 .brand { display: flex; align-items: center; gap: 12px; text-decoration: none; color: var(--ink); min-width: 0; padding: 4px 8px 4px 4px; border-radius: 8px; }
 .brand:hover { background: var(--hover); }
 .brand svg { width: 34px; height: 34px; color: var(--ornament); flex: none; }
 .brand b { display: block; font: 700 22px/1.1 var(--serif); letter-spacing: -.005em; }
+.brand b .sh { display: none; }
+@media (max-width: 600px) { .brand b .fl { display: none; } .brand b .sh { display: inline; } .brand { padding-right: 2px; } .brand b.long { font-size: clamp(15px, 4.2vw, 20px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; } .brand span:has(> b.long) { min-width: 0; } }
+@media (max-width: 380px) { .brand:has(b.long) svg { display: none; } .brand:has(b.long) { gap: 0; } }
+/* phones: the ornament band folds away while reading and comes back on scrolling up */
+@media (max-width: 760px) { .mast .band { transition: height .2s; } .mast.compact .band { height: 0; } }
+@media (max-width: 760px) and (prefers-reduced-motion: reduce) { .mast .band { transition: none; } }
 .brand small { display: block; font-size: 14px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .spacer { flex: 1; }
 .icon-btn { width: 44px; height: 44px; border: 0; border-radius: 22px; background: transparent; color: var(--ink-2); display: inline-grid; place-items: center; flex: none; transition: background-color .15s, color .15s; }
@@ -252,6 +258,9 @@ a.tag.men { color: #1d4f91; text-decoration: underline; text-decoration-thicknes
 a.tag.men:hover { text-decoration-thickness: 2px; }
 :root[data-theme="dark"] a.tag.men { color: #8fb6ff; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) a.tag.men { color: #8fb6ff; } }
+button.tag { border: 0; background: transparent; font: inherit; font-size: 15px; cursor: pointer; }
+.tag.jump { display: none; color: var(--thread); font-weight: 600; }
+@media (max-width: 760px) { .tag.jump { display: inline-flex; } }
 @media (max-width: 600px) { #printBtn .pl-t { display: none; } #printBtn { padding: 2px 9px; } }
 .grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(240px, 300px); gap: 0 48px; align-items: start; }
 .score-sec { max-width: 1040px; }
@@ -490,10 +499,10 @@ dialog.corr-dlg::backdrop { background: rgba(18, 12, 12, .5); }
   .map { height: 62vh; }
   /* the language switch has to fit next to the map and theme buttons on a phone */
   .mast-in { gap: 2px; padding-left: max(6px, env(safe-area-inset-left)); padding-right: max(8px, env(safe-area-inset-right)); }
-  .brand { gap: 8px; }
+  .brand { gap: 5px; }
   .brand b { font-size: clamp(17px, 5vw, 22px); }
-  .lang-sel select { padding: 0 20px 0 9px; }
-  .lang-sel svg { right: 2px; }
+  .lang-sel select { padding: 0 18px 0 6px; }
+  .lang-sel svg { right: 0; }
 }
 @media (max-width: 400px) {
   .adult .brand { gap: 0; }
@@ -555,11 +564,9 @@ dialog.ph-box .ph-prev svg { transform: rotate(180deg); }
 .hero-ph.split figure { position: relative; margin: 0; height: 100%; overflow: hidden; }
 .hero-ph.split figure img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
 .hero-ph.split figure::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #ddd6ca 0, rgba(221, 214, 202, 0) 26%), linear-gradient(0deg, rgba(221, 214, 202, .9) 0, rgba(221, 214, 202, 0) 14%); pointer-events: none; }
-.hero-ph.split.wide { grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); height: auto; min-height: min(84vh, 640px); }
-.hero-ph.split.wide figure { height: auto; align-self: center; padding: 28px clamp(16px, 3vw, 40px) 28px 0; }
-.hero-ph.split.wide figure img { height: auto; object-fit: initial; border-radius: 6px; box-shadow: 0 18px 40px -22px rgba(40, 20, 10, .55); }
-.hero-ph.split.wide figure::before { display: none; }
-.home .hero-ph.split.wide .ph-cap { position: static; display: block; max-width: none; margin-top: 10px; padding: 0; background: none; color: #6b605a; font-size: 13px; }
+.hero-ph.split.wide { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); height: min(80vh, 680px); }
+/* the general catalogue's landscape photo bleeds to the edge and fades into the linen, like the men's one */
+.hero-ph.split.wide figure img { object-position: 42% 50%; }
 .home .hero-ph.split .ph-cap { z-index: 2; top: 12px; right: 12px; bottom: auto; max-width: min(72%, 360px); padding: 4px 9px; border-radius: 6px; background: rgba(24, 17, 18, .6); color: #f4ede3; }
 .sec-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 52px 0 18px; }
 .sec-title h2 { margin: 0; font: 700 clamp(26px, 3vw, 34px)/1.15 var(--serif); }
@@ -631,14 +638,14 @@ a.place { text-decoration: none; }
   .people { flex-wrap: wrap; gap: 12px; } .people figure.wide { flex-basis: 100% !important; } .people figure:not(.wide) { min-width: 30%; }
   .hero-ph { min-height: 560px; height: 86vh; }
   .hero-ph.split { grid-template-columns: 1fr; height: auto; min-height: 0; }
-  .hero-ph.split figure { order: -1; height: 58vh; }
-  .hero-ph.split.wide { grid-template-columns: 1fr; min-height: 0; }
-  .hero-ph.split.wide figure { height: auto; padding: 0; }
-  .hero-ph.split.wide figure img { border-radius: 0; box-shadow: none; }
-  .hero-ph.split.wide .hero-in { margin-top: 0; padding-top: 18px; bottom: auto; }
-  .home .hero-ph.split.wide .ph-cap { margin: 6px 12px 0; font-size: 12px; }
+  /* phones: a lower photo, and the search right under the title, so both fit the first screen */
+  .hero-ph.split figure { order: -1; height: 40vh; min-height: 230px; }
+  .hero-ph.split.wide { grid-template-columns: minmax(0, 1fr); height: auto; }
+  .hero-ph.split .hero-in { display: flex; flex-direction: column; left: auto; right: auto; }
+  .hero-ph.split .home-search { order: 2; margin: 2px 0 20px; }
+  .home .hero-ph.split .sub { order: 3; margin-bottom: 0; }
   .hero-ph.split figure::before { background: linear-gradient(0deg, #ddd6ca 0, rgba(221, 214, 202, 0) 30%); }
-  .hero-ph.split .hero-in { padding: 0 20px 30px; margin-top: -40px; position: relative; z-index: 2; }
+  .hero-ph.split .hero-in { padding: 6px 20px 30px; margin-top: -10px; position: relative; z-index: 2; }
   .ph-cap { display: none; }
   .home .hero-ph.split .ph-cap { display: block; top: 10px; right: 10px; font-size: 12px; }
   .places { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 14px; }
@@ -893,7 +900,7 @@ a.place { text-decoration: none; }
   // which catalogue is open: brand title and the switch at the top of the list (in the 18+ section too)
   if (!ADULT || window.ADULT_OK) {
     document.querySelector('.brand b').textContent = NAME;
-    if (ALL && !ADULT) { document.querySelector('.brand b').textContent = t('Песні V і VI тамоў Федароўскага'); document.querySelector('.brand b').classList.add('long'); document.querySelector('.brand small').hidden = true; }
+    if (ALL && !ADULT) { document.querySelector('.brand b').innerHTML = '<span class="fl">' + t('Песні V і VI тамоў Федароўскага') + '</span><span class="sh">' + t('Песні Федароўскага') + '</span>'; document.querySelector('.brand b').classList.add('long'); document.querySelector('.brand small').hidden = true; }
     var ksw = document.getElementById('catsw'), kq = function (k) { var u = new URLSearchParams(location.search); ['g', 'q', 'v', 't', 's', 'm', 'i'].forEach(function (x) { u.delete(x); }); u.set('k', k); return location.pathname + '?' + u.toString(); };
     ksw.hidden = false;
     [].forEach.call(ksw.querySelectorAll('a'), function (a) { var k = a.getAttribute('data-k'); a.href = kq(k); if ((k === 'all') === ALL) a.setAttribute('aria-current', 'page'); });
@@ -969,6 +976,13 @@ a.place { text-decoration: none; }
   var fold = function (s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/ł/g, 'l'); };
   var hasMusic = function (s) { return s.group === 'own' || s.group === 'ref'; };
   var nf = new Intl.NumberFormat(LANG === 'be' ? 'ru' : LANG);   // Belarusian groups thousands with a space, as Russian does
+  // phones: fold the ornament band while scrolling down, show it again on scrolling up
+  (function () {
+    var mast = document.querySelector('.mast'), last = 0;
+    function on(y) { if (y > last + 6 && y > 80) mast.classList.add('compact'); else if (y < last - 6 || y < 40) mast.classList.remove('compact'); last = y; }
+    $('main').addEventListener('scroll', function () { on($('main').scrollTop); }, { passive: true });
+    window.addEventListener('scroll', function () { on(window.scrollY); }, { passive: true });
+  })();
   // the phone opens its own share sheet, a computer copies the link
   function shareSong() {
     var url = location.href, title = document.title;
@@ -1585,8 +1599,10 @@ a.place { text-decoration: none; }
         '<div class="p-field"><span class="p-lbl" id="lbl-tr">' + t('Вышыня') + '</span><span class="stepper" role="group" aria-labelledby="lbl-tr"><button id="pTrDown" aria-label="' + t('На паўтон ніжэй') + '">' + svg('minus', '') + '</button><output id="pTr" class="num" aria-live="polite"></output><button id="pTrUp" aria-label="' + t('На паўтон вышэй') + '">' + svg('plus', '') + '</button></span><small>' + t('паўтоны, каб падабраць пад свой голас') + '</small></div>' +
         '<div class="p-field"><label class="p-lbl" for="pTempo">' + t('Тэмп') + '</label><input type="range" id="pTempo" min="50" max="150" step="5" value="' + Math.round(S.tempo * 100) + '"><output id="pTempoV" class="num" for="pTempo"></output></div>' +
       '</div></div>' +
-      '<p class="pnote">' + t('«Паслухаць» іграе мелодыю адзін раз. «Развучыць» спачатку дае пачатковы тон, потым іграе павольней і паўтарае па крузе. Налады агульныя для ўсіх песень. Мелодыя распазнана з нот аўтаматычна, таму ў рытме ці асобных нотах магчымыя памылкі. Пстрыкніце на ноты, каб слухаць з гэтага месца; <kbd>Прабел</kbd> — паслухаць або спыніць.') + '</p>';
+      '<p class="pnote"' + (helpSeen() && !open ? ' hidden' : '') + '>' + t('«Паслухаць» іграе мелодыю адзін раз. «Развучыць» спачатку дае пачатковы тон, потым іграе павольней і паўтарае па крузе. Налады агульныя для ўсіх песень. Мелодыя распазнана з нот аўтаматычна, таму ў рытме ці асобных нотах магчымыя памылкі. Пстрыкніце на ноты, каб слухаць з гэтага месца; <kbd>Прабел</kbd> — паслухаць або спыніць.') + '</p>';
   }
+  // the help under the player is shown for the first few songs, later only with the settings open
+  function helpSeen() { return load('helpN', 0) > 3; }
   function apparatusHtml(s) {
     var h = ['<aside class="apparatus" aria-label="' + t('Звесткі пра запіс') + '"><dl>'];
     var fl = function (key, v, label, extra) { return '<button class="flink" data-facet-set="' + key + '" data-value="' + esc(v) + '"' + (extra || '') + '>' + label + '</button>'; };
@@ -1613,6 +1629,7 @@ a.place { text-decoration: none; }
   }
 
   function renderSong(s) {
+    save('helpN', load('helpN', 0) + 1);
     var h = [], i = visible.indexOf(s), p = i > 0 ? visible[i - 1] : null, n = i >= 0 && i < visible.length - 1 ? visible[i + 1] : null;
     h.push('<nav class="crumbbar" aria-label="' + t('Гартаць песні') + '"><button class="icon-btn" id="prev" aria-label="' + t('Папярэдняя песня') + '"' + (p ? '' : ' disabled') + '>' + svg('prev') + '</button>' +
       '<span class="num">' + (i >= 0 ? nf.format(i + 1) + ' / ' + nf.format(visible.length) : '') + '</span>' +
@@ -1629,6 +1646,7 @@ a.place { text-decoration: none; }
     if (ALL && !ADULT && s.men) h.push('<a class="tag men" href="?k=men' + (BE ? '' : '&lang=' + LANG) + '#' + esc(s.id) + '" title="' + t('Адкрыць у мужчынскім каталогу') + '">' + t('мужчынская') + '</a>');
     if (s.group === 'own') h.push('<span class="tag">' + noteIcon(s) + t('свае ноты') + '</span>');
     else if (s.group === 'ref') h.push('<span class="tag">' + noteIcon(s) + t('на мелодыю № {n}', { n: esc(s.refm.filter(function (r) { return r.imgs.length; }).map(function (r) { return r.n; }).join(', ')) }) + '</span>');
+    if (s.cyr.length && (s.own.length || s.refm.some(function (r) { return r.imgs.length; }))) h.push('<button class="tag jump" id="toText">' + t('Тэкст') + ' ↓</button>');
     if (likesOn) h.push('<a class="pill" href="#likes" id="toLikes">' + svg('heart', '') + '<span>' + t('Адзначыць') + '</span><span class="num" id="likeCount"></span></a>');
     h.push('</div>');
 
@@ -2052,6 +2070,7 @@ a.place { text-decoration: none; }
     if (t.closest('#homeSearch')) { openMenu(); $('q').focus(); return; }
     if (t.closest('#printBtn')) { stopPlay(); window.print(); return; }
     if (t.closest('#shareBtn')) { shareSong(); return; }
+    if (t.closest('#toText')) { var ht = $('h-text'); if (ht) ht.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' }); return; }
     var zb = t.closest('.zoom-btn'); if (zb) { openZoom(zb.getAttribute('data-src')); return; }
     if (t.tagName === 'IMG' && t.matches(PH_SEL)) { phOpen(t); return; }
     if (t.closest('#prev')) return go(-1);
@@ -2060,7 +2079,7 @@ a.place { text-decoration: none; }
     if (t.closest('#toLikes')) { e.preventDefault(); var L = $('likes'); if (L) L.scrollIntoView(); return; }
     if (t.closest('#pListen')) { if (playing() && FP.mode() === 'listen') stopPlay(); else startPlay('listen'); return; }
     if (t.closest('#pLearn')) { if (playing() && FP.mode() === 'learn') stopPlay(); else startPlay('learn', 0); return; }
-    var ps = t.closest('#pSet'); if (ps) { var pn = $('pPanel'); pn.hidden = !pn.hidden; ps.setAttribute('aria-expanded', !pn.hidden); save('panel', !pn.hidden); return; }
+    var ps = t.closest('#pSet'); if (ps) { var pn = $('pPanel'); pn.hidden = !pn.hidden; ps.setAttribute('aria-expanded', !pn.hidden); save('panel', !pn.hidden); var pq = document.querySelector('.pnote'); if (pq && helpSeen()) pq.hidden = pn.hidden; return; }
     var pi = t.closest('#pInst button'); if (pi) { FP.set('inst', pi.getAttribute('data-v')); updateUI(); return; }
     var po = t.closest('#pOct button'); if (po) { FP.set('octave', +po.getAttribute('data-v')); updateUI(); return; }
     if (t.closest('#pTrDown')) { FP.set('transpose', Math.max(-7, FP.settings.transpose - 1)); updateUI(); return; }
