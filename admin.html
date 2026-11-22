@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
-<title>Праўкі — адміністратар</title>
+<title>Адмінка — Мужчынскія песні</title>
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <style>
 :root {
@@ -58,10 +58,48 @@ blockquote mark { background: var(--thread-soft); color: var(--on-soft); }
 .row .grow { flex: 1; }
 .empty { color: var(--ink-3); padding: 24px 0; text-align: center; }
 .hint { color: var(--ink-3); font-size: 14.5px; margin: 0 0 16px; }
+.views { display: flex; gap: 4px; }
+.views button { min-height: 32px; padding: 0 12px; border-radius: 16px; border: 0; background: transparent; cursor: pointer; font-size: 15px; color: var(--ink-2); }
+.views button[aria-pressed=true] { background: var(--thread-soft); color: var(--on-soft); font-weight: 600; }
+main:has(.tiles) { max-width: 1100px; }
+.filters { display: flex; flex-wrap: wrap; gap: 0 16px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin: 0 0 14px; }
+.tile { border: 1px solid var(--rule); border-radius: 10px; padding: 10px 14px; }
+.tile small { display: block; color: var(--ink-3); font-size: 13.5px; }
+.tile b { display: block; font: 700 26px/1.2 var(--serif); font-variant-numeric: tabular-nums; }
+.tile span { display: block; color: var(--ink-3); font-size: 13px; }
+.panel { border: 1px solid var(--rule); border-radius: 10px; padding: 12px 16px; margin: 0 0 14px; min-width: 0; }
+.panel h3 { margin: 0 0 10px; font-size: 15px; }
+.panel .empty { padding: 8px 0; text-align: left; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0 14px; }
+.chart { position: relative; }
+.chart svg, .panel > svg { display: block; width: 100%; height: auto; }
+.grid { stroke: var(--rule); stroke-width: 1; }
+.ax { fill: var(--ink-3); font-size: 11px; } .ax.big { font-size: 22px; }
+.line { fill: none; stroke: var(--thread); stroke-width: 2; stroke-linejoin: round; }
+.area { fill: var(--thread); opacity: .1; }
+.xh { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
+.dot { fill: var(--thread); stroke: var(--page); stroke-width: 2; }
+.bar { fill: var(--thread); opacity: .85; } .bar:hover { opacity: 1; }
+.tip { position: absolute; top: 8px; min-width: 130px; padding: 6px 10px; border-radius: 8px; background: var(--page); border: 1px solid var(--rule-2); box-shadow: 0 4px 14px rgba(0,0,0,.12); font-size: 13.5px; pointer-events: none; }
+details { margin-top: 8px; font-size: 14px; } summary { cursor: pointer; color: var(--ink-3); }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+th { text-align: left; font-weight: 600; color: var(--ink-3); font-size: 13px; padding: 4px 6px; border-bottom: 1px solid var(--rule); }
+td { padding: 5px 6px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mini { display: inline-block; width: 60px; height: 8px; margin-right: 6px; background: var(--linen); border-radius: 4px; vertical-align: middle; overflow: hidden; }
+.mini i, .tr i { display: block; height: 100%; background: var(--thread); border-radius: 4px; }
+.bars { list-style: none; margin: 0; padding: 0; }
+.bars li { display: grid; grid-template-columns: minmax(80px, 38%) 1fr auto; gap: 8px; align-items: center; padding: 3px 0; font-size: 14.5px; }
+.bars .lb { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bars .tr { height: 10px; background: var(--linen); border-radius: 4px; overflow: hidden; }
+.bars .vl { font-variant-numeric: tabular-nums; text-align: right; } .bars .vl small { color: var(--ink-3); }
+#smap { height: 420px; border-radius: 8px; overflow: hidden; background: var(--linen); }
+@media (max-width: 600px) { header { flex-wrap: wrap; gap: 6px 10px; } header #who { display: none; } .top th:nth-child(4), .top td:nth-child(4), .top th:nth-child(6), .top td:nth-child(6) { display: none; } header h1 { font-size: 17px; } }
 </style>
 </head>
 <body>
-<header><h1>Праўкі ад наведвальнікаў</h1><span class="grow"></span><small id="who"></small><button class="btn" id="logout" hidden>Выйсці</button></header>
+<header><h1>Адмінка</h1><nav class="views" id="views" hidden><button data-view="corr" aria-pressed="true">Праўкі</button><button data-view="stats" aria-pressed="false">Статыстыка</button></nav><span class="grow"></span><small id="who"></small><button class="btn" id="logout" hidden>Выйсці</button></header>
 <main id="app"><p class="empty">Загрузка…</p></main>
 <script src="config.js"></script>
 <script>
@@ -72,7 +110,7 @@ blockquote mark { background: var(--thread-soft); color: var(--on-soft); }
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
   var KIND = { text: 'Тэкст песні', notes: 'Ноты ці мелодыя', place: 'Мясціна, павет, ад каго', translation: 'Пераклад ці надпісы', other: 'Іншае' };
   var STATUSES = [['новая', 'Новыя'], ['прынята', 'Прынятыя'], ['выпраўлена', 'Выпраўленыя'], ['адхілена', 'Адхіленыя'], ['', 'Усе']];
-  var sess = null, tab = 'новая', rows = [], blocked = {};
+  var sess = null, tab = 'новая', rows = [], blocked = {}, view = location.hash === '#stats' ? 'stats' : 'corr';
 
   function load() { try { return JSON.parse(localStorage.getItem(SK)); } catch (e) { return null; } }
   function store(s) { sess = s; try { if (s) localStorage.setItem(SK, JSON.stringify(s)); else localStorage.removeItem(SK); } catch (e) {} }
@@ -131,13 +169,16 @@ blockquote mark { background: var(--thread-soft); color: var(--on-soft); }
 
   function render() {
     document.getElementById('logout').hidden = !sess;
+    if (!sess) document.getElementById('views').hidden = true;
+    [].forEach.call(document.querySelectorAll('#views button'), function (x) { x.setAttribute('aria-pressed', x.getAttribute('data-view') === view); });
     document.getElementById('who').textContent = sess ? sess.email || '' : '';
     if (!URL0 || !KEY) { app.innerHTML = '<p class="msg">У config.js не зададзены corrections.url і corrections.key.</p>'; return; }
     if (!sess) { loginView(app.dataset.err); delete app.dataset.err; return; }
     if (!sess.email) api('/auth/v1/user').then(function (u) { if (u && u.email && sess) { sess.email = u.email; store(sess); document.getElementById('who').textContent = u.email; } }).catch(function () {});
     api('/rest/v1/rpc/is_admin', { method: 'POST', body: {} }).then(function (ok) {
       if (!ok) { app.innerHTML = '<p class="msg">Гэты ўліковы запіс не адміністратар. Запусціце supabase/corrections-2-admin.sql пасля стварэння карыстальніка.</p>'; return; }
-      refresh();
+      document.getElementById('views').hidden = false;
+      if (view === 'stats') statsView(); else refresh();
     }).catch(fail);
   }
   function fail(err) { app.innerHTML = '<p class="msg">' + esc(err.message) + '</p>'; }
@@ -156,7 +197,7 @@ blockquote mark { background: var(--thread-soft); color: var(--on-soft); }
 
   function fmtDate(d) { var p = function (n) { return (n < 10 ? '0' : '') + n; }; return p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
   function songLink(r) {
-    var base = 'index.html' + (r.section === '18' ? '?r=18' : '');
+    var base = 'index.html' + (r.section === '18' ? '?r=18&k=all' : '?k=all');
     return '<a href="' + base + '#' + encodeURIComponent(r.song_id) + '" target="_blank" rel="noopener">№ ' + esc(r.song_id) + (r.section === '18' ? ' (18+)' : '') + '</a>';
   }
   function card(r) {
@@ -182,9 +223,123 @@ blockquote mark { background: var(--thread-soft); color: var(--on-soft); }
       (rows.length ? rows.map(card).join('') : '<p class="empty">Тут пуста.</p>');
   }
 
+  // =====================================================================
+  //  Statistics (supabase/stats.sql → stats_summary)
+  // =====================================================================
+  var SP = { days: 30, cat: '' }, SDATA = null, leafletP = null, placesP = null, smap = null;
+  var CAT = { '': 'Усе раздзелы', all: 'Агульны каталог', men: 'Мужчынскі', '18': '18+' };
+  var LANGN = { be: 'беларуская', pl: 'польская', en: 'англійская' };
+  var DEVN = { phone: 'тэлефон', tablet: 'планшэт', desktop: 'камп’ютар' };
+  var nf = new Intl.NumberFormat('uk');   // «1 050»: Intl часта не ведае be
+  function iso(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function dur(s) { s = Math.round(+s || 0); if (s < 60) return s + ' с'; if (s < 3600) return Math.floor(s / 60) + ' хв ' + (s % 60) + ' с'; return Math.floor(s / 3600) + ' г ' + Math.round(s % 3600 / 60) + ' хв'; }
+  function loadScript(src) { return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
+  function places() { return placesP || (placesP = window.PLACES ? Promise.resolve() : loadScript('places.js')); }
+  function leaflet() {
+    if (leafletP) return leafletP;
+    var B = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min';
+    var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = B + '.css'; document.head.appendChild(l);
+    return (leafletP = loadScript(B + '.js'));
+  }
+  function statsView() {
+    var to = new Date(), from = new Date(Date.now() - (SP.days - 1) * 864e5);
+    app.innerHTML = '<div class="filters"><div class="tabs" id="sDays">' + [[7, '7 дзён'], [30, '30 дзён'], [90, '90 дзён'], [365, 'Год']].map(function (d) { return '<button data-days="' + d[0] + '" aria-pressed="' + (SP.days === d[0]) + '">' + d[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="tabs" id="sCat">' + ['', 'all', 'men', '18'].map(function (k) { return '<button data-cat="' + k + '" aria-pressed="' + (SP.cat === k) + '">' + CAT[k] + '</button>'; }).join('') + '</div></div><p class="empty">Загрузка…</p>';
+    api('/rest/v1/rpc/stats_summary', { method: 'POST', body: { p_from: iso(from), p_to: iso(to), p_catalog: SP.cat || null } })
+      .then(function (d) { SDATA = d; return places(); })
+      .then(function () { drawStats(SDATA); })
+      .catch(function (err) { app.querySelector('.empty').textContent = /stats_summary|PGRST202|42883/.test(err.message) ? 'Статыстыка яшчэ не ўключана: запусціце supabase/stats.sql у SQL Editor.' : err.message; });
+  }
+  function tile(label, value, sub) { return '<div class="tile"><small>' + label + '</small><b>' + value + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</div>'; }
+  function barList(title, obj, names, total) {
+    var ks = Object.keys(obj || {}).sort(function (a, b) { return obj[b] - obj[a]; });
+    if (!ks.length) return '<section class="panel"><h3>' + title + '</h3><p class="empty">Няма даных</p></section>';
+    var max = obj[ks[0]], sum = total || ks.reduce(function (a, k) { return a + obj[k]; }, 0);
+    return '<section class="panel"><h3>' + title + '</h3><ul class="bars">' + ks.slice(0, 12).map(function (k) {
+      var nm = (names && names[k]) || (k === '?' ? 'невядома' : k);
+      return '<li title="' + esc(nm) + ': ' + nf.format(obj[k]) + '"><span class="lb">' + esc(nm) + '</span><span class="tr"><i style="width:' + Math.max(2, obj[k] / max * 100) + '%"></i></span><span class="vl">' + nf.format(obj[k]) + ' <small>' + Math.round(obj[k] / sum * 100) + '%</small></span></li>';
+    }).join('') + '</ul></section>';
+  }
+  function lineChart(days) {
+    var W = Math.max(300, Math.min(1060, app.clientWidth - 34)), H = W < 500 ? 180 : 220, L = 36, R = 10, T = 12, B = 26, n = days.length;
+    var max = Math.max(4, Math.max.apply(null, days.map(function (d) { return d.visitors; })));
+    var step = Math.pow(10, Math.floor(Math.log10(max))), nice = Math.ceil(max / step) * step; if (nice / step > 5) step *= 2;
+    var x = function (i) { return L + (n < 2 ? 0 : i * (W - L - R) / (n - 1)); }, y = function (v) { return T + (1 - v / nice) * (H - T - B); };
+    var g = [];
+    for (var v = 0; v <= nice; v += step) g.push('<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" class="grid"/><text x="' + (L - 6) + '" y="' + (y(v) + 4) + '" class="ax" text-anchor="end">' + nf.format(v) + '</text>');
+    var every = Math.ceil(n / (W < 500 ? 4 : 8));
+    days.forEach(function (d, i) { if ((i % every === 0 && n - 1 - i >= every / 2) || i === n - 1) g.push('<text x="' + x(i) + '" y="' + (H - 6) + '" class="ax" text-anchor="' + (i === n - 1 ? 'end' : i === 0 ? 'start' : 'middle') + '">' + d.day.slice(8, 10) + '.' + d.day.slice(5, 7) + '</text>'); });
+    var pts = days.map(function (d, i) { return x(i).toFixed(1) + ',' + y(d.visitors).toFixed(1); }).join(' ');
+    var area = 'M' + x(0) + ',' + y(0) + ' L' + pts.split(' ').join(' L') + ' L' + x(n - 1) + ',' + y(0) + 'Z';
+    return '<div class="chart" id="lc"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Наведвальнікі па днях">' + g.join('') +
+      '<path d="' + area + '" class="area"/><polyline points="' + pts + '" class="line"/><line class="xh" y1="' + T + '" y2="' + (H - B) + '" x1="-10" x2="-10"/><circle class="dot" r="5" cx="-10" cy="-10"/>' +
+      '<rect x="' + L + '" y="' + T + '" width="' + (W - L - R) + '" height="' + (H - T - B) + '" fill="transparent" class="hit"/></svg><div class="tip" hidden></div></div>';
+  }
+  function hoursChart(h) {
+    var max = 1; for (var i = 0; i < 24; i++) max = Math.max(max, h[i] || 0);
+    var b = []; for (i = 0; i < 24; i++) { var v = h[i] || 0, bh = v / max * 100; b.push('<rect x="' + (i * 30 + 3) + '" y="' + (110 - bh) + '" width="24" height="' + Math.max(bh, 0.5) + '" rx="3" class="bar"><title>' + i + ':00–' + (i + 1) + ':00 — ' + nf.format(v) + ' сесій</title></rect>' + (i % 3 === 0 ? '<text x="' + (i * 30 + 15) + '" y="150" class="ax big" text-anchor="middle">' + i + '</text>' : '')); }
+    return '<svg viewBox="0 0 720 160" role="img" aria-label="Сесіі па гадзінах">' + b.join('') + '</svg>';
+  }
+  function placeName(k) { var p = (window.PLACES || {})[k]; return p ? (p.be || (p.pl && p.pl[0]) || k) + (p.st === 'approx' ? ' (прыблізна)' : '') : k; }
+  function songHref(s) { return 'index.html?' + (s.catalog === '18' ? 'r=18&k=all' : 'k=all') + '#' + encodeURIComponent(s.song_id); }
+  function drawStats(d) {
+    var T0 = d.totals || {}, days = d.days || [];
+    var h = [app.querySelector('.filters').outerHTML];
+    h.push('<div class="tiles">' + tile('Наведвальнікі', nf.format(T0.visitors || 0), 'унікальныя за кожны дзень, сума') + tile('Сесіі', nf.format(T0.sessions || 0)) +
+      tile('Сярэдняя сесія', dur(T0.avg_session), 'медыяна ' + dur(T0.median_session)) + tile('Адкрыта песень', nf.format(T0.songs || 0), (T0.avg_songs || 0) + ' за сесію') +
+      tile('Час над тэкстамі', dur(T0.song_seconds)) + tile('Праслухоўванні', nf.format(T0.plays || 0)) + '</div>');
+    h.push('<section class="panel"><h3>Наведвальнікі па днях</h3>' + lineChart(days) + '<details><summary>Табліца</summary><table><thead><tr><th>Дзень</th><th>Наведвальнікі</th><th>Сесіі</th><th>Песні</th></tr></thead><tbody>' +
+      days.slice().reverse().map(function (x) { return '<tr><td>' + x.day + '</td><td>' + x.visitors + '</td><td>' + x.sessions + '</td><td>' + x.songs + '</td></tr>'; }).join('') + '</tbody></table></details></section>');
+    var top = d.top_songs || [], tmax = top.length ? top[0].views : 1;
+    h.push('<section class="panel"><h3>Папулярныя песні</h3>' + (top.length ? '<table class="top"><thead><tr><th>№</th><th>Песня</th><th>Прагляды</th><th>Людзей</th><th>Сярэдні час</th><th>Слухалі</th></tr></thead><tbody>' + top.map(function (s) {
+      return '<tr><td><a href="' + songHref(s) + '" target="_blank" rel="noopener">' + esc(s.song_id) + '</a>' + (s.catalog === '18' ? ' <small>18+</small>' : '') + '</td><td>' + esc(s.title || '') + '</td><td class="num"><span class="mini"><i style="width:' + Math.max(3, s.views / tmax * 100) + '%"></i></span>' + nf.format(s.views) + '</td><td class="num">' + nf.format(s.visitors) + '</td><td class="num">' + (s.views ? dur(s.seconds / s.views) : '—') + '</td><td class="num">' + nf.format(s.plays) + '</td></tr>';
+    }).join('') + '</tbody></table>' : '<p class="empty">Няма даных</p>') + '</section>');
+    h.push('<section class="panel"><h3>Мясціны песень па праглядах</h3><div id="smap"></div><p class="hint">Памер кружка — колькі разоў адкрывалі песні, запісаныя ў гэтай мясціне.</p></section>');
+    h.push('<div class="grid2">' + barList('Адкуль прыходзяць', d.referrer) + barList('Мова сайта', d.lang, LANGN) + barList('Прылада', d.device, DEVN) + barList('Краіна', d.country) + barList('Раздзел', d.catalog, CAT) +
+      '<section class="panel"><h3>Час (па Варшаве)</h3>' + hoursChart(d.hours || {}) + '</section></div>');
+    h.push('<p class="hint">Без кукі і без старонніх лічыльнікаў. «Наведвальнік» пазнаецца па ананімным хэшы, які мяняецца кожныя суткі, таму аднаго чалавека за некалькі дзён разам не лічым. Не ўлічваюцца браўзеры з «Do Not Track».</p>');
+    app.innerHTML = h.join('');
+    hookLine(days);
+    drawMap(d.places || {});
+  }
+  function hookLine(days) {
+    var box = document.getElementById('lc'); if (!box || !days.length) return;
+    var svgEl = box.querySelector('svg'), tip = box.querySelector('.tip'), xh = box.querySelector('.xh'), dot = box.querySelector('.dot'), hit = box.querySelector('.hit');
+    var W = +svgEl.getAttribute('viewBox').split(' ')[2], L = 36, R = 10, n = days.length, pts = box.querySelector('.line').getAttribute('points').split(' ').map(function (p) { return p.split(',').map(Number); });
+    function move(e) {
+      var r = svgEl.getBoundingClientRect(), vx = (e.clientX - r.left) / r.width * W, i = n < 2 ? 0 : Math.round((vx - L) / ((W - L - R) / (n - 1)));
+      i = Math.max(0, Math.min(n - 1, i)); var p = pts[i], d = days[i];
+      xh.setAttribute('x1', p[0]); xh.setAttribute('x2', p[0]); dot.setAttribute('cx', p[0]); dot.setAttribute('cy', p[1]);
+      tip.hidden = false; tip.innerHTML = '<b>' + d.day.slice(8, 10) + '.' + d.day.slice(5, 7) + '.' + d.day.slice(0, 4) + '</b><br>Наведвальнікі: ' + d.visitors + '<br>Сесіі: ' + d.sessions + '<br>Песні: ' + d.songs;
+      var px = p[0] / W * r.width; tip.style.left = Math.min(r.width - 150, Math.max(0, px + 12)) + 'px';
+    }
+    hit.addEventListener('pointermove', move); hit.addEventListener('pointerdown', move);
+    hit.addEventListener('pointerleave', function () { tip.hidden = true; xh.setAttribute('x1', -10); xh.setAttribute('x2', -10); dot.setAttribute('cx', -10); });
+  }
+  function drawMap(pl) {
+    var el = document.getElementById('smap'); if (!el) return;
+    var P = window.PLACES || {}, ks = Object.keys(pl).filter(function (k) { return P[k]; });
+    if (!ks.length) { el.innerHTML = '<p class="empty">Няма даных</p>'; el.style.height = 'auto'; return; }
+    leaflet().then(function () {
+      if (smap) { smap.remove(); smap = null; }
+      smap = window.L.map(el, { scrollWheelZoom: false });
+      window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 13, attribution: '© OpenStreetMap' }).addTo(smap);
+      var max = Math.max.apply(null, ks.map(function (k) { return pl[k]; })), b = [];
+      ks.sort(function (a, c) { return pl[c] - pl[a]; }).forEach(function (k) {
+        var p = P[k], r = 5 + 20 * Math.sqrt(pl[k] / max);
+        window.L.circleMarker([p.lat, p.lon], { radius: r, color: '#fff', weight: 2, fillColor: '#b0141e', fillOpacity: .7 })
+          .bindTooltip(esc(placeName(k)) + ': ' + nf.format(pl[k])).addTo(smap);
+        b.push([p.lat, p.lon]);
+      });
+      smap.fitBounds(b, { padding: [30, 30], maxZoom: 10 });
+    }).catch(function () { el.innerHTML = '<p class="empty">Не атрымалася загрузіць мапу.</p>'; });
+  }
+
   function patch(id, body) { return api('/rest/v1/corrections?id=eq.' + id, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: body }); }
   app.addEventListener('click', function (e) {
     var t = e.target.closest('[data-tab]'); if (t) { tab = t.getAttribute('data-tab'); refresh(); return; }
+    var dd = e.target.closest('[data-days]'); if (dd) { SP.days = +dd.getAttribute('data-days'); statsView(); return; }
+    var dc = e.target.closest('[data-cat]'); if (dc) { SP.cat = dc.getAttribute('data-cat'); statsView(); return; }
     var b = e.target.closest('[data-a]'); if (!b) return;
     var c = b.closest('.card'), id = +c.getAttribute('data-id'), a = b.getAttribute('data-a'), ta = c.querySelector('textarea.sugg');
     var body = { admin_note: c.querySelector('.note').value.trim() || null };
@@ -207,6 +362,13 @@ blockquote mark { background: var(--thread-soft); color: var(--on-soft); }
   document.getElementById('logout').addEventListener('click', function () {
     if (sess) fetch(URL0 + '/auth/v1/logout', { method: 'POST', headers: hdr() }).catch(function () {});
     store(null); render();
+  });
+  document.getElementById('views').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-view]'); if (!b) return;
+    view = b.getAttribute('data-view');
+    [].forEach.call(this.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', x === b); });
+    history.replaceState(null, '', location.pathname + (view === 'stats' ? '#stats' : ''));
+    if (view === 'stats') statsView(); else refresh();
   });
   render();
 })();
