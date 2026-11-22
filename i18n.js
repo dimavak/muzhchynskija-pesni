@@ -134,6 +134,7 @@
     ["Запіс", "Zapis", "Record"],
     ["Танец", "Taniec", "Dance"],
     ["Заўвага", "Uwaga", "Note"],
+    ["Заўвагі", "Uwagi", "Notes"],
     ["Крыніца", "Źródło", "Source"],
     ["Федароўскі, т. {v}", "Federowski, t. {v}", "Federowski, vol. {v}"],
     [", с. {p}", ", s. {p}", ", p. {p}"],

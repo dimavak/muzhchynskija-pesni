@@ -1359,7 +1359,7 @@ a.place { text-decoration: none; }
     // the Polish version shows the tempo as the edition gives it, the others translate it and add the original
     if ((s.tempo_by || []).length) h.push('<div><dt>' + t('Тэмп') + '</dt><dd>' + (LANG === 'pl' ? '<span class="orig" translate="no">' + esc(s.tempo_lat.join('; ')) + '</span>' : esc(s.tempo_by.map(tv).filter(Boolean).join(', ')) + ' <span class="orig" lang="pl" translate="no">(' + esc(s.tempo_lat.join('; ')) + ')</span>') + '</dd></div>');
     if (s.melref && !s.refm.length) h.push('<div><dt>' + t('Мелодыя') + '</dt><dd class="orig" lang="pl" translate="no">' + esc(s.melref) + '</dd></div>');
-    if (s.notes.length) h.push('<div><dt>' + t('Заўвага') + '</dt><dd class="orig" translate="no">' + esc(s.notes.join('; ')) + '</dd></div>');
+    if (s.notes.length) h.push('<div><dt>' + t(s.notes.length > 1 ? 'Заўвагі' : 'Заўвага') + '</dt><dd class="orig" translate="no">' + s.notes.map(esc).join('<br>') + '</dd></div>');
     h.push('<div><dt>' + t('Крыніца') + '</dt><dd>' + fl('vol', 'т. ' + s.vol, t('Федароўскі, т. {v}', { v: s.vol })) + t(', с. {p}', { p: s.pages && s.pages.length > 1 ? s.pages[0] + '–' + s.pages[s.pages.length - 1] : s.page }) + '</dd></div>');
     h.push('</dl>');
     if (s.footnotes.length) h.push('<div class="fn"><h3>' + t('Зноскі выдання') + '</h3><p class="fn-note">' + t('Па-польску, як у арыгінале; «v.» — варыянт радка.') + '</p><ol lang="pl" translate="no">' + s.footnotes.map(function (f) { return '<li>' + esc(f.replace(/^\d+\s+/, '')) + '</li>'; }).join('') + '</ol></div>');
