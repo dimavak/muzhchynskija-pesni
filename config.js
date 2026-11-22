@@ -11,7 +11,7 @@ window.SONGBOOK_CONFIG = {
   // Project URL і anon / publishable key з Supabase → Project Settings → API. Яны не сакрэтныя: даступ абараняюць
   // правілы ў базе (supabase/corrections.sql). Ключ service_role / secret сюды ніколі не ўстаўляць.
   corrections: {
-    url: '',         // напрыклад 'https://abcd1234.supabase.co'
-    key: ''          // anon / publishable key
+    url: 'https://zrrkkwtnexnreptvovkj.supabase.co',
+    key: 'sb_publishable_63-aNA-j51ueY0cUqx77pQ_c02ZobwU'
   }
 };
