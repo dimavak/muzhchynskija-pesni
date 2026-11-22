@@ -1,0 +1,63 @@
+# Штодня ўносіць прынятыя ў адмінцы праўкі тэксту і адкрывае (або абнаўляе) адзін PR «Праўкі з сайта».
+# Патрэбна адзін раз:
+#   1) Settings → Secrets and variables → Actions → New repository secret: SUPABASE_SECRET_KEY
+#      (Supabase → Project Settings → API Keys → Secret key, пачынаецца з sb_secret_);
+#   2) Settings → Actions → General → Workflow permissions: «Allow GitHub Actions to create and approve pull requests».
+# Запусціць неадкладна: Actions → Apply corrections → Run workflow.
+name: Apply corrections
+on:
+  schedule:
+    - cron: '23 4 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+  pull-requests: write
+concurrency:
+  group: apply-corrections
+  cancel-in-progress: false
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    env:
+      BRANCH: corrections/auto
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Праверыць сакрэт
+        env:
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          if [ -z "$SUPABASE_SECRET_KEY" ]; then echo "::warning::Сакрэт SUPABASE_SECRET_KEY не зададзены, прапускаю"; echo "skip=1" >> "$GITHUB_ENV"; fi
+      - name: Унесці праўкі
+        if: env.skip != '1'
+        id: apply
+        env:
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          node scripts/apply-corrections.mjs
+          cat corrections-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: PR
+        if: env.skip != '1' && steps.apply.outputs.applied != '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -C "$BRANCH"
+          git add data*.js texts-lat*.js
+          git commit -q -m "Праўкі з сайта: ${{ steps.apply.outputs.applied }}"
+          git push -f origin "$BRANCH"
+          num=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$num" ]; then
+            gh pr edit "$num" --title "Праўкі з сайта (${{ steps.apply.outputs.applied }})" --body-file corrections-report.md
+          else
+            gh pr create --base main --head "$BRANCH" --title "Праўкі з сайта (${{ steps.apply.outputs.applied }})" --body-file corrections-report.md --assignee "${{ github.repository_owner }}"
+          fi
+      - name: Закрыць пусты PR
+        if: env.skip != '1' && steps.apply.outputs.applied == '0'
+        run: |
+          num=$(gh pr list --head "$BRANCH" --state open --json number --jq '.[0].number')
+          if [ -n "$num" ]; then gh pr close "$num" --delete-branch --comment "Новых правак няма: усё ўжо ў main або адхілена."; fi

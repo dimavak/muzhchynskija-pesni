@@ -1260,7 +1260,9 @@ a.place { text-decoration: none; }
   function startPlay(mode, from, opts) {
     if (!FP || !FP.supported()) { snack(t('Гэты браўзер не ўмее прайграваць гук.')); return; }
     if (!P.mel || !P.mel.ev.length) return;
+    var was = playing();
     if (FP.play(mode, from == null ? P.idx : from, opts)) { cancelAnimationFrame(P.raf); loop(); }
+    if (!was && playing()) track('play', { song_id: cur && cur.id, mode: mode });
     updateUI();
   }
   function stopPlay() { if (FP) FP.stop(); cancelAnimationFrame(P.raf); updateUI(); }
@@ -1353,7 +1355,7 @@ a.place { text-decoration: none; }
   var CC = CFG.corrections || {};
   var corrOn = !!(CC.url && CC.key);
   var KINDS = [['text', 'Тэкст песні'], ['notes', 'Ноты ці мелодыя'], ['place', 'Мясціна, павет, ад каго запісана'], ['translation', 'Пераклад ці надпісы сайта'], ['other', 'Іншае']];
-  var corrSel = null, corrCtx = null;
+  var corrSel = null, corrCtx = null, corrCtx0 = 0;
   // what is selected in the song text: the quote, its line and a little text around it
   function selectionInfo() {
     var sel = window.getSelection(); if (!sel || sel.isCollapsed || !sel.rangeCount) return null;
@@ -1435,12 +1437,12 @@ a.place { text-decoration: none; }
     $('corrSugg').value = s ? s.quote : '';
     $('corrCom').value = ''; $('corrWeb').value = ''; $('corrErr').hidden = true; $('corrSend').disabled = false;
     corrKindUI();
-    d.showModal();
+    d.showModal(); corrCtx0 = Date.now();
     var ta = $('corrSugg'); ta.focus(); if (s) ta.setSelectionRange(0, ta.value.length);
   }
   function corrError(code) {
     var m = { empty: 'Напішыце, як павінна быць, або каментар.', same: 'Прапанова супадае з выдзеленым тэкстам. Выпраўце яе або дадайце каментар.',
-      email: 'Праверце email.', rate: 'Занадта шмат правак за кароткі час. Паспрабуйце пазней.' }[code] || 'Не атрымалася адправіць. Праверце сетку і паспрабуйце яшчэ раз.';
+      email: 'Праверце email.', links: 'Калі ласка, без спасылак на сайты.', rate: 'Занадта шмат правак за кароткі час. Паспрабуйце пазней.' }[code] || 'Не атрымалася адправіць. Праверце сетку і паспрабуйце яшчэ раз.';
     var el = $('corrErr'); el.textContent = t(m); el.hidden = false; $('corrSend').disabled = false;
   }
   function sendCorr() {
@@ -1451,7 +1453,7 @@ a.place { text-decoration: none; }
     save('corr.who', { name: name, mail: mail });
     var p = { song_id: cur.id, section: ADULT ? '18' : 'main', kind: $('corrKind').value, script: s.script || '', line_no: s.line || '',
       quote: s.quote || '', context_before: s.before || '', context_after: s.after || '', suggestion: sugg, comment: com,
-      author_name: name, author_email: mail, ui_lang: LANG, page_url: location.href.slice(0, 500), website: $('corrWeb').value };
+      author_name: name, author_email: mail, ui_lang: LANG, elapsed_ms: Date.now() - corrCtx0, page_url: location.href.slice(0, 500), website: $('corrWeb').value };
     var hd = { 'Content-Type': 'application/json', apikey: CC.key };
     if (/^eyJ/.test(CC.key)) hd.Authorization = 'Bearer ' + CC.key;   // the old JWT anon key; the new publishable key goes only in apikey
     $('corrSend').disabled = true; $('corrErr').hidden = true;
@@ -1464,6 +1466,60 @@ a.place { text-decoration: none; }
         snack(t('Дзякуй! Праўка адпраўлена, мы яе праглядзім.'));
       })
       .catch(function () { corrError('net'); });
+  }
+
+  // =====================================================================
+  //  Statistics: anonymous events to track() in Supabase (supabase/stats.sql). No cookies and nothing personal:
+  //  a random id of this tab's session, the page, the song, active seconds, language, kind of device.
+  //  Off on localhost and with «Do Not Track»; config.js corrections.stats: false turns it off.
+  // =====================================================================
+  var statOn = corrOn && CC.stats !== false && !/^(localhost|127\.|\[?::1)/.test(location.hostname) && navigator.doNotTrack !== '1';
+  var statSess = (function () {
+    var v = Math.random().toString(36).slice(2, 12) + Date.now().toString(36);
+    try { var o = sessionStorage.getItem('fed5.sess'); if (o) return o; sessionStorage.setItem('fed5.sess', v); } catch (e) {}
+    return v;
+  })();
+  var statDev = matchMedia('(pointer: coarse)').matches ? (Math.min(screen.width, screen.height) >= 600 ? 'tablet' : 'phone') : 'desktop';
+  function track(type, o) {
+    if (!statOn) return;
+    var p = { session: statSess, type: type, catalog: ADULT ? '18' : ALL ? 'all' : 'men', lang: LANG, device: statDev };
+    for (var k in o || {}) p[k] = o[k];
+    var hd = { 'Content-Type': 'application/json', apikey: CC.key };
+    if (/^eyJ/.test(CC.key)) hd.Authorization = 'Bearer ' + CC.key;
+    try { fetch(CC.url.replace(/\/+$/, '') + '/rest/v1/rpc/track', { method: 'POST', headers: hd, body: JSON.stringify({ p: p }), keepalive: true }).catch(function () {}); } catch (e) {}
+  }
+  // time counts only while the page is visible; song time goes in pieces (their sum is the time on the song)
+  var statAct = { total: 0, since: document.hidden ? 0 : Date.now() }, statSong = { id: null, total: 0, since: 0 };
+  function statSongFlush(keep) {
+    if (!statSong.id) return;
+    var ms = statSong.total + (statSong.since ? Date.now() - statSong.since : 0);
+    if (ms >= 2000) track('song_time', { song_id: statSong.id, seconds: Math.round(ms / 1000) });
+    statSong = keep ? { id: statSong.id, total: 0, since: 0 } : { id: null, total: 0, since: 0 };
+  }
+  function statShow(s) {
+    if (s && s.id === statSong.id) return;
+    statSongFlush(false);
+    if (!s) return;
+    statSong = { id: s.id, total: 0, since: document.hidden ? 0 : Date.now() };
+    var SPx = (ADULT ? window.SONG_PLACES_18 : window.SONG_PLACES) || {};
+    track('song', { page: 'song', song_id: s.id, song_title: String(s.title || '').replace(/́/g, '').slice(0, 160), places: (SPx[s.id] || []).slice(0, 30) });
+  }
+  function statHide() {
+    if (statAct.since) { statAct.total += Date.now() - statAct.since; statAct.since = 0; }
+    statSongFlush(true);
+    track('end', { seconds: Math.round(statAct.total / 1000) });
+  }
+  if (statOn) {
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) statHide();
+      else { statAct.since = Date.now(); if (statSong.id) statSong.since = Date.now(); }
+    });
+    window.addEventListener('pagehide', function () { if (!document.hidden) statHide(); });
+    (function () {
+      var h = decodeURIComponent(location.hash.slice(1)), ref = '';
+      try { var r = document.referrer && new URL(document.referrer); if (r && r.host !== location.host) ref = r.host.replace(/^www\./, ''); } catch (e) {}
+      track('view', { page: !h ? 'home' : /^map(\/|$)/.test(h) ? 'map' : byId[h] ? 'song' : 'other', referrer: ref });
+    })();
   }
 
   // ---------- song view ----------
@@ -1840,7 +1896,7 @@ a.place { text-decoration: none; }
     if (id === 'likes') return;
     $('mapLink').toggleAttribute('aria-current', mapOn()); if (mapOn()) $('mapLink').setAttribute('aria-current', 'page');
     if (mapOn()) {
-      cur = null; renderList(); renderMap(id.slice(4));
+      cur = null; statShow(null); renderList(); renderMap(id.slice(4));
       $('main').scrollTop = 0; document.title = t('Мапа мясцін') + ' — ' + NAME; closeMenu(); return;
     }
     unloadMap();
@@ -1855,6 +1911,7 @@ a.place { text-decoration: none; }
     var NOT_ON_SITE = { 1026: 1, 1027: 1 };
     function inAllCat(n) { return n >= 1 && n <= 4171 && !(n >= 2960 && n <= 3312) && !NOT_ON_SITE[n]; }
     renderList();
+    statShow(cur);
     if (cur) renderSong(cur);
     else if (id && !ADULT && !ALL && /^\d{1,4}[a-z]?$/.test(id) && inAllCat(+id.replace(/\D/g, ''))) {
       unloadSong();

@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Адмінка — Мужчынскія песні</title>
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root {
+  --page: #fff; --linen: #f4f2ef; --ink: #1c1918; --ink-2: #5d5552; --ink-3: #736965; --rule: #e3ddd8; --rule-2: #cfc6c0;
+  --thread: #b0141e; --thread-ink: #fff; --thread-soft: #fbe5e4; --thread-wash: #fdf2f1; --on-soft: #6f0b12; --ok: #2e7d32;
+  --sans: "Alegreya Sans", "Segoe UI", Roboto, Arial, sans-serif; --serif: Alegreya, "PT Serif", Georgia, serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page: #151213; --linen: #1c1819; --ink: #eee6e2; --ink-2: #bdb2ad; --ink-3: #958985; --rule: #332b2b; --rule-2: #463c3b;
+    --thread: #ff8f93; --thread-ink: #3b0006; --thread-soft: #4a1d20; --thread-wash: #241a1b; --on-soft: #ffd9d8; --ok: #7fcf8c;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--page); color: var(--ink); font: 16px/1.5 var(--sans); }
+header { position: sticky; top: 0; z-index: 2; display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: var(--page); border-bottom: 1px solid var(--rule); }
+header h1 { margin: 0; font: 700 19px/1.2 var(--serif); }
+header .grow { flex: 1; }
+header small { color: var(--ink-3); }
+main { max-width: 860px; margin: 0 auto; padding: 16px; }
+a { color: var(--thread); }
+button, input, textarea { font: inherit; color: inherit; }
+.btn { min-height: 36px; padding: 0 14px; border-radius: 18px; border: 1px solid var(--rule-2); background: transparent; cursor: pointer; font-weight: 600; font-size: 15px; }
+.btn:hover { background: var(--thread-wash); }
+.btn.primary { background: var(--thread); color: var(--thread-ink); border-color: transparent; }
+.btn.ok { background: var(--ok); color: var(--page); border-color: transparent; }
+.btn:disabled { opacity: .55; cursor: default; }
+input[type=email], textarea, input.note { width: 100%; padding: 8px 10px; border: 1px solid var(--rule-2); border-radius: 8px; background: var(--linen); }
+textarea { resize: vertical; min-height: 44px; }
+.login { max-width: 420px; margin: 48px auto; }
+.login form { display: flex; gap: 8px; margin-top: 12px; }
+.msg { padding: 10px 14px; border-radius: 8px; background: var(--thread-wash); margin: 12px 0; }
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 16px; }
+.tabs button { min-height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid var(--rule-2); background: transparent; cursor: pointer; font-size: 15px; }
+.tabs button[aria-pressed=true] { background: var(--thread-soft); color: var(--on-soft); border-color: transparent; font-weight: 600; }
+.tabs .n { margin-left: 4px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.card { border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; margin: 0 0 12px; }
+.card .meta { display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; font-size: 14.5px; color: var(--ink-3); }
+.card .meta b { color: var(--ink); font-size: 16px; }
+.card .meta .st { padding: 0 8px; border-radius: 10px; background: var(--linen); color: var(--ink-2); }
+.card .meta .blk { color: var(--thread); font-weight: 600; }
+.card h3 { margin: 12px 0 4px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: var(--ink-3); }
+blockquote { margin: 0; padding: 8px 12px; border-left: 3px solid var(--thread); background: var(--thread-wash); border-radius: 0 8px 8px 0; font: 17px/1.5 var(--serif); white-space: pre-wrap; }
+blockquote .ctx { color: var(--ink-3); }
+blockquote mark { background: var(--thread-soft); color: var(--on-soft); }
+.sugg { font: 17px/1.5 var(--serif); }
+.com { white-space: pre-wrap; }
+.row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.row .grow { flex: 1; }
+.empty { color: var(--ink-3); padding: 24px 0; text-align: center; }
+.hint { color: var(--ink-3); font-size: 14.5px; margin: 0 0 16px; }
+.views { display: flex; gap: 4px; }
+.views button { min-height: 32px; padding: 0 12px; border-radius: 16px; border: 0; background: transparent; cursor: pointer; font-size: 15px; color: var(--ink-2); }
+.views button[aria-pressed=true] { background: var(--thread-soft); color: var(--on-soft); font-weight: 600; }
+main:has(.tiles) { max-width: 1100px; }
+.filters { display: flex; flex-wrap: wrap; gap: 0 16px; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin: 0 0 14px; }
+.tile { border: 1px solid var(--rule); border-radius: 10px; padding: 10px 14px; }
+.tile small { display: block; color: var(--ink-3); font-size: 13.5px; }
+.tile b { display: block; font: 700 26px/1.2 var(--serif); font-variant-numeric: tabular-nums; }
+.tile span { display: block; color: var(--ink-3); font-size: 13px; }
+.panel { border: 1px solid var(--rule); border-radius: 10px; padding: 12px 16px; margin: 0 0 14px; min-width: 0; }
+.panel h3 { margin: 0 0 10px; font-size: 15px; }
+.panel .empty { padding: 8px 0; text-align: left; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 0 14px; }
+.chart { position: relative; }
+.chart svg, .panel > svg { display: block; width: 100%; height: auto; }
+.grid { stroke: var(--rule); stroke-width: 1; }
+.ax { fill: var(--ink-3); font-size: 11px; } .ax.big { font-size: 22px; }
+.line { fill: none; stroke: var(--thread); stroke-width: 2; stroke-linejoin: round; }
+.area { fill: var(--thread); opacity: .1; }
+.xh { stroke: var(--ink-3); stroke-width: 1; stroke-dasharray: 3 3; }
+.dot { fill: var(--thread); stroke: var(--page); stroke-width: 2; }
+.bar { fill: var(--thread); opacity: .85; } .bar:hover { opacity: 1; }
+.tip { position: absolute; top: 8px; min-width: 130px; padding: 6px 10px; border-radius: 8px; background: var(--page); border: 1px solid var(--rule-2); box-shadow: 0 4px 14px rgba(0,0,0,.12); font-size: 13.5px; pointer-events: none; }
+details { margin-top: 8px; font-size: 14px; } summary { cursor: pointer; color: var(--ink-3); }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; }
+th { text-align: left; font-weight: 600; color: var(--ink-3); font-size: 13px; padding: 4px 6px; border-bottom: 1px solid var(--rule); }
+td { padding: 5px 6px; border-bottom: 1px solid var(--rule); vertical-align: middle; }
+td.num { white-space: nowrap; font-variant-numeric: tabular-nums; }
+.mini { display: inline-block; width: 60px; height: 8px; margin-right: 6px; background: var(--linen); border-radius: 4px; vertical-align: middle; overflow: hidden; }
+.mini i, .tr i { display: block; height: 100%; background: var(--thread); border-radius: 4px; }
+.bars { list-style: none; margin: 0; padding: 0; }
+.bars li { display: grid; grid-template-columns: minmax(80px, 38%) 1fr auto; gap: 8px; align-items: center; padding: 3px 0; font-size: 14.5px; }
+.bars .lb { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bars .tr { height: 10px; background: var(--linen); border-radius: 4px; overflow: hidden; }
+.bars .vl { font-variant-numeric: tabular-nums; text-align: right; } .bars .vl small { color: var(--ink-3); }
+#smap { height: 420px; border-radius: 8px; overflow: hidden; background: var(--linen); }
+@media (max-width: 600px) { header { flex-wrap: wrap; gap: 6px 10px; } header #who { display: none; } .top th:nth-child(4), .top td:nth-child(4), .top th:nth-child(6), .top td:nth-child(6) { display: none; } header h1 { font-size: 17px; } }
+</style>
+</head>
+<body>
+<header><h1>Адмінка</h1><nav class="views" id="views" hidden><button data-view="corr" aria-pressed="true">Праўкі</button><button data-view="stats" aria-pressed="false">Статыстыка</button></nav><span class="grow"></span><small id="who"></small><button class="btn" id="logout" hidden>Выйсці</button></header>
+<main id="app"><p class="empty">Загрузка…</p></main>
+<script src="config.js"></script>
+<script>
+(function () {
+  'use strict';
+  var C = (window.SONGBOOK_CONFIG || {}).corrections || {}, URL0 = String(C.url || '').replace(/\/+$/, ''), KEY = C.key || '';
+  var SK = 'pesni.admin.session', app = document.getElementById('app');
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var KIND = { text: 'Тэкст песні', notes: 'Ноты ці мелодыя', place: 'Мясціна, павет, ад каго', translation: 'Пераклад ці надпісы', other: 'Іншае' };
+  var STATUSES = [['новая', 'Новыя'], ['прынята', 'Прынятыя'], ['выпраўлена', 'Выпраўленыя'], ['адхілена', 'Адхіленыя'], ['', 'Усе']];
+  var sess = null, tab = 'новая', rows = [], blocked = {}, view = location.hash === '#stats' ? 'stats' : 'corr';
+
+  function load() { try { return JSON.parse(localStorage.getItem(SK)); } catch (e) { return null; } }
+  function store(s) { sess = s; try { if (s) localStorage.setItem(SK, JSON.stringify(s)); else localStorage.removeItem(SK); } catch (e) {} }
+  function hdr(extra) {
+    var h = { apikey: KEY, 'Content-Type': 'application/json' };
+    if (sess) h.Authorization = 'Bearer ' + sess.access_token;
+    for (var k in extra || {}) h[k] = extra[k];
+    return h;
+  }
+  function api(path, opt) {
+    opt = opt || {};
+    return fresh().then(function () {
+      return fetch(URL0 + path, { method: opt.method || 'GET', headers: hdr(opt.headers), body: opt.body ? JSON.stringify(opt.body) : undefined });
+    }).then(function (r) {
+      if (r.status === 401) { store(null); render(); throw new Error('Сесія скончылася, увайдзіце зноў.'); }
+      if (!r.ok) return r.text().then(function (t) { throw new Error(t || r.statusText); });
+      return r.status === 204 ? null : r.json();
+    });
+  }
+  // the access token lives an hour: refresh it a minute before it ends
+  function fresh() {
+    if (!sess || Date.now() < sess.expires_at - 60000) return Promise.resolve();
+    return fetch(URL0 + '/auth/v1/token?grant_type=refresh_token', { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ refresh_token: sess.refresh_token }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (!j || !j.access_token) { store(null); throw new Error('Сесія скончылася, увайдзіце зноў.'); } keep(j); });
+  }
+  function keep(j) { store({ access_token: j.access_token, refresh_token: j.refresh_token, expires_at: Date.now() + (+j.expires_in || 3600) * 1000, email: (j.user && j.user.email) || (sess && sess.email) || '' }); }
+
+  // the link from the e-mail brings the session in the address: #access_token=…&refresh_token=…
+  (function () {
+    var h = new URLSearchParams(location.hash.slice(1));
+    if (h.get('access_token')) {
+      keep({ access_token: h.get('access_token'), refresh_token: h.get('refresh_token'), expires_in: h.get('expires_in') });
+      history.replaceState(null, '', location.pathname);
+    } else if (h.get('error_description')) {
+      app.dataset.err = h.get('error_description').replace(/\+/g, ' ');
+      history.replaceState(null, '', location.pathname);
+    }
+    if (!sess) sess = load();
+  })();
+
+  function loginView(msg) {
+    app.innerHTML = '<div class="login"><h2>Уваход</h2><p>Увядзіце свой email. Прыйдзе ліст са спасылкай; адкрыйце яе на гэтай прыладзе.</p>' +
+      (msg ? '<p class="msg">' + esc(msg) + '</p>' : '') +
+      '<form id="lf"><input type="email" id="em" required autocomplete="email" placeholder="email"><button class="btn primary">Даслаць спасылку</button></form></div>';
+    document.getElementById('lf').addEventListener('submit', function (e) {
+      e.preventDefault();
+      var em = document.getElementById('em').value.trim(), b = this.querySelector('button'); b.disabled = true;
+      var back = location.origin + location.pathname;
+      fetch(URL0 + '/auth/v1/otp?redirect_to=' + encodeURIComponent(back), { method: 'POST', headers: { apikey: KEY, 'Content-Type': 'application/json' }, body: JSON.stringify({ email: em, create_user: false }) })
+        .then(function (r) { return r.ok ? null : r.json().then(function (j) { throw new Error(j.msg || j.error_description || j.message || r.statusText); }); })
+        .then(function () { loginView('Ліст адпраўлены на ' + em + '. Адкрыйце спасылку з яго (праверце і «Спам»).'); })
+        .catch(function (err) { loginView('Не атрымалася: ' + err.message); });
+    });
+  }
+
+  function render() {
+    document.getElementById('logout').hidden = !sess;
+    if (!sess) document.getElementById('views').hidden = true;
+    [].forEach.call(document.querySelectorAll('#views button'), function (x) { x.setAttribute('aria-pressed', x.getAttribute('data-view') === view); });
+    document.getElementById('who').textContent = sess ? sess.email || '' : '';
+    if (!URL0 || !KEY) { app.innerHTML = '<p class="msg">У config.js не зададзены corrections.url і corrections.key.</p>'; return; }
+    if (!sess) { loginView(app.dataset.err); delete app.dataset.err; return; }
+    if (!sess.email) api('/auth/v1/user').then(function (u) { if (u && u.email && sess) { sess.email = u.email; store(sess); document.getElementById('who').textContent = u.email; } }).catch(function () {});
+    api('/rest/v1/rpc/is_admin', { method: 'POST', body: {} }).then(function (ok) {
+      if (!ok) { app.innerHTML = '<p class="msg">Гэты ўліковы запіс не адміністратар. Запусціце supabase/corrections-2-admin.sql пасля стварэння карыстальніка.</p>'; return; }
+      document.getElementById('views').hidden = false;
+      if (view === 'stats') statsView(); else refresh();
+    }).catch(fail);
+  }
+  function fail(err) { app.innerHTML = '<p class="msg">' + esc(err.message) + '</p>'; }
+
+  function refresh() {
+    var q = '/rest/v1/corrections?select=*&order=created_at.desc&limit=300' + (tab ? '&status=eq.' + encodeURIComponent(tab) : '');
+    Promise.all([api(q), api('/rest/v1/corrections?select=status&limit=10000')]).then(function (res) {
+      rows = res[0];
+      var cnt = { '': res[1].length }; res[1].forEach(function (r) { cnt[r.status] = (cnt[r.status] || 0) + 1; });
+      return api('/rest/v1/rpc/blocked_ids', { method: 'POST', body: { p_ids: rows.map(function (r) { return r.id; }) } }).then(function (ids) {
+        blocked = {}; (ids || []).forEach(function (i) { blocked[i] = true; });
+        draw(cnt);
+      });
+    }).catch(fail);
+  }
+
+  function fmtDate(d) { var p = function (n) { return (n < 10 ? '0' : '') + n; }; return p(d.getDate()) + '.' + p(d.getMonth() + 1) + '.' + d.getFullYear() + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()); }
+  function songLink(r) {
+    var base = 'index.html' + (r.section === '18' ? '?r=18&k=all' : '?k=all');
+    return '<a href="' + base + '#' + encodeURIComponent(r.song_id) + '" target="_blank" rel="noopener">№ ' + esc(r.song_id) + (r.section === '18' ? ' (18+)' : '') + '</a>';
+  }
+  function card(r) {
+    var d = new Date(r.created_at), h = [];
+    h.push('<article class="card" data-id="' + r.id + '"><div class="meta"><b>' + songLink(r) + '</b><span>' + esc(KIND[r.kind] || r.kind) + (r.script ? ' · ' + (r.script === 'lat' ? 'арыгінал' : 'кірыліца') : '') + (r.line_no ? ' · радок ' + r.line_no : '') + '</span>' +
+      '<span>' + fmtDate(d) + '</span><span class="st">' + esc(r.status) + '</span>' + (blocked[r.id] ? '<span class="blk">аўтар заблакаваны</span>' : '') + '<span>#' + r.id + '</span></div>');
+    if (r.quote) h.push('<h3>Выдзелены тэкст</h3><blockquote>' + (r.context_before ? '<span class="ctx">' + esc(r.context_before) + '</span>' : '') + '<mark>' + esc(r.quote) + '</mark>' + (r.context_after ? '<span class="ctx">' + esc(r.context_after) + '</span>' : '') + '</blockquote>');
+    if (r.suggestion != null || r.quote) h.push('<h3>' + (r.quote ? 'Як павінна быць' : 'Што не так') + '</h3>' + (r.status === 'новая' || r.status === 'прынята' ? '<textarea class="sugg" rows="2">' + esc(r.suggestion || '') + '</textarea>' : '<div class="sugg com">' + esc(r.suggestion || '') + '</div>'));
+    if (r.comment) h.push('<h3>Каментар</h3><div class="com">' + esc(r.comment) + '</div>');
+    if (r.author_name || r.author_email) h.push('<h3>Аўтар</h3><div>' + esc(r.author_name || '') + (r.author_email ? ' <a href="mailto:' + esc(r.author_email) + '">' + esc(r.author_email) + '</a>' : '') + '</div>');
+    h.push('<h3>Нататка</h3><input class="note" value="' + esc(r.admin_note || '') + '" placeholder="для сябе">');
+    var b = [];
+    if (r.status === 'новая') b.push('<button class="btn ok" data-a="accept">Прыняць</button>', '<button class="btn" data-a="reject">Адхіліць</button>', '<span class="grow"></span><button class="btn" data-a="block">Заблакаваць аўтара</button>');
+    if (r.status === 'прынята') b.push('<button class="btn" data-a="save">Захаваць прапанову</button>', '<button class="btn" data-a="new">Вярнуць у новыя</button>', '<button class="btn" data-a="reject">Адхіліць</button>');
+    if (r.status === 'адхілена') b.push('<button class="btn" data-a="new">Вярнуць у новыя</button>' + (blocked[r.id] ? '<span class="grow"></span><button class="btn" data-a="unblock">Разблакаваць аўтара</button>' : ''));
+    if (r.status === 'выпраўлена') b.push('<button class="btn" data-a="accept">Зноў у прынятыя</button>');
+    h.push('<div class="row">' + b.join('') + '</div></article>');
+    return h.join('');
+  }
+  function draw(cnt) {
+    app.innerHTML = '<p class="hint">Прынятыя праўкі тэксту штодня (і па кнопцы ў GitHub Actions) трапляюць у аўтаматычны PR; пасля яго зліцця становяцца «выпраўлена». Праўкі нот і іншыя прынятыя застаюцца ў «Прынятых», іх уносіць Claude.</p>' +
+      '<div class="tabs">' + STATUSES.map(function (s) { return '<button data-tab="' + s[0] + '" aria-pressed="' + (tab === s[0]) + '">' + s[1] + '<span class="n">' + (cnt[s[0]] || 0) + '</span></button>'; }).join('') + '</div>' +
+      (rows.length ? rows.map(card).join('') : '<p class="empty">Тут пуста.</p>');
+  }
+
+  // =====================================================================
+  //  Statistics (supabase/stats.sql → stats_summary)
+  // =====================================================================
+  var SP = { days: 30, cat: '' }, SDATA = null, leafletP = null, placesP = null, smap = null;
+  var CAT = { '': 'Усе раздзелы', all: 'Агульны каталог', men: 'Мужчынскі', '18': '18+' };
+  var LANGN = { be: 'беларуская', pl: 'польская', en: 'англійская' };
+  var DEVN = { phone: 'тэлефон', tablet: 'планшэт', desktop: 'камп’ютар' };
+  var nf = new Intl.NumberFormat('uk');   // «1 050»: Intl часта не ведае be
+  function iso(d) { return d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2); }
+  function dur(s) { s = Math.round(+s || 0); if (s < 60) return s + ' с'; if (s < 3600) return Math.floor(s / 60) + ' хв ' + (s % 60) + ' с'; return Math.floor(s / 3600) + ' г ' + Math.round(s % 3600 / 60) + ' хв'; }
+  function loadScript(src) { return new Promise(function (ok, no) { var s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
+  function places() { return placesP || (placesP = window.PLACES ? Promise.resolve() : loadScript('places.js')); }
+  function leaflet() {
+    if (leafletP) return leafletP;
+    var B = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min';
+    var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = B + '.css'; document.head.appendChild(l);
+    return (leafletP = loadScript(B + '.js'));
+  }
+  function statsView() {
+    var to = new Date(), from = new Date(Date.now() - (SP.days - 1) * 864e5);
+    app.innerHTML = '<div class="filters"><div class="tabs" id="sDays">' + [[7, '7 дзён'], [30, '30 дзён'], [90, '90 дзён'], [365, 'Год']].map(function (d) { return '<button data-days="' + d[0] + '" aria-pressed="' + (SP.days === d[0]) + '">' + d[1] + '</button>'; }).join('') + '</div>' +
+      '<div class="tabs" id="sCat">' + ['', 'all', 'men', '18'].map(function (k) { return '<button data-cat="' + k + '" aria-pressed="' + (SP.cat === k) + '">' + CAT[k] + '</button>'; }).join('') + '</div></div><p class="empty">Загрузка…</p>';
+    api('/rest/v1/rpc/stats_summary', { method: 'POST', body: { p_from: iso(from), p_to: iso(to), p_catalog: SP.cat || null } })
+      .then(function (d) { SDATA = d; return places(); })
+      .then(function () { drawStats(SDATA); })
+      .catch(function (err) { app.querySelector('.empty').textContent = /stats_summary|PGRST202|42883/.test(err.message) ? 'Статыстыка яшчэ не ўключана: запусціце supabase/stats.sql у SQL Editor.' : err.message; });
+  }
+  function tile(label, value, sub) { return '<div class="tile"><small>' + label + '</small><b>' + value + '</b>' + (sub ? '<span>' + sub + '</span>' : '') + '</div>'; }
+  function barList(title, obj, names, total) {
+    var ks = Object.keys(obj || {}).sort(function (a, b) { return obj[b] - obj[a]; });
+    if (!ks.length) return '<section class="panel"><h3>' + title + '</h3><p class="empty">Няма даных</p></section>';
+    var max = obj[ks[0]], sum = total || ks.reduce(function (a, k) { return a + obj[k]; }, 0);
+    return '<section class="panel"><h3>' + title + '</h3><ul class="bars">' + ks.slice(0, 12).map(function (k) {
+      var nm = (names && names[k]) || (k === '?' ? 'невядома' : k);
+      return '<li title="' + esc(nm) + ': ' + nf.format(obj[k]) + '"><span class="lb">' + esc(nm) + '</span><span class="tr"><i style="width:' + Math.max(2, obj[k] / max * 100) + '%"></i></span><span class="vl">' + nf.format(obj[k]) + ' <small>' + Math.round(obj[k] / sum * 100) + '%</small></span></li>';
+    }).join('') + '</ul></section>';
+  }
+  function lineChart(days) {
+    var W = Math.max(300, Math.min(1060, app.clientWidth - 34)), H = W < 500 ? 180 : 220, L = 36, R = 10, T = 12, B = 26, n = days.length;
+    var max = Math.max(4, Math.max.apply(null, days.map(function (d) { return d.visitors; })));
+    var step = Math.pow(10, Math.floor(Math.log10(max))), nice = Math.ceil(max / step) * step; if (nice / step > 5) step *= 2;
+    var x = function (i) { return L + (n < 2 ? 0 : i * (W - L - R) / (n - 1)); }, y = function (v) { return T + (1 - v / nice) * (H - T - B); };
+    var g = [];
+    for (var v = 0; v <= nice; v += step) g.push('<line x1="' + L + '" x2="' + (W - R) + '" y1="' + y(v) + '" y2="' + y(v) + '" class="grid"/><text x="' + (L - 6) + '" y="' + (y(v) + 4) + '" class="ax" text-anchor="end">' + nf.format(v) + '</text>');
+    var every = Math.ceil(n / (W < 500 ? 4 : 8));
+    days.forEach(function (d, i) { if ((i % every === 0 && n - 1 - i >= every / 2) || i === n - 1) g.push('<text x="' + x(i) + '" y="' + (H - 6) + '" class="ax" text-anchor="' + (i === n - 1 ? 'end' : i === 0 ? 'start' : 'middle') + '">' + d.day.slice(8, 10) + '.' + d.day.slice(5, 7) + '</text>'); });
+    var pts = days.map(function (d, i) { return x(i).toFixed(1) + ',' + y(d.visitors).toFixed(1); }).join(' ');
+    var area = 'M' + x(0) + ',' + y(0) + ' L' + pts.split(' ').join(' L') + ' L' + x(n - 1) + ',' + y(0) + 'Z';
+    return '<div class="chart" id="lc"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Наведвальнікі па днях">' + g.join('') +
+      '<path d="' + area + '" class="area"/><polyline points="' + pts + '" class="line"/><line class="xh" y1="' + T + '" y2="' + (H - B) + '" x1="-10" x2="-10"/><circle class="dot" r="5" cx="-10" cy="-10"/>' +
+      '<rect x="' + L + '" y="' + T + '" width="' + (W - L - R) + '" height="' + (H - T - B) + '" fill="transparent" class="hit"/></svg><div class="tip" hidden></div></div>';
+  }
+  function hoursChart(h) {
+    var max = 1; for (var i = 0; i < 24; i++) max = Math.max(max, h[i] || 0);
+    var b = []; for (i = 0; i < 24; i++) { var v = h[i] || 0, bh = v / max * 100; b.push('<rect x="' + (i * 30 + 3) + '" y="' + (110 - bh) + '" width="24" height="' + Math.max(bh, 0.5) + '" rx="3" class="bar"><title>' + i + ':00–' + (i + 1) + ':00 — ' + nf.format(v) + ' сесій</title></rect>' + (i % 3 === 0 ? '<text x="' + (i * 30 + 15) + '" y="150" class="ax big" text-anchor="middle">' + i + '</text>' : '')); }
+    return '<svg viewBox="0 0 720 160" role="img" aria-label="Сесіі па гадзінах">' + b.join('') + '</svg>';
+  }
+  function placeName(k) { var p = (window.PLACES || {})[k]; return p ? (p.be || (p.pl && p.pl[0]) || k) + (p.st === 'approx' ? ' (прыблізна)' : '') : k; }
+  function songHref(s) { return 'index.html?' + (s.catalog === '18' ? 'r=18&k=all' : 'k=all') + '#' + encodeURIComponent(s.song_id); }
+  function drawStats(d) {
+    var T0 = d.totals || {}, days = d.days || [];
+    var h = [app.querySelector('.filters').outerHTML];
+    h.push('<div class="tiles">' + tile('Наведвальнікі', nf.format(T0.visitors || 0), 'унікальныя за кожны дзень, сума') + tile('Сесіі', nf.format(T0.sessions || 0)) +
+      tile('Сярэдняя сесія', dur(T0.avg_session), 'медыяна ' + dur(T0.median_session)) + tile('Адкрыта песень', nf.format(T0.songs || 0), (T0.avg_songs || 0) + ' за сесію') +
+      tile('Час над тэкстамі', dur(T0.song_seconds)) + tile('Праслухоўванні', nf.format(T0.plays || 0)) + '</div>');
+    h.push('<section class="panel"><h3>Наведвальнікі па днях</h3>' + lineChart(days) + '<details><summary>Табліца</summary><table><thead><tr><th>Дзень</th><th>Наведвальнікі</th><th>Сесіі</th><th>Песні</th></tr></thead><tbody>' +
+      days.slice().reverse().map(function (x) { return '<tr><td>' + x.day + '</td><td>' + x.visitors + '</td><td>' + x.sessions + '</td><td>' + x.songs + '</td></tr>'; }).join('') + '</tbody></table></details></section>');
+    var top = d.top_songs || [], tmax = top.length ? top[0].views : 1;
+    h.push('<section class="panel"><h3>Папулярныя песні</h3>' + (top.length ? '<table class="top"><thead><tr><th>№</th><th>Песня</th><th>Прагляды</th><th>Людзей</th><th>Сярэдні час</th><th>Слухалі</th></tr></thead><tbody>' + top.map(function (s) {
+      return '<tr><td><a href="' + songHref(s) + '" target="_blank" rel="noopener">' + esc(s.song_id) + '</a>' + (s.catalog === '18' ? ' <small>18+</small>' : '') + '</td><td>' + esc(s.title || '') + '</td><td class="num"><span class="mini"><i style="width:' + Math.max(3, s.views / tmax * 100) + '%"></i></span>' + nf.format(s.views) + '</td><td class="num">' + nf.format(s.visitors) + '</td><td class="num">' + (s.views ? dur(s.seconds / s.views) : '—') + '</td><td class="num">' + nf.format(s.plays) + '</td></tr>';
+    }).join('') + '</tbody></table>' : '<p class="empty">Няма даных</p>') + '</section>');
+    h.push('<section class="panel"><h3>Мясціны песень па праглядах</h3><div id="smap"></div><p class="hint">Памер кружка — колькі разоў адкрывалі песні, запісаныя ў гэтай мясціне.</p></section>');
+    h.push('<div class="grid2">' + barList('Адкуль прыходзяць', d.referrer) + barList('Мова сайта', d.lang, LANGN) + barList('Прылада', d.device, DEVN) + barList('Краіна', d.country) + barList('Раздзел', d.catalog, CAT) +
+      '<section class="panel"><h3>Час (па Варшаве)</h3>' + hoursChart(d.hours || {}) + '</section></div>');
+    h.push('<p class="hint">Без кукі і без старонніх лічыльнікаў. «Наведвальнік» пазнаецца па ананімным хэшы, які мяняецца кожныя суткі, таму аднаго чалавека за некалькі дзён разам не лічым. Не ўлічваюцца браўзеры з «Do Not Track».</p>');
+    app.innerHTML = h.join('');
+    hookLine(days);
+    drawMap(d.places || {});
+  }
+  function hookLine(days) {
+    var box = document.getElementById('lc'); if (!box || !days.length) return;
+    var svgEl = box.querySelector('svg'), tip = box.querySelector('.tip'), xh = box.querySelector('.xh'), dot = box.querySelector('.dot'), hit = box.querySelector('.hit');
+    var W = +svgEl.getAttribute('viewBox').split(' ')[2], L = 36, R = 10, n = days.length, pts = box.querySelector('.line').getAttribute('points').split(' ').map(function (p) { return p.split(',').map(Number); });
+    function move(e) {
+      var r = svgEl.getBoundingClientRect(), vx = (e.clientX - r.left) / r.width * W, i = n < 2 ? 0 : Math.round((vx - L) / ((W - L - R) / (n - 1)));
+      i = Math.max(0, Math.min(n - 1, i)); var p = pts[i], d = days[i];
+      xh.setAttribute('x1', p[0]); xh.setAttribute('x2', p[0]); dot.setAttribute('cx', p[0]); dot.setAttribute('cy', p[1]);
+      tip.hidden = false; tip.innerHTML = '<b>' + d.day.slice(8, 10) + '.' + d.day.slice(5, 7) + '.' + d.day.slice(0, 4) + '</b><br>Наведвальнікі: ' + d.visitors + '<br>Сесіі: ' + d.sessions + '<br>Песні: ' + d.songs;
+      var px = p[0] / W * r.width; tip.style.left = Math.min(r.width - 150, Math.max(0, px + 12)) + 'px';
+    }
+    hit.addEventListener('pointermove', move); hit.addEventListener('pointerdown', move);
+    hit.addEventListener('pointerleave', function () { tip.hidden = true; xh.setAttribute('x1', -10); xh.setAttribute('x2', -10); dot.setAttribute('cx', -10); });
+  }
+  function drawMap(pl) {
+    var el = document.getElementById('smap'); if (!el) return;
+    var P = window.PLACES || {}, ks = Object.keys(pl).filter(function (k) { return P[k]; });
+    if (!ks.length) { el.innerHTML = '<p class="empty">Няма даных</p>'; el.style.height = 'auto'; return; }
+    leaflet().then(function () {
+      if (smap) { smap.remove(); smap = null; }
+      smap = window.L.map(el, { scrollWheelZoom: false });
+      window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 13, attribution: '© OpenStreetMap' }).addTo(smap);
+      var max = Math.max.apply(null, ks.map(function (k) { return pl[k]; })), b = [];
+      ks.sort(function (a, c) { return pl[c] - pl[a]; }).forEach(function (k) {
+        var p = P[k], r = 5 + 20 * Math.sqrt(pl[k] / max);
+        window.L.circleMarker([p.lat, p.lon], { radius: r, color: '#fff', weight: 2, fillColor: '#b0141e', fillOpacity: .7 })
+          .bindTooltip(esc(placeName(k)) + ': ' + nf.format(pl[k])).addTo(smap);
+        b.push([p.lat, p.lon]);
+      });
+      smap.fitBounds(b, { padding: [30, 30], maxZoom: 10 });
+    }).catch(function () { el.innerHTML = '<p class="empty">Не атрымалася загрузіць мапу.</p>'; });
+  }
+
+  function patch(id, body) { return api('/rest/v1/corrections?id=eq.' + id, { method: 'PATCH', headers: { Prefer: 'return=minimal' }, body: body }); }
+  app.addEventListener('click', function (e) {
+    var t = e.target.closest('[data-tab]'); if (t) { tab = t.getAttribute('data-tab'); refresh(); return; }
+    var dd = e.target.closest('[data-days]'); if (dd) { SP.days = +dd.getAttribute('data-days'); statsView(); return; }
+    var dc = e.target.closest('[data-cat]'); if (dc) { SP.cat = dc.getAttribute('data-cat'); statsView(); return; }
+    var b = e.target.closest('[data-a]'); if (!b) return;
+    var c = b.closest('.card'), id = +c.getAttribute('data-id'), a = b.getAttribute('data-a'), ta = c.querySelector('textarea.sugg');
+    var body = { admin_note: c.querySelector('.note').value.trim() || null };
+    if (ta) body.suggestion = ta.value.trim() || null;
+    var p;
+    if (a === 'accept') { body.status = 'прынята'; p = patch(id, body); }
+    else if (a === 'reject') { body.status = 'адхілена'; p = patch(id, body); }
+    else if (a === 'new') { body.status = 'новая'; p = patch(id, body); }
+    else if (a === 'save') p = patch(id, body);
+    else if (a === 'block') { if (!confirm('Адхіліць усе новыя праўкі гэтага аўтара і ігнараваць наступныя з яго адраса?')) return; p = api('/rest/v1/rpc/block_author', { method: 'POST', body: { p_id: id } }); }
+    else if (a === 'unblock') p = api('/rest/v1/rpc/unblock_author', { method: 'POST', body: { p_id: id } });
+    b.disabled = true;
+    p.then(refresh).catch(function (err) { b.disabled = false; alert(err.message); });
+  });
+  app.addEventListener('change', function (e) {
+    if (!e.target.classList.contains('note')) return;
+    var id = +e.target.closest('.card').getAttribute('data-id');
+    patch(id, { admin_note: e.target.value.trim() || null }).catch(function (err) { alert(err.message); });
+  });
+  document.getElementById('logout').addEventListener('click', function () {
+    if (sess) fetch(URL0 + '/auth/v1/logout', { method: 'POST', headers: hdr() }).catch(function () {});
+    store(null); render();
+  });
+  document.getElementById('views').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-view]'); if (!b) return;
+    view = b.getAttribute('data-view');
+    [].forEach.call(this.querySelectorAll('button'), function (x) { x.setAttribute('aria-pressed', x === b); });
+    history.replaceState(null, '', location.pathname + (view === 'stats' ? '#stats' : ''));
+    if (view === 'stats') statsView(); else refresh();
+  });
+  render();
+})();
+</script>
+</body>
+</html>
