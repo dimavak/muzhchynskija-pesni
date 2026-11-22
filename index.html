@@ -137,7 +137,9 @@ h1, h2, h3 { text-wrap: balance; }
 :root.cat-men { --cursor: #1d4f91; --cursor-band: rgba(29, 79, 145, .14); --thread: #1d4f91; --thread-soft: #e1eaf6; --thread-wash: #f1f5fb; --on-soft: #0c2a52; --ornament: #1d4f91; --hover: rgba(29, 79, 145, .07); --press: rgba(29, 79, 145, .13); }
 :root.cat-men[data-theme="dark"] { --cursor: #8fb6ff; --cursor-band: rgba(143, 182, 255, .18); --thread: #8fb6ff; --thread-ink: #071a3a; --thread-soft: #1c2a44; --thread-wash: #161c27; --on-soft: #d6e4ff; --ornament: #4f7fd0; --hover: rgba(143, 182, 255, .08); --press: rgba(143, 182, 255, .14); }
 @media (prefers-color-scheme: dark) { :root.cat-men:not([data-theme="light"]) { --cursor: #8fb6ff; --cursor-band: rgba(143, 182, 255, .18); --thread: #8fb6ff; --thread-ink: #071a3a; --thread-soft: #1c2a44; --thread-wash: #161c27; --on-soft: #d6e4ff; --ornament: #4f7fd0; --hover: rgba(143, 182, 255, .08); --press: rgba(143, 182, 255, .14); } }
-.catsw { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0 0 10px; }
+.catsw { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 0 0 14px; padding-bottom: 14px; border-bottom: 1px solid var(--rule); }
+/* a visible title, so the two buttons read as two catalogues, not as one more filter */
+.catsw-lbl { grid-column: 1 / -1; margin: 0 2px; font-size: 12.5px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-3); }
 .catsw a { display: grid; gap: 1px; align-content: center; min-height: 52px; padding: 6px 10px; border-radius: var(--r); border: 2px solid var(--rule-2); background: var(--page); color: var(--ink); text-decoration: none; line-height: 1.15; }
 .catsw a b { font-size: 15px; font-weight: 700; }
 .catsw a small { font-size: 13px; color: var(--ink-3); }
@@ -780,7 +782,7 @@ a.place { text-decoration: none; }
     <aside class="rail" id="rail" aria-label="Песні">
       <div class="rail-scroll" id="railScroll">
         <div class="rail-top">
-          <nav class="catsw" id="catsw" aria-label="Каталог" hidden><a class="k-men" data-k="men" href="?k=men"><b data-t>Мужчынскія</b><small id="k-men"></small></a><a class="k-all" data-k="all" href="?k=all"><b data-t>Усе песні</b><small id="k-all"></small></a></nav>
+          <nav class="catsw" id="catsw" aria-labelledby="catsw-lbl" hidden><p class="catsw-lbl" id="catsw-lbl" data-t>Каталог песень</p><a class="k-men" data-k="men" href="?k=men"><b data-t>Мужчынскія</b><small id="k-men"></small></a><a class="k-all" data-k="all" href="?k=all"><b data-t>Усе песні</b><small id="k-all"></small></a></nav>
           <label class="search"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             <span class="vh" data-t>Пошук песні</span>
             <input id="q" type="search" name="q" placeholder="Нумар, радок, імя…" autocomplete="off" spellcheck="false" enterkeyhint="search">
@@ -1660,7 +1662,8 @@ a.place { text-decoration: none; }
     h.push('<h1 class="song-title"><span class="no num"><small>' + NO + '</small>' + esc(s.id) + '</span>' + (BE ? esc(stress(s.title)) : '<span' + titleLang(s) + '>' + esc(T(s)) + '</span>') + '</h1>');
     h.push('<p class="print-src">' + t('Федароўскі М.') + ' Lud białoruski na Rusi Litewskiej, ' + pageRef(s.vol, s.page) + '. ' + (s.region ? esc(tv(s.region)) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
       (s.informant.length ? ' ' + t('Ад каго запісана') + ': ' + (BE ? s.informant_cyr.map(function (x) { return esc(x.replace(/́/g, '')); }) : s.informant.map(function (x) { return esc(noGrave(x)); })).join(', ') + '.' : '') + '</p>');
-    h.push('<div class="subline"><button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="' + esc(t('Паказаць усе песні тыпу «{c}»', { c: tv(s.cat) })) + '">' + esc(tv(s.cat)) + '</button>');
+    // the type is not shown under the title when the edition does not define it
+    h.push('<div class="subline">' + (s.cat && s.cat !== 'не вызначаны' ? '<button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="' + esc(t('Паказаць усе песні тыпу «{c}»', { c: tv(s.cat) })) + '">' + esc(tv(s.cat)) + '</button>' : ''));
     // quiet tags describe the song; only buttons and links look like buttons
     if (ALL && !ADULT && s.men) h.push('<a class="tag men" href="?k=men' + (BE ? '' : '&lang=' + LANG) + '#' + esc(s.id) + '" title="' + t('Адкрыць у мужчынскім каталогу') + '">' + t('мужчынская') + '</a>');
     if (s.group === 'own') h.push('<span class="tag">' + noteIcon(s) + t('свае ноты') + '</span>');
