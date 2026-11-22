@@ -1,0 +1,27 @@
+# Бясплатны праект Supabase засынае пасля 7 дзён без запытаў, і тады праўкі з сайта не даходзяць.
+# Раз на тыдзень гэты крок робіць адзін лёгкі запыт (функцыя ping() з supabase/corrections.sql).
+# Адрас і ключ бярэ з config.js; пакуль яны пустыя, нічога не робіць.
+name: Supabase ping
+on:
+  schedule:
+    - cron: '17 6 * * 1,4'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: config.js
+          sparse-checkout-cone-mode: false
+      - name: Ping
+        run: |
+          block=$(sed -n '/corrections:/,/}/p' config.js)
+          url=$(printf '%s\n' "$block" | sed -n "s/^ *url: *'\([^']*\)'.*/\1/p")
+          key=$(printf '%s\n' "$block" | sed -n "s/^ *key: *'\([^']*\)'.*/\1/p")
+          if [ -z "$url" ] || [ -z "$key" ]; then echo "config.js: corrections не настроены, прапускаю"; exit 0; fi
+          auth=(); case "$key" in eyJ*) auth=(-H "Authorization: Bearer $key");; esac
+          curl -fsS -X POST "${url%/}/rest/v1/rpc/ping" -H "apikey: $key" "${auth[@]}" -H 'Content-Type: application/json' -d '{}'
+          echo
