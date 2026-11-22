@@ -569,9 +569,12 @@ dialog.ph-box .ph-prev svg { transform: rotate(180deg); }
 .hero-ph.split figure { position: relative; margin: 0; height: 100%; overflow: hidden; }
 .hero-ph.split figure img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
 .hero-ph.split figure::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg, #ddd6ca 0, rgba(221, 214, 202, 0) 26%), linear-gradient(0deg, rgba(221, 214, 202, .9) 0, rgba(221, 214, 202, 0) 14%); pointer-events: none; }
-.hero-ph.split.wide { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); height: min(80vh, 680px); }
-/* the general catalogue's landscape photo bleeds to the edge and fades into the linen, like the men's one */
-.hero-ph.split.wide figure img { object-position: 42% 50%; }
+.hero-ph.split.wide { grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); height: auto; min-height: 0; }
+/* the general catalogue's photo is shown whole (nobody cut off), unframed, reaching the right edge;
+   only the thin roof and ground strips fade into the linen */
+.hero-ph.split.wide figure { height: auto; align-self: center; margin: 28px 0; }
+.hero-ph.split.wide figure img { height: auto; object-fit: initial; -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 5%, #000 95%, transparent); mask-image: linear-gradient(180deg, transparent 0, #000 5%, #000 95%, transparent); }
+.hero-ph.split.wide figure::before { display: none; }
 .home .hero-ph.split .ph-cap { z-index: 2; top: 12px; right: 12px; bottom: auto; max-width: min(72%, 360px); padding: 4px 9px; border-radius: 6px; background: rgba(24, 17, 18, .6); color: #f4ede3; }
 .sec-title { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin: 52px 0 18px; }
 .sec-title h2 { margin: 0; font: 700 clamp(26px, 3vw, 34px)/1.15 var(--serif); }
@@ -586,7 +589,8 @@ dialog.ph-box .ph-prev svg { transform: rotate(180deg); }
 a.place { text-decoration: none; }
 .home .ph-credit { font-size: 13px; color: var(--ink-3); margin: 10px 0 0; }
 .place figure { margin: 0 0 12px; aspect-ratio: 4 / 3; overflow: hidden; border-radius: 14px; background: var(--linen-2); }
-.place img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
+/* the whole photo is shown, nobody in it is cut off; the linen fills the rest of the card */
+.place img { width: 100%; height: 100%; object-fit: contain; transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
 .place:hover img { transform: scale(1.04); }
 .place b { display: block; font: 700 22px/1.2 var(--serif); }
 .place span { display: block; color: var(--ink-2); font-size: 15px; margin-top: 2px; }
@@ -646,6 +650,9 @@ a.place { text-decoration: none; }
   /* phones: a lower photo, and the search right under the title, so both fit the first screen */
   .hero-ph.split figure { order: -1; height: 40vh; min-height: 230px; }
   .hero-ph.split.wide { grid-template-columns: minmax(0, 1fr); height: auto; }
+  .hero-ph.split.wide figure { height: auto; min-height: 0; margin: 0; }
+  .hero-ph.split.wide .hero-in { margin-top: 0; padding-top: 16px; }
+  .hero-ph.split.wide figure img { -webkit-mask-image: linear-gradient(0deg, transparent 0, #000 7%); mask-image: linear-gradient(0deg, transparent 0, #000 7%); }
   .hero-ph.split .hero-in { display: flex; flex-direction: column; left: auto; right: auto; }
   .hero-ph.split .home-search { order: 2; margin: 2px 0 20px; }
   .home .hero-ph.split .sub { order: 3; margin-bottom: 0; }
