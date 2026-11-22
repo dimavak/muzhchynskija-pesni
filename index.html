@@ -450,11 +450,6 @@ dialog.corr-dlg::backdrop { background: rgba(18, 12, 12, .5); }
 .lang-sel select { appearance: none; -webkit-appearance: none; height: 44px; padding: 0 28px 0 12px; border: 0; border-radius: 22px; background: transparent; color: inherit; font: inherit; font-weight: 500; letter-spacing: .02em; cursor: pointer; transition: background-color .15s, color .15s; }
 .lang-sel select:hover { background: var(--hover); color: var(--ink); }
 .lang-sel select option { color: #1c1918; background: #ffffff; }
-.lang-row { display: none; align-items: center; gap: 2px; flex: none; color: var(--ink-3); }
-.lang-row a { display: inline-grid; place-items: center; min-width: 44px; height: 44px; padding: 0 6px; border-radius: 22px; color: var(--ink-2); text-decoration: none; font-weight: 500; }
-.lang-row a:hover { background: var(--hover); color: var(--ink); }
-.lang-row a[aria-current] { color: var(--thread); font-weight: 700; }
-@media (min-width: 1000px) { .lang-row { display: inline-flex; } .lang-sel { display: none; } }
 .lang-sel svg { position: absolute; right: 8px; width: 18px; height: 18px; fill: currentColor; pointer-events: none; }
 .mapv { max-width: 1120px; }
 .mapv h1 { font: 800 clamp(30px, 4.2vw, 46px)/1.08 var(--serif); letter-spacing: -.015em; margin: 4px 0 10px; }
@@ -767,7 +762,6 @@ a.place { text-decoration: none; }
       <span class="spacer"></span>
       <a class="map-link" href="#map" id="mapLink" aria-label="Мапа мясцін"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3l-.16.03L15 5.1 9 3 3.36 4.9c-.21.07-.36.25-.36.48V20.5c0 .28.22.5.5.5l.16-.03L9 18.9l6 2.1 5.64-1.9c.21-.07.36-.25.36-.48V3.5c0-.28-.22-.5-.5-.5zM15 19l-6-2.11V5l6 2.11V19z"/></svg><span data-t>Мапа</span></a>
       <label class="lang-sel"><span class="vh" data-t>Мова сайта</span><select id="lang"><option value="be" lang="be">Бел</option><option value="pl" lang="pl">Pol</option><option value="en" lang="en">Eng</option></select><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 10l5 5 5-5z"/></svg></label>
-      <nav class="lang-row" aria-label="Мова сайта"><a href="?" data-lang="be" lang="be">Бел</a><span aria-hidden="true">·</span><a href="?lang=pl" data-lang="pl" lang="pl">Pol</a><span aria-hidden="true">·</span><a href="?lang=en" data-lang="en" lang="en">Eng</a></nav>
       <button class="icon-btn" id="theme" aria-label="Змяніць тэму"></button>
     </div>
   </header>
@@ -894,11 +888,6 @@ a.place { text-decoration: none; }
       var u = new URLSearchParams(location.search); if (v === 'be') u.delete('lang'); else u.set('lang', v);
       var q = u.toString(), to = location.pathname + (q ? '?' + q : '') + location.hash;
       if (to === location.pathname + location.search + location.hash) location.reload(); else location.href = to;
-    });
-    // on wide screens the three languages stand in a row: Бел · Pol · Eng
-    document.querySelectorAll('.lang-row a').forEach(function (a) {
-      if (a.getAttribute('data-lang') === LANG) a.setAttribute('aria-current', 'true');
-      a.addEventListener('click', function (e) { e.preventDefault(); sel.value = a.getAttribute('data-lang'); sel.dispatchEvent(new Event('change')); });
     });
   })();
   var ADULT = !!window.ADULT, NAME = t(ADULT ? 'Фрывольныя песні' : ALL ? 'Усе песні' : 'Мужчынскія песні'), MAIN = location.pathname + (BE ? '' : '?lang=' + LANG), A18 = location.pathname + '?r=18' + (BE ? '' : '&lang=' + LANG);
