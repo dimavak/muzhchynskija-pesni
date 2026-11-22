@@ -3,7 +3,7 @@
 // Strategy: network first (so changes arrive at once); if the network fails, or is slower than a few
 // seconds and a saved copy exists, the saved copy is shown and the fresh one is saved for next time.
 // Bump VERSION to drop old saved copies.
-const VERSION = 'v1';
+const VERSION = 'v2';
 const CACHE = 'pesni-' + VERSION;
 const CORE = ['./', 'index.html', 'config.js', 'data.js', 'data-all.js', 'melodies.js', 'melodies-all.js', 'places.js',
   'notators.js', 'folk-player.js', 'i18n.js', 'icon.svg', 'manifest.webmanifest', 'img/lachavicy-muzyki.jpg', 'img/lachavicy-muzyki-hero.jpg'];
@@ -25,7 +25,9 @@ self.addEventListener('fetch', (e) => {
   e.respondWith((async () => {
     const cache = await caches.open(CACHE);
     const saved = () => nav ? cache.match(req, { ignoreSearch: true }).then((r) => r || cache.match('index.html')) : cache.match(req);
-    const net = fetch(req).then((r) => { if (r && r.ok && r.type === 'basic') cache.put(nav ? 'index.html' : req, r.clone()).catch(() => {}); return r; });
+    // always ask the server whether the file changed (a cheap 304 when it did not): otherwise the browser's own
+    // cache could hand back a page up to 10 minutes old right after a site update
+    const net = (nav ? fetch(req.url, { cache: 'no-cache', credentials: 'same-origin' }) : fetch(new Request(req, { cache: 'no-cache' }))).then((r) => { if (r && r.ok && r.type === 'basic') cache.put(nav ? 'index.html' : req, r.clone()).catch(() => {}); return r; });
     const slow = new Promise((ok) => setTimeout(ok, SLOW_MS)).then(saved);
     try {
       const first = await Promise.race([net, slow.then((r) => r || net)]);

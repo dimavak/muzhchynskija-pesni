@@ -568,6 +568,9 @@ dialog.ph-box .ph-prev svg { transform: rotate(180deg); }
 /* the longest word of the title is about 5.6em wide: keep it inside the text column, also when the side menu narrows the page */
 .hero-ph.split h1 { font-size: min(clamp(46px, 7.5vw, 96px), 17cqi); }
 .home .hero-ph.split .sub { color: #4a403c; font-size: clamp(17px, 1.5vw, 20px); }
+/* the hero stays light linen in both themes, so its link keeps the dark catalogue colour */
+.home .hero-ph.split .sub a { color: #9b111b; }
+:root.cat-men .home .hero-ph.split .sub a { color: #1d4f91; }
 .hero-ph.split .home-search { background: #fff; box-shadow: 0 10px 30px -14px rgba(40, 20, 10, .45); border: 1px solid #cfc6bb; }
 .hero-ph.split figure { position: relative; margin: 0; height: 100%; overflow: hidden; }
 .hero-ph.split figure img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; }
@@ -610,7 +613,7 @@ a.place { text-decoration: none; }
 .informants figcaption, .informants .src { font-size: 13px; color: var(--ink-3); margin-top: 8px; }
 .home .informants p { font: 400 18px/1.6 var(--serif); color: var(--ink-2); margin: 0 0 14px; }
 .inf-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
-.inf-card { display: flex; flex-direction: column; align-items: flex-start; text-align: left; border: 1px solid var(--rule); border-top: 3px solid #7a1c22; background: var(--paper); border-radius: 12px; padding: 16px 16px 14px; cursor: pointer; color: var(--ink); font: inherit; transition: background .2s, transform .2s; }
+.inf-card { display: flex; flex-direction: column; align-items: flex-start; text-align: left; border: 1px solid var(--rule); border-top: 3px solid #7a1c22; background: var(--page); border-radius: 12px; padding: 16px 16px 14px; cursor: pointer; color: var(--ink); font: inherit; transition: background .2s, transform .2s; }
 .inf-card:hover { background: var(--linen-2); transform: translateY(-2px); }
 .inf-card b { display: block; font: 700 19px/1.2 var(--serif); }
 .inf-card span { display: block; color: var(--ink-2); font-size: 14px; margin-top: 4px; }
@@ -620,7 +623,7 @@ a.place { text-decoration: none; }
 .tl { list-style: none; margin: 4px 0 0 6px; padding: 0; border-left: 2px solid var(--rule); }
 .tl li { position: relative; padding: 0 0 18px 22px; }
 .tl li:last-child { padding-bottom: 0; }
-.tl li::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: #7a1c22; box-shadow: 0 0 0 3px var(--paper); }
+.tl li::before { content: ""; position: absolute; left: -7px; top: 5px; width: 12px; height: 12px; border-radius: 50%; background: #7a1c22; box-shadow: 0 0 0 3px var(--page); }
 .tl b { display: block; font: 700 15px/1.3 var(--sans); letter-spacing: .04em; color: var(--thread); margin: 0 0 3px; }
 .home .tl p { font: 400 17px/1.55 var(--serif); color: var(--ink-2); margin: 0; }
 .how h3 { font: 700 24px/1.2 var(--serif); margin: 0 0 12px; }
@@ -668,7 +671,7 @@ a.place { text-decoration: none; }
   .melody figure { order: -1; }
 }
 
-.mini { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 50; display: flex; align-items: center; gap: 10px; width: min(560px, calc(100vw - 24px)); padding: 6px 8px 6px 6px; border-radius: 30px; background: var(--paper); color: var(--ink); border: 1px solid var(--rule-2); box-shadow: var(--shadow); transition: transform .2s, opacity .2s; }
+.mini { position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translate(-50%, 20px); opacity: 0; pointer-events: none; z-index: 50; display: flex; align-items: center; gap: 10px; width: min(560px, calc(100vw - 24px)); padding: 6px 8px 6px 6px; border-radius: 30px; background: var(--page); color: var(--ink); border: 1px solid var(--rule-2); box-shadow: var(--shadow); transition: transform .2s, opacity .2s; }
 .mini.on { transform: translate(-50%, 0); opacity: 1; pointer-events: auto; }
 .mini .mbtn { width: 46px; height: 46px; border: 0; border-radius: 23px; background: var(--thread); color: var(--thread-ink); display: grid; place-items: center; flex: none; }
 .mini .mbtn svg { width: 24px; height: 24px; fill: currentColor; }
@@ -912,6 +915,11 @@ a.place { text-decoration: none; }
     var ksw = document.getElementById('catsw'), kq = function (k) { var u = new URLSearchParams(location.search); ['g', 'q', 'v', 't', 's', 'm', 'i'].forEach(function (x) { u.delete(x); }); u.set('k', k); return location.pathname + '?' + u.toString(); };
     ksw.hidden = false;
     [].forEach.call(ksw.querySelectorAll('a'), function (a) { var k = a.getAttribute('data-k'); a.href = kq(k); if ((k === 'all') === ALL) a.setAttribute('aria-current', 'page'); });
+    // switching catalogue on a song keeps that song open when the other catalogue has it
+    ksw.addEventListener('click', function (e) {
+      var a = e.target.closest('a[data-k]'); if (!a || !cur || e.metaKey || e.ctrlKey || e.shiftKey) return;
+      if (a.getAttribute('data-k') === 'all' || cur.men) a.href = kq(a.getAttribute('data-k')) + '#' + encodeURIComponent(cur.id);
+    });
     document.getElementById('k-men').textContent = MEN_COUNT;
     document.getElementById('k-all').textContent = ALL ? SONGS.length : MEN_COUNT + ALL_EXTRA;
   }
