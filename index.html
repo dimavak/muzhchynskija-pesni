@@ -1662,7 +1662,8 @@ a.place { text-decoration: none; }
     h.push('<h1 class="song-title"><span class="no num"><small>' + NO + '</small>' + esc(s.id) + '</span>' + (BE ? esc(stress(s.title)) : '<span' + titleLang(s) + '>' + esc(T(s)) + '</span>') + '</h1>');
     h.push('<p class="print-src">' + t('Федароўскі М.') + ' Lud białoruski na Rusi Litewskiej, ' + pageRef(s.vol, s.page) + '. ' + (s.region ? esc(tv(s.region)) + ', ' : '') + '<span lang="pl">' + esc(s.header) + '</span>.' +
       (s.informant.length ? ' ' + t('Ад каго запісана') + ': ' + (BE ? s.informant_cyr.map(function (x) { return esc(x.replace(/́/g, '')); }) : s.informant.map(function (x) { return esc(noGrave(x)); })).join(', ') + '.' : '') + '</p>');
-    h.push('<div class="subline"><button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="' + esc(t('Паказаць усе песні тыпу «{c}»', { c: tv(s.cat) })) + '">' + esc(tv(s.cat)) + '</button>');
+    // the type is not shown under the title when the edition does not define it
+    h.push('<div class="subline">' + (s.cat && s.cat !== 'не вызначаны' ? '<button class="pill" data-facet-set="cat" data-value="' + esc(s.cat) + '" aria-label="' + esc(t('Паказаць усе песні тыпу «{c}»', { c: tv(s.cat) })) + '">' + esc(tv(s.cat)) + '</button>' : ''));
     // quiet tags describe the song; only buttons and links look like buttons
     if (ALL && !ADULT && s.men) h.push('<a class="tag men" href="?k=men' + (BE ? '' : '&lang=' + LANG) + '#' + esc(s.id) + '" title="' + t('Адкрыць у мужчынскім каталогу') + '">' + t('мужчынская') + '</a>');
     if (s.group === 'own') h.push('<span class="tag">' + noteIcon(s) + t('свае ноты') + '</span>');
